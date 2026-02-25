@@ -1,0 +1,20 @@
+[
+  {
+    "date": "2026-02-01",
+    "results": {
+      "combined_r": 7.0
+    },
+    "test_id": "ft-001",
+    "test_type": "sleep_overnight",
+    "tester": "jay"
+  },
+  {
+    "date": "2026-02-05",
+    "results": {
+      "success": true
+    },
+    "test_id": "ft-002",
+    "test_type": "stove_cold_start",
+    "tester": "jay"
+  }
+]

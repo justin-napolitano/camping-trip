@@ -1,0 +1,44 @@
+{
+  "$id": "https://example.org/schemas/TestLog.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "date": {
+      "format": "date",
+      "type": "string"
+    },
+    "results": {
+      "type": "object"
+    },
+    "test_id": {
+      "type": "string"
+    },
+    "test_type": {
+      "enum": [
+        "sleep_overnight",
+        "stove_cold_start"
+      ],
+      "type": "string"
+    },
+    "tester": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "trip_sim_id": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "test_id",
+    "test_type",
+    "date",
+    "results"
+  ],
+  "title": "TestLog",
+  "type": "object"
+}

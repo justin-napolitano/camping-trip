@@ -1,0 +1,56 @@
+{
+  "id": "clothing-v1",
+  "meta": {
+    "tsi_band_map": {
+      "high": {
+        "clothing": [
+          1,
+          2,
+          3,
+          5,
+          6
+        ]
+      },
+      "low": {
+        "clothing": [
+          1,
+          2,
+          3
+        ]
+      },
+      "moderate": {
+        "clothing": [
+          1,
+          2,
+          3,
+          5
+        ]
+      },
+      "severe": {
+        "clothing": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7
+        ]
+      }
+    }
+  },
+  "priority": 10,
+  "rules": [
+    {
+      "description": "Set required clothing minimums based on tsi band (engine uses meta.tsi_band_map)",
+      "id": "map_tsi_to_minimums",
+      "if": {
+        "always": true
+      },
+      "priority": 5,
+      "then": {
+        "action": "set_minimums",
+        "source": "meta.tsi_band_map"
+      }
+    }
+  ]
+}

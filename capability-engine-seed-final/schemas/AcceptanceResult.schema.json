@@ -1,0 +1,70 @@
+{
+  "$id": "https://example.org/schemas/AcceptanceResult.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "approved": {
+      "type": "boolean"
+    },
+    "hard_rule_triggers": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "redundancy_warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "required_min_levels": {
+      "type": "object"
+    },
+    "selected_items": {
+      "items": {
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "suitability_score": {
+      "type": "number"
+    },
+    "timestamp": {
+      "format": "date-time",
+      "type": "string"
+    },
+    "top_3_factors": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "trip_id": {
+      "type": "string"
+    },
+    "tsi": {
+      "type": "number"
+    },
+    "tsi_band": {
+      "type": "string"
+    },
+    "warnings": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "trip_id",
+    "timestamp",
+    "approved",
+    "tsi",
+    "tsi_band",
+    "hard_rule_triggers",
+    "selected_items"
+  ],
+  "title": "AcceptanceResult",
+  "type": "object"
+}

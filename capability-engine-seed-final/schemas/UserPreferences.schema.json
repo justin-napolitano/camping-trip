@@ -1,0 +1,26 @@
+{
+  "$id": "https://example.org/schemas/UserPreferences.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "comfortable_margin_c": {
+      "type": "number"
+    },
+    "max_pack_weight_g": {
+      "type": "number"
+    },
+    "sleep_comfort_preference": {
+      "enum": [
+        "cold_tolerant",
+        "neutral",
+        "warm_pref"
+      ],
+      "type": "string"
+    },
+    "user_id": {
+      "type": "string"
+    }
+  },
+  "title": "UserPreferences",
+  "type": "object"
+}

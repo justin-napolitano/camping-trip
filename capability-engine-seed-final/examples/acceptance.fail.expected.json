@@ -1,0 +1,18 @@
+{
+  "approved": false,
+  "hard_rule_triggers": [
+    "canister_unreliable_in_cold"
+  ],
+  "redundancy_warnings": [
+    "no_backup_stove"
+  ],
+  "selected_items": [],
+  "suitability_score": 0.0,
+  "timestamp": "2026-02-25T22:20:16.132415Z",
+  "top_3_factors": [
+    "canister_stove_issue"
+  ],
+  "trip_id": "trip-cold-001",
+  "tsi": 0.6,
+  "tsi_band": "high"
+}

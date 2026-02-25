@@ -1,0 +1,15 @@
+{
+  "end_date": "2026-03-12",
+  "expected_high_c": 15,
+  "expected_low_c": 3,
+  "group_size": 2,
+  "location": "Appalachians, SE",
+  "name": "SE weekend humid test",
+  "precipitation": "light",
+  "remoteness": "near",
+  "start_date": "2026-03-10",
+  "static_exposure": "medium",
+  "style": "backpack",
+  "trip_id": "trip-se-001",
+  "wind_mph": 8
+}

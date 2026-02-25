@@ -1,0 +1,71 @@
+[
+  {
+    "activity_tags": [
+      "active"
+    ],
+    "category": "clothing",
+    "id": "base_top_poly",
+    "insulation_type": "none",
+    "name": "Poly Base Top",
+    "role_tags": [
+      "primary"
+    ],
+    "sub_category": "base_top"
+  },
+  {
+    "activity_tags": [
+      "active"
+    ],
+    "category": "clothing",
+    "id": "grid_fleece_top",
+    "insulation_type": "fleece",
+    "name": "Grid Fleece Top",
+    "role_tags": [
+      "primary"
+    ],
+    "sub_category": "grid_top"
+  },
+  {
+    "activity_tags": [
+      "active",
+      "static"
+    ],
+    "category": "clothing",
+    "id": "waterproof_shell",
+    "insulation_type": "none",
+    "name": "Lightweight Waterproof Shell",
+    "role_tags": [
+      "primary"
+    ],
+    "seam_sealed": true,
+    "sub_category": "shell",
+    "waterproof_mmv": 20000
+  },
+  {
+    "activity_tags": [
+      "static",
+      "camp"
+    ],
+    "category": "clothing",
+    "fill_weight_g": 150,
+    "id": "m65_insulated",
+    "insulation_type": "synthetic",
+    "name": "Custom M65 Synthetic Lined Jacket",
+    "role_tags": [
+      "primary"
+    ],
+    "sub_category": "parka"
+  },
+  {
+    "category": "sleep",
+    "id": "pad_large",
+    "name": "Inflatable Pad",
+    "pad_rvalue": 3.0
+  },
+  {
+    "bag_r_equivalent": 4.0,
+    "category": "sleep",
+    "id": "bag_0c",
+    "name": "Sleeping Bag 0C Equivalent"
+  }
+]

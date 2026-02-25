@@ -1,0 +1,205 @@
+{
+  "$id": "https://example.org/schemas/GearItem.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "additionalProperties": false,
+  "properties": {
+    "activity_tags": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "bag_r_equivalent": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "bag_rating": {
+      "additionalProperties": false,
+      "properties": {
+        "comfort_c": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "extreme_c": {
+          "type": [
+            "number",
+            "null"
+          ]
+        },
+        "limit_c": {
+          "type": [
+            "number",
+            "null"
+          ]
+        }
+      },
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "brand": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "breathability_gm2": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "category": {
+      "enum": [
+        "clothing",
+        "shelter",
+        "sleep",
+        "cooking",
+        "water",
+        "navigation",
+        "climbing",
+        "medical",
+        "repair",
+        "power",
+        "consumable",
+        "admin"
+      ],
+      "type": "string"
+    },
+    "fill_power": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "fill_weight_g": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "fuel_type": {
+      "enum": [
+        "null",
+        "canister",
+        "white-gas",
+        "alcohol",
+        "wood"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "id": {
+      "type": "string"
+    },
+    "insulation_type": {
+      "enum": [
+        "down",
+        "synthetic",
+        "fleece",
+        "none",
+        "null"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "internal_note": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "model": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "name": {
+      "type": "string"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "pad_rvalue": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "role_tags": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "seam_sealed": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "source_type": {
+      "enum": [
+        "user_upload",
+        "vendor",
+        "internal",
+        "null"
+      ],
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "source_url": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sub_category": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "waterproof_mmv": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "weight_g": {
+      "minimum": 0,
+      "type": [
+        "number",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "category"
+  ],
+  "title": "GearItem",
+  "type": "object"
+}

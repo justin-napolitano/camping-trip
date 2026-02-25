@@ -1,0 +1,13 @@
+{
+  "bundle_hash": "sha256:0e684fff8783cbacaad1ea042a1a1e5874c218c306f29609abc493af0bfc6f0a",
+  "bundle_id": "capability-policy-v1.0.0",
+  "bundle_version": "1.0.0",
+  "created_at": "2026-02-25T22:20:16.128739Z",
+  "created_by": "jay.napolitano@adventhealth.com",
+  "rules": [
+    "clothing.rules.json",
+    "sleep.rules.json",
+    "cooking.rules.json",
+    "global.rules.json"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "id": "sleep-v1",
+  "priority": 20,
+  "rules": [
+    {
+      "description": "Block if combined_r below required threshold",
+      "id": "sleep_combined_r_block",
+      "if": {
+        "lt": [
+          "combined_r",
+          {
+            "arg": "trip.expected_low_c",
+            "lookup": "sleep_threshold_for"
+          }
+        ]
+      },
+      "priority": 100,
+      "then": {
+        "action": "block",
+        "reason": "sleep_combined_r_below_threshold"
+      }
+    }
+  ],
+  "sleep_thresholds": {
+    "gte_-6_lt_0": 4.5,
+    "gte_0_lt_10": 3.5,
+    "gte_10": 2.5,
+    "lt_-6": 6.0
+  }
+}

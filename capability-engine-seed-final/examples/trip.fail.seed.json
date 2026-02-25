@@ -1,0 +1,15 @@
+{
+  "end_date": "2026-03-16",
+  "expected_high_c": 2,
+  "expected_low_c": -2,
+  "group_size": 1,
+  "location": "Test Range",
+  "name": "Cold canister-only test",
+  "precipitation": "none",
+  "remoteness": "near",
+  "start_date": "2026-03-15",
+  "static_exposure": "medium",
+  "style": "backpack",
+  "trip_id": "trip-cold-001",
+  "wind_mph": 4
+}

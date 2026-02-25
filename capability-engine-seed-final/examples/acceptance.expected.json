@@ -1,0 +1,27 @@
+{
+  "approved": true,
+  "hard_rule_triggers": [],
+  "redundancy_warnings": [],
+  "selected_items": [
+    {
+      "item_id": "waterproof_shell",
+      "role": "clothing_L6",
+      "suitability_score": 0.91,
+      "top_3_factors": [
+        "waterproof",
+        "breathability",
+        "weight"
+      ]
+    }
+  ],
+  "suitability_score": 0.88,
+  "timestamp": "2026-02-25T22:20:16.132011Z",
+  "top_3_factors": [
+    "sleep_R",
+    "waterproof",
+    "fuel_margin"
+  ],
+  "trip_id": "trip-se-001",
+  "tsi": 0.32,
+  "tsi_band": "moderate"
+}

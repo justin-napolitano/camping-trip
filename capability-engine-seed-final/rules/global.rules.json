@@ -1,0 +1,98 @@
+{
+  "id": "global-v1",
+  "priority": 5,
+  "rules": [
+    {
+      "description": "Block if precipitation and no L6",
+      "id": "precipitation_rain_protection",
+      "if": {
+        "and": [
+          {
+            "in": [
+              "trip.precipitation",
+              [
+                "light",
+                "moderate",
+                "heavy",
+                "mixed",
+                "snow"
+              ]
+            ]
+          },
+          {
+            "not": {
+              "has_level": "L6"
+            }
+          }
+        ]
+      },
+      "priority": 150,
+      "then": {
+        "action": "block",
+        "reason": "no_rain_protection"
+      }
+    },
+    {
+      "description": "Block if static exposure below 5C and no L7",
+      "id": "static_L7_rule",
+      "if": {
+        "and": [
+          {
+            "lt": [
+              "trip.expected_low_c",
+              5
+            ]
+          },
+          {
+            "not": {
+              "has_level": "L7"
+            }
+          }
+        ]
+      },
+      "priority": 150,
+      "then": {
+        "action": "block",
+        "reason": "no_static_insulation"
+      }
+    },
+    {
+      "description": "Block if remote and no N3",
+      "id": "navigation_remote_rule",
+      "if": {
+        "and": [
+          {
+            "eq": [
+              "trip.remoteness",
+              "remote"
+            ]
+          },
+          {
+            "not": {
+              "has_navigation_min": "N3"
+            }
+          }
+        ]
+      },
+      "priority": 150,
+      "then": {
+        "action": "block",
+        "reason": "no_navigation_redundancy"
+      }
+    },
+    {
+      "description": "Block if no medical policy",
+      "id": "medical_policy_rule",
+      "if": {
+        "not": {
+          "has_medical_policy": true
+        }
+      },
+      "priority": 200,
+      "then": {
+        "action": "block",
+        "reason": "no_medical_policy"
+      }
+    }
+  ]
+}

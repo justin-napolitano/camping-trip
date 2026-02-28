@@ -1159,12 +1159,11 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T83 | Harden DB command scripts for truthful migration/rollback validation | You + Codex | High | Done | 2026-03-02 | `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` now perform real DB operations and fail on real apply/restore errors |
 | T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Done | 2026-03-02 | Added full-text canonical-search GIN index + name/model trigram GIN index; `db:migrate:check` enforcement added and preview apply verified |
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
-| T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | In Progress | 2026-03-06 | Active ExecPlan governance commit completed (`d53a069`); runtime scope remains DB-derived evaluation context, strict explainability enforcement, and field-test pass gating in `.agent/execplans/v2-engine-hardening.md` |
+| T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
-1. Execute `.agent/execplans/v2-engine-hardening.md` in milestone order.
-2. Complete T86 before further trip-evaluation feature expansion.
-3. Run release hardening closeout and final evidence capture.
-4. Keep AGENTS workboard and ExecPlan progress log synchronized.
+1. Run release hardening closeout and final evidence capture.
+2. Keep AGENTS workboard and ExecPlan progress log synchronized.
+3. Start next feature/task only after creating/updating the active branch ExecPlan path.

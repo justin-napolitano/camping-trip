@@ -46,6 +46,50 @@ const invalidTripEval = validateTripsEvaluateRequest({
 });
 assert(!invalidTripEval.ok, "expected invalid trip evaluation request to fail");
 
+const tripEvalUnknownBodyField = validateTripsEvaluateRequest({
+  trip_profile: {
+    trip_type: "weekend_backpacking",
+    expected_low_c: 2,
+    wind_mph: 12,
+    precipitation_risk: "medium",
+    remoteness: "semi_remote",
+    static_exposure: "medium",
+    precipitation_expected: true
+  },
+  selected_gear_by_system: { sleep: ["gear-1"] },
+  unexpected: "x"
+});
+assert(!tripEvalUnknownBodyField.ok, "expected unknown body fields to fail");
+
+const tripEvalUnknownTripProfileField = validateTripsEvaluateRequest({
+  trip_profile: {
+    trip_type: "weekend_backpacking",
+    expected_low_c: 2,
+    wind_mph: 12,
+    precipitation_risk: "medium",
+    remoteness: "semi_remote",
+    static_exposure: "medium",
+    precipitation_expected: true,
+    unknown_prop: true
+  },
+  selected_gear_by_system: { sleep: ["gear-1"] }
+});
+assert(!tripEvalUnknownTripProfileField.ok, "expected unknown trip_profile fields to fail");
+
+const tripEvalInvalidSelectedIds = validateTripsEvaluateRequest({
+  trip_profile: {
+    trip_type: "weekend_backpacking",
+    expected_low_c: 2,
+    wind_mph: 12,
+    precipitation_risk: "medium",
+    remoteness: "semi_remote",
+    static_exposure: "medium",
+    precipitation_expected: true
+  },
+  selected_gear_by_system: { sleep: ["gear-1", "", 12], cooking: "gear-2" }
+});
+assert(!tripEvalInvalidSelectedIds.ok, "expected selected_gear_by_system item/type validation to fail");
+
 const validReview = validateReviewIntelCreate({
   source_type: "internal_admin",
   source_url: null

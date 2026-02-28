@@ -49,11 +49,30 @@ export function validateTripsEvaluateRequest(body) {
     return { ok: false, errors: [bodyError] };
   }
 
+  const allowedBodyKeys = new Set(["trip_profile", "selected_gear_by_system"]);
+  const unknownBodyKeys = Object.keys(body).filter((key) => !allowedBodyKeys.has(key));
+  if (unknownBodyKeys.length > 0) {
+    errors.push(`unknown body fields: ${unknownBodyKeys.join(",")}`);
+  }
+
   const tripProfileError = ensureObject(body.trip_profile, "trip_profile");
   if (tripProfileError) {
     errors.push(tripProfileError);
   } else {
     const t = body.trip_profile;
+    const allowedTripProfileKeys = new Set([
+      "trip_type",
+      "expected_low_c",
+      "wind_mph",
+      "precipitation_risk",
+      "remoteness",
+      "static_exposure",
+      "precipitation_expected"
+    ]);
+    const unknownTripProfileKeys = Object.keys(t).filter((key) => !allowedTripProfileKeys.has(key));
+    if (unknownTripProfileKeys.length > 0) {
+      errors.push(`unknown trip_profile fields: ${unknownTripProfileKeys.join(",")}`);
+    }
     if (!TRIP_TYPES.includes(t.trip_type)) {
       errors.push("trip_profile.trip_type is invalid");
     }
@@ -80,6 +99,24 @@ export function validateTripsEvaluateRequest(body) {
   const selectedError = ensureObject(body.selected_gear_by_system, "selected_gear_by_system");
   if (selectedError) {
     errors.push(selectedError);
+  } else {
+    const selectedEntries = Object.entries(body.selected_gear_by_system);
+    if (selectedEntries.length === 0) {
+      errors.push("selected_gear_by_system must include at least one system");
+    }
+
+    for (const [systemKey, ids] of selectedEntries) {
+      if (!Array.isArray(ids)) {
+        errors.push(`selected_gear_by_system.${systemKey} must be an array`);
+        continue;
+      }
+
+      ids.forEach((id, idx) => {
+        if (typeof id !== "string" || id.trim().length === 0) {
+          errors.push(`selected_gear_by_system.${systemKey}[${idx}] must be a non-empty string`);
+        }
+      });
+    }
   }
 
   return { ok: errors.length === 0, errors };

@@ -13,11 +13,11 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
 ## Progress
 
 - [x] (2026-02-28T20:25:00Z) V4 ExecPlan created and AGENTS T88 registration synchronized.
-- [ ] (2026-02-28T20:25:00Z) Milestone 1 pending: route/page scaffolding for explorer and gear detail views.
-- [ ] (2026-02-28T20:25:00Z) Milestone 2 pending: gear explorer UI wiring to `/api/v1/gear` query/filters.
-- [ ] (2026-02-28T20:25:00Z) Milestone 3 pending: gear detail + location performance UI wiring.
-- [ ] (2026-02-28T20:25:00Z) Milestone 4 pending: homepage kit-to-gear detail navigation links.
-- [ ] (2026-02-28T20:25:00Z) Milestone 5 pending: validation gates and closure evidence sync.
+- [x] (2026-02-28T20:40:00Z) Milestone 1 completed: added `/gear` explorer page and `/gear/[slug]` detail page scaffolding.
+- [x] (2026-02-28T20:40:00Z) Milestone 2 completed: explorer UI now queries `/api/v1/gear` with filter/query controls and renders paged results.
+- [x] (2026-02-28T20:40:00Z) Milestone 3 completed: detail UI now loads `/api/v1/gear/:slug` and `/api/v1/gear/:slug/locations` and renders aggregate/location views.
+- [x] (2026-02-28T20:40:00Z) Milestone 4 completed: homepage kit items now include in-app links to gear detail routes and explorer entrypoint link.
+- [x] (2026-02-28T20:40:00Z) Milestone 5 completed: validation gates passed (`test:homepage-kits`, `test:e2e -- --grep \"homepage kits\"`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`).
 
 ## Surprises & Discoveries
 
@@ -26,6 +26,9 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
 
 - Observation: target APIs already exist and can be consumed without changing contracts.
   Evidence: route handlers for `/api/v1/gear`, `/api/v1/gear/:slug`, and `/api/v1/gear/:slug/locations` are present.
+
+- Observation: DB-backed homepage kit payloads used UUID-like `gear_item_id` values, which broke direct slug-based detail links.
+  Evidence: updated DB repository mapping to return gear slug for `gear_item_id` in homepage kits payload to preserve current contract while enabling links.
 
 ## Decision Log
 
@@ -37,9 +40,23 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
   Rationale: maintain continuity and avoid unnecessary design churn.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: keep `gear_item_id` contract field as string but back it with slug in homepage DB payload mapping for navigability.
+  Rationale: avoids contract expansion while supporting immediate in-app detail navigation.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
-Success means users can discover and inspect gear in-app (list + detail + location performance) and navigate from homepage kit items into detail pages, with all locked test gates passing. Final retrospective will capture any UX gaps and deferred improvements.
+T88 completed: users can now explore gear via `/gear`, open detail pages under `/gear/[slug]`, inspect location performance, and navigate from homepage kit cards into detail routes. All locked validation gates passed.
+
+Validation evidence:
+
+- `npm run test:homepage-kits`: PASS
+- `npm run test:e2e -- --grep "homepage kits"`: PASS
+- `npm run test:contract`: PASS
+- `npm run test:unit`: PASS
+- `npm run test:integration`: PASS
+- `npm run lint`: PASS
+- `npm run typecheck`: PASS
 
 ## Context and Orientation
 
@@ -138,3 +155,4 @@ UI pages should consume existing response shapes directly and avoid introducing 
 ## Change Notes
 
 - 2026-02-28: Created active V4 ExecPlan for gear explorer browse/detail UX and synced AGENTS task/command manifest.
+- 2026-02-28: Completed T88 implementation and recorded full gate evidence for explorer/detail UI rollout.

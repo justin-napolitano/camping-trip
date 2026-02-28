@@ -14,19 +14,17 @@ This plan delivers the first working version of the project by making the API co
 - [x] (2026-02-28T16:01:14Z) Milestone 0: Bootstrap and command scaffold verification completed (bootstrap/env + script help checks pass).
 - [x] (2026-02-28T16:01:14Z) Milestone 0.5: Repo bootstrap readiness gate completed (required paths/scripts exist; path checks pass).
 - [x] (2026-02-28T16:23:18Z) Milestone 1: T12 completed with locked endpoint schemas, OpenAPI route coverage, runtime handler/validator wiring, and passing `contract:validate` + `test:contract` (including endpoint-handler contract suite).
-- [ ] (2026-02-28T16:11:09Z) Milestone 2 in progress: full Prisma schema + initial SQL migration is implemented, but closure is pending truthful DB command hardening and clean evidence rerun.
-- [ ] (2026-02-25T15:47:00Z) Milestone 2: Complete T13 Prisma schema and initial migration.
+- [x] (2026-02-28T17:21:47Z) Milestone 2: T13 completed with real DB bring-up, clean reset/apply validation, preview-like apply validation, and rollback path verification evidence.
 - [x] (2026-02-28T17:03:29Z) Preview-like DB environment bootstrapped via `npm run db:up`; both local dev and preview DBs are running and reachable.
-- [ ] (2026-02-28T17:18:20Z) Milestone 2 remains open: T83 hardening is complete; remaining T13 blocker is T84 search-index policy drift closure and rerun evidence.
 - [x] (2026-02-28T16:17:08Z) Milestone 3: T11 seed dataset build and validation completed (`seed:validate`, `seed:import:test`, `seed:report`, `test:capability-rules`, `test:trip-evaluation` all pass with report artifacts).
 - [x] (2026-02-28T16:12:41Z) Milestone 4: T10 integration scaffolding completed with Notion disabled guardrails; `integration:check` + `test:integration-adapters` passing and evidence artifact recorded.
-- [ ] (2026-02-25T15:47:00Z) Milestone 5: Run global local test gate and finalize completion evidence.
+- [x] (2026-02-28T17:23:20Z) Milestone 5: Global local test gate completed with real (non-noop) command implementations and passing results.
 - [x] (2026-02-28T16:23:18Z) Milestone 6: T81 completed with deterministic capability engine, trip-evaluation handler wiring, and passing `test:capability-rules`, `test:trip-evaluation`, and endpoint handler tests.
 - [ ] (2026-02-25T16:10:00Z) Milestone 7: Complete T82 homepage kit endpoint/UI contract integration.
 - [x] (2026-02-28T17:18:20Z) Milestone 8: T83 completed; DB command path hardened and verified with real operations (`db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, `db:restore:dry-run` all pass).
 - [x] (2026-02-28T17:19:56Z) Post-hardening verification rerun completed: `db:migrate:check`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` all pass with real DB side effects and artifact outputs.
-- [ ] (2026-02-28T17:10:00Z) Milestone 9: Complete T84 hardening (search-index drift closure).
-- [ ] (2026-02-28T17:10:00Z) Milestone 10: Complete T85 hardening (real global gate commands).
+- [x] (2026-02-28T17:21:47Z) Milestone 9: T84 completed (search-index drift closure) with full-text and name/model trigram index enforcement + preview apply pass.
+- [x] (2026-02-28T17:23:20Z) Milestone 10: T85 completed with real gate scripts for `lint`, `typecheck`, `test:unit`, and `test:integration`.
 
 ## Surprises & Discoveries
 
@@ -43,6 +41,8 @@ Execution discovery on 2026-02-28: T11 can be closed with deterministic fixtures
 Execution discovery on 2026-02-28: endpoint-handler contract suite is effective for verifying request-validation/runtime wiring across the locked endpoint set without requiring a full Next.js runtime boot.
 Execution discovery on 2026-02-28: preview-like live migration apply path exists via `npm run db:migrate:preview-check`; initial credential block was resolved by local Docker DB bring-up.
 Execution discovery on 2026-02-28: preview-like DB credentials are now available via local Docker bring-up; after T83 patching, preview migration check now fails on apply conflicts and passes only after successful clean reset + apply verification.
+Execution discovery on 2026-02-28: T84 search-index drift was resolved by adding a canonical-search full-text GIN index and a name/model trigram GIN index, with `db:migrate:check` asserting both.
+Execution discovery on 2026-02-28: T85 gate hardening replaced all no-op global gate scripts with real lint/type/unit/integration validation command paths that now pass locally.
 
 Evidence:
 
@@ -322,3 +322,4 @@ Change Note
 - 2026-02-25: Synced Milestone 2 command manifest with AGENTS T13 rollback command availability requirements to remove acceptance drift risk.
 - 2026-02-25: Expanded ExecPlan scope to include T81 capability-policy implementation and T82 homepage kits integration.
 - 2026-02-28: Added T83/T84/T85 hardening milestones and synchronized command manifests with AGENTS (including `npm run db:up` for T13/T83).
+- 2026-02-28: Completed T13/T83/T84/T85 command hardening and validation evidence; global local test gate now runs real non-noop checks.

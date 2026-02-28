@@ -28,7 +28,9 @@ For database setup and `T13` closeout on a personal machine, use:
 - `T10`: Done
 - `T11`: Done
 - `T12`: Done
-- `T13`: Blocked pending search-index policy drift closure (`T84`) before closure evidence rerun
+- `T13`: Done
 - `T81`: Done
+- `T84`: Done
+- `T85`: Done
 
 See [AGENTS.md](AGENTS.md) and [.agent/execplans/v1-implementation.md](.agent/execplans/v1-implementation.md) for authoritative status.

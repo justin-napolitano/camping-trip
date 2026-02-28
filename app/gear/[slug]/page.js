@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function GearDetailPage({ params }) {
-  const slug = params?.slug;
+  const slug = use(params)?.slug;
   const [status, setStatus] = useState("loading");
   const [error, setError] = useState("");
   const [detail, setDetail] = useState(null);

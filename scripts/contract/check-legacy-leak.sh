@@ -4,6 +4,20 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
+has_rg() {
+  command -v rg >/dev/null 2>&1
+}
+
+search_regex() {
+  local pattern="$1"
+  shift
+  if has_rg; then
+    rg -n --hidden --glob '!**/node_modules/**' --glob '!**/.next/**' "$pattern" "$@"
+  else
+    grep -R -n -E --exclude-dir=node_modules --exclude-dir=.next "$pattern" "$@"
+  fi
+}
+
 echo "[guard] checking for legacy seed package leakage into canonical runtime/contract paths..."
 
 LEGACY_REF_REGEX='capability-engine-seed-final|reference/legacy-capability-seed|legacy-capability-seed'
@@ -19,7 +33,7 @@ done
 if [ "${#SCAN_TARGETS[@]}" -eq 0 ]; then
   echo "[guard] canonical paths not present yet; skipping import leak scan."
 else
-  if rg -n --hidden --glob '!**/node_modules/**' --glob '!**/.next/**' "$LEGACY_REF_REGEX" "${SCAN_TARGETS[@]}"; then
+  if search_regex "$LEGACY_REF_REGEX" "${SCAN_TARGETS[@]}"; then
     echo "[guard] FAIL: found legacy package references in canonical paths."
     exit 1
   fi
@@ -37,7 +51,7 @@ done
 if [ "${#CONTRACT_TARGETS[@]}" -eq 0 ]; then
   echo "[guard] canonical contract files not present yet; skipping enum leak scan."
 else
-  if rg -n --hidden --glob '!**/node_modules/**' "$LEGACY_ENUM_OR_FIELD_REGEX" "${CONTRACT_TARGETS[@]}"; then
+  if search_regex "$LEGACY_ENUM_OR_FIELD_REGEX" "${CONTRACT_TARGETS[@]}"; then
     echo "[guard] FAIL: found legacy trip model fields/enums in canonical contracts."
     echo "[guard] blocked tokens: near, style, precipitation"
     exit 1

@@ -1083,12 +1083,13 @@ This file is the operating contract for scope, architecture, data, and decision 
   - add frontend browse/discovery routes for gear list and detail experiences
   - implement gear explorer page that consumes `GET /api/v1/gear` with query/filter controls and pagination
   - implement gear detail page consuming `GET /api/v1/gear/:slug` and location-performance view from `GET /api/v1/gear/:slug/locations`
+  - surface full gear-detail payload sections in UI (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`)
   - add navigation from homepage kits to gear detail routes
   - preserve existing API contracts and maintain DB-backed endpoint behavior introduced in T87
 - Acceptance criteria:
   - users can navigate from homepage kit item to gear detail page
   - users can search/filter gear from UI and see non-empty results for valid queries
-  - gear detail page shows aggregated score fields and location performance payloads without contract drift
+  - gear detail page shows aggregated scores plus full detail payload sections and location performance without contract drift
   - no regression in homepage kits rendering behavior
   - local verification commands succeed:
     - `npm run test:homepage-kits`
@@ -1221,7 +1222,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
 | T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 | T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
-| T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
+| T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, expanded gear detail payload/UI surfacing (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`), and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 

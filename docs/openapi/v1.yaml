@@ -106,6 +106,72 @@ paths:
                       composite_score: 4.3
                       confidence_score: 0.82
                       review_count: 7
+                    specs:
+                      price_usd: 219
+                      weight_g: 340
+                      packed_volume_l: 1.2
+                      packability_mode: portable_volume_based
+                      insulation_type: null
+                      fill_weight_g: null
+                      fill_power: null
+                      waterproof_mmv: 20000
+                      seam_sealed: true
+                      breathability_gm2: 12000
+                      purchase_url: https://example.com/alpha-shell
+                    classification:
+                      gear_class:
+                        id: cls-shell
+                        slug: shell-jacket
+                        name: Shell Jacket
+                      systems:
+                        - slug: clothing
+                          name: Clothing
+                      features_present: [waterproof, hood]
+                      required_features: [waterproof, hood]
+                      feature_coverage_ratio: 1
+                    review_summary:
+                      avg_rating: 4.2
+                      avg_durability: 3.8
+                      avg_value: 3.9
+                      avg_packability: 4.1
+                      latest_review_date: 2026-02-02
+                      source_mix:
+                        internal_admin: 3
+                        third_party_review: 4
+                      evidence_quality:
+                        low: 1
+                        medium: 5
+                        high: 1
+                      usage_and_reliability:
+                        failure_events_total: 2
+                        repair_events_total: 1
+                        usage_cycles_total: 88
+                        usage_runtime_hours_total: 37
+                    field_tests_recent:
+                      - id: ft-001
+                        test_type: sleep_overnight
+                        test_date: 2026-02-01
+                        expected_low_c: -2
+                        passed: true
+                        notes: Sleep system held warm overnight.
+                    kit_presence:
+                      in_homepage_kits: true
+                      kits:
+                        - kit_id: wknd-1
+                          kit_name: Weekend Backpacking Baseline
+                          system: clothing
+                          suitability_score: 0.91
+                    location_summary:
+                      strongest_location:
+                        location_slug: sand-rock
+                        location_name: Sand Rock
+                        composite_score: 4.4
+                        confidence_score: 0.86
+                      weakest_location:
+                        location_slug: linville-gorge
+                        location_name: Linville Gorge
+                        composite_score: 3.8
+                        confidence_score: 0.71
         "404":
           description: Gear not found
           content:

@@ -4,7 +4,18 @@
   "title": "GearDetailResponse",
   "type": "object",
   "additionalProperties": false,
-  "required": ["id", "slug", "name", "aggregated_scores"],
+  "required": [
+    "id",
+    "slug",
+    "name",
+    "aggregated_scores",
+    "specs",
+    "classification",
+    "review_summary",
+    "field_tests_recent",
+    "kit_presence",
+    "location_summary"
+  ],
   "properties": {
     "id": { "type": "string" },
     "slug": { "type": "string" },
@@ -17,6 +28,191 @@
         "composite_score": { "type": "number" },
         "confidence_score": { "type": "number" },
         "review_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "specs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "price_usd",
+        "weight_g",
+        "packed_volume_l",
+        "packability_mode",
+        "insulation_type",
+        "fill_weight_g",
+        "fill_power",
+        "waterproof_mmv",
+        "seam_sealed",
+        "breathability_gm2",
+        "purchase_url"
+      ],
+      "properties": {
+        "price_usd": { "type": "number" },
+        "weight_g": { "type": "number" },
+        "packed_volume_l": { "type": ["number", "null"] },
+        "packability_mode": { "type": "string" },
+        "insulation_type": { "type": ["string", "null"] },
+        "fill_weight_g": { "type": ["number", "null"] },
+        "fill_power": { "type": ["number", "null"] },
+        "waterproof_mmv": { "type": ["number", "null"] },
+        "seam_sealed": { "type": ["boolean", "null"] },
+        "breathability_gm2": { "type": ["number", "null"] },
+        "purchase_url": { "type": ["string", "null"] }
+      }
+    },
+    "classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gear_class", "systems", "features_present", "required_features", "feature_coverage_ratio"],
+      "properties": {
+        "gear_class": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "slug", "name"],
+          "properties": {
+            "id": { "type": "string" },
+            "slug": { "type": "string" },
+            "name": { "type": "string" }
+          }
+        },
+        "systems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["slug", "name"],
+            "properties": {
+              "slug": { "type": "string" },
+              "name": { "type": "string" }
+            }
+          }
+        },
+        "features_present": { "type": "array", "items": { "type": "string" } },
+        "required_features": { "type": "array", "items": { "type": "string" } },
+        "feature_coverage_ratio": { "type": "number" }
+      }
+    },
+    "review_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "avg_rating",
+        "avg_durability",
+        "avg_value",
+        "avg_packability",
+        "latest_review_date",
+        "source_mix",
+        "evidence_quality",
+        "usage_and_reliability"
+      ],
+      "properties": {
+        "avg_rating": { "type": "number" },
+        "avg_durability": { "type": "number" },
+        "avg_value": { "type": "number" },
+        "avg_packability": { "type": "number" },
+        "latest_review_date": { "type": ["string", "null"] },
+        "source_mix": {
+          "type": "object",
+          "additionalProperties": { "type": "integer", "minimum": 0 }
+        },
+        "evidence_quality": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["low", "medium", "high"],
+          "properties": {
+            "low": { "type": "integer", "minimum": 0 },
+            "medium": { "type": "integer", "minimum": 0 },
+            "high": { "type": "integer", "minimum": 0 }
+          }
+        },
+        "usage_and_reliability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["failure_events_total", "repair_events_total", "usage_cycles_total", "usage_runtime_hours_total"],
+          "properties": {
+            "failure_events_total": { "type": "number", "minimum": 0 },
+            "repair_events_total": { "type": "number", "minimum": 0 },
+            "usage_cycles_total": { "type": "number", "minimum": 0 },
+            "usage_runtime_hours_total": { "type": "number", "minimum": 0 }
+          }
+        }
+      }
+    },
+    "field_tests_recent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "test_type", "test_date", "expected_low_c", "passed", "notes"],
+        "properties": {
+          "id": { "type": "string" },
+          "test_type": { "type": "string" },
+          "test_date": { "type": "string" },
+          "expected_low_c": { "type": "number" },
+          "passed": { "type": "boolean" },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "kit_presence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["in_homepage_kits", "kits"],
+      "properties": {
+        "in_homepage_kits": { "type": "boolean" },
+        "kits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kit_id", "kit_name", "system", "suitability_score"],
+            "properties": {
+              "kit_id": { "type": "string" },
+              "kit_name": { "type": "string" },
+              "system": { "type": "string" },
+              "suitability_score": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "location_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["strongest_location", "weakest_location"],
+      "properties": {
+        "strongest_location": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["location_slug", "location_name", "composite_score", "confidence_score"],
+              "properties": {
+                "location_slug": { "type": "string" },
+                "location_name": { "type": "string" },
+                "composite_score": { "type": "number" },
+                "confidence_score": { "type": "number" }
+              }
+            }
+          ]
+        },
+        "weakest_location": {
+          "oneOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["location_slug", "location_name", "composite_score", "confidence_score"],
+              "properties": {
+                "location_slug": { "type": "string" },
+                "location_name": { "type": "string" },
+                "composite_score": { "type": "number" },
+                "confidence_score": { "type": "number" }
+              }
+            }
+          ]
+        }
       }
     }
   }

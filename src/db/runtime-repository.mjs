@@ -159,6 +159,7 @@ export async function fetchHomepageKitsDb() {
       b.slug AS kit_slug,
       b.name AS kit_name,
       i.gear_item_id::text AS gear_item_id,
+      g.slug AS gear_slug,
       g.name AS gear_name,
       s.slug AS system_slug,
       i.suitability_score::float AS suitability_score,
@@ -184,7 +185,7 @@ export async function fetchHomepageKitsDb() {
     }
 
     grouped.get(row.kit_slug).items.push({
-      gear_item_id: row.gear_item_id,
+      gear_item_id: row.gear_slug || row.gear_item_id,
       name: row.gear_name,
       system: row.system_slug,
       suitability_score: Number(row.suitability_score),

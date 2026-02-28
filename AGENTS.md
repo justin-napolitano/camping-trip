@@ -1221,12 +1221,11 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
 | T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 | T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
-| T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | In Progress | 2026-03-12 | Active execution source-of-truth is `.agent/execplans/v4-gear-explorer-ui.md`; task remains in progress until browse pages, homepage->detail links, and T88 command gates are complete |
+| T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
-1. Execute `.agent/execplans/v4-gear-explorer-ui.md` in milestone order.
-2. Complete T88 before additional UX/theme expansion.
-3. Keep AGENTS workboard and ExecPlan progress log synchronized.
-4. Run release hardening closeout and final evidence capture.
+1. Run release hardening closeout and final evidence capture.
+2. Keep AGENTS workboard and ExecPlan progress log synchronized.
+3. Start next feature/task only after creating/updating the active branch ExecPlan path.

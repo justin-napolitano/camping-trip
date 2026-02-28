@@ -4,6 +4,38 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
+has_rg() {
+  command -v rg >/dev/null 2>&1
+}
+
+contains_literal() {
+  local needle="$1"
+  local file="$2"
+  if has_rg; then
+    rg -F -q "$needle" "$file"
+  else
+    grep -F -q "$needle" "$file"
+  fi
+}
+
+contains_regex() {
+  local pattern="$1"
+  local file="$2"
+  if has_rg; then
+    rg -q "$pattern" "$file"
+  else
+    grep -E -q "$pattern" "$file"
+  fi
+}
+
+search_todo_tbd() {
+  if has_rg; then
+    rg -n "TODO|TBD" docs/openapi/v1.yaml schemas src/contracts/index.mjs
+  else
+    grep -R -n -E "TODO|TBD" docs/openapi/v1.yaml schemas src/contracts/index.mjs
+  fi
+}
+
 bash scripts/contract/check-legacy-leak.sh
 
 required_paths=(
@@ -35,7 +67,7 @@ required_endpoints=(
 )
 
 for endpoint in "${required_endpoints[@]}"; do
-  if ! rg -F -q "${endpoint}" docs/openapi/v1.yaml; then
+  if ! contains_literal "${endpoint}" docs/openapi/v1.yaml; then
     echo "[contract:validate] endpoint missing from openapi: ${endpoint}" >&2
     exit 1
   fi
@@ -49,7 +81,7 @@ required_schema_refs=(
 )
 
 for schema_ref in "${required_schema_refs[@]}"; do
-  if ! rg -q "${schema_ref}" docs/openapi/v1.yaml; then
+  if ! contains_regex "${schema_ref}" docs/openapi/v1.yaml; then
     echo "[contract:validate] required schema ref missing in openapi: ${schema_ref}" >&2
     exit 1
   fi
@@ -59,7 +91,7 @@ for schema_ref in "${required_schema_refs[@]}"; do
   fi
 done
 
-if rg -n "TODO|TBD" docs/openapi/v1.yaml schemas src/contracts/index.mjs; then
+if search_todo_tbd; then
   echo "[contract:validate] remove TODO/TBD placeholders from contract files." >&2
   exit 1
 fi

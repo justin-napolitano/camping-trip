@@ -93,13 +93,16 @@ This file is the operating contract for scope, architecture, data, and decision 
   - `.agent/execplans/v3-db-seed-runtime-wiring.md`
 - Active implementation for prior gear-explorer branch was driven by:
   - `.agent/execplans/v4-gear-explorer-ui.md`
-- Active implementation for current source-ingest-affiliate-seeding branch must be driven by:
+- Active implementation for prior source-ingest-affiliate-seeding branch was driven by:
   - `.agent/execplans/v5-source-ingest-affiliate-seeding.md`
+- Active implementation for current affiliate-linking-system branch must be driven by:
+  - `.agent/execplans/v6-affiliate-linking-system.md`
 - Historical-plan rule:
   - `.agent/execplans/v1-implementation.md` is retained as closed historical evidence and is not the active execution source-of-truth for new tasks.
   - `.agent/execplans/v2-engine-hardening.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
   - `.agent/execplans/v3-db-seed-runtime-wiring.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
   - `.agent/execplans/v4-gear-explorer-ui.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
+  - `.agent/execplans/v5-source-ingest-affiliate-seeding.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
 - ExecPlan usage rules:
   - the ExecPlan is the execution source-of-truth during implementation
   - the ExecPlan must be treated as a living document and updated at every stopping point
@@ -1139,6 +1142,29 @@ This file is the operating contract for scope, architecture, data, and decision 
     - `npm run lint`
     - `npm run typecheck`
 
+### T90: Affiliate Linking System (Outbound Link Governance + Tracking)
+- Required deliverables:
+  - define canonical affiliate-link resolution policy for outbound gear links (raw source URL -> tracked outbound URL)
+  - implement affiliate link builder utility with deterministic provider rules and explicit fallback behavior
+  - implement server route for outbound redirect/tracking with request id and link metadata logging
+  - enforce allowed outbound domains and block malformed/untrusted redirect targets
+  - add contract/docs updates for any new affiliate-link endpoint and response/error shapes
+  - wire homepage/gear detail UI links to affiliate-link resolver path without breaking current navigation
+- Acceptance criteria:
+  - affiliate link builder produces deterministic outbound URLs for approved providers
+  - redirect route blocks invalid/untrusted URLs and returns standard API error contract fields
+  - homepage kit and gear detail purchase actions use affiliate-link resolver path
+  - no regression in existing browse/detail/homepage routes
+  - local verification commands succeed:
+    - `npm run test:homepage-kits`
+    - `npm run test:e2e -- --grep "homepage kits"`
+    - `npm run test:contract`
+    - `npm run contract:validate`
+    - `npm run test:unit`
+    - `npm run test:integration`
+    - `npm run lint`
+    - `npm run typecheck`
+
 ### Implementation Dependency Order (Locked)
 1. T12 (contracts) must be completed before T13 (schema migration finalization).
 2. T13 must be completed before T11 (seed import validation).
@@ -1263,6 +1289,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
 | T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, expanded gear detail payload/UI surfacing (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`), and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
 | T89 | Implement affiliate-source seed expansion workflow | You + Codex | High | Done | 2026-03-16 | Completed under `.agent/execplans/v5-source-ingest-affiliate-seeding.md`: fail-closed source policy gates, deterministic normalization pipeline + fixture affiliate feeds, additive source artifact import wiring (`gear_items.source.json`), provenance-aware seed reporting, and passing gate bundle (`seed:source:check`, `seed:source:normalize`, `seed:validate`, `seed:import:db`, `seed:import:test`, `seed:report`, `test:contract`, `contract:validate`, `test:unit`, `test:integration`, `lint`, `typecheck`) |
+| T90 | Implement affiliate linking system for outbound gear links | You + Codex | High | In Progress | 2026-03-20 | Active plan: `.agent/execplans/v6-affiliate-linking-system.md`; scope is deterministic affiliate URL resolution, tracked redirect endpoint, domain safety enforcement, and UI wiring for purchase links |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 

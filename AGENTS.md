@@ -1106,8 +1106,17 @@ This file is the operating contract for scope, architecture, data, and decision 
 ### T89: Affiliate-Source Seed Expansion (Agentic Ingest Workflow)
 - Required deliverables:
   - define and implement an agentic source-ingest workflow for affiliate-safe gear catalog expansion
+  - lock explicit approved source ids for v1 ingest: `rei_affiliate_feed`, `backcountry_affiliate_feed`, `manual_admin_fixture`
+  - lock explicit trusted domain allowlist for adapter URLs:
+    - REI: `rei.com`, `www.rei.com`
+    - Backcountry: `backcountry.com`, `www.backcountry.com`, `steepandcheap.com`, `www.steepandcheap.com`
   - add source adapter layer for affiliate/product-feed ingestion with strict source allowlist controls
   - extend seed normalization so incoming source records map deterministically into canonical `GearItem`, `GearClass`, and optional `ReviewIntel` seed structures
+  - enforce deterministic source dedupe key algorithm:
+    - `source_dedupe_key = sha256(source_id + \"|\" + source_product_id + \"|\" + normalized_brand + \"|\" + normalized_model)`
+  - define adapter contract fields and required normalized output fields before adapter-specific parsing:
+    - required raw fields: `source_id`, `source_product_id`, `source_url`, `name`, `brand`, `price_usd`, `currency`, `fetched_at`
+    - required normalized fields: `slug`, `name`, `gear_class_slug`, `system_slugs`, `price_usd`, `purchase_url`, `source_id`, `source_product_id`, `source_dedupe_key`, `raw_hash`, `parser_version`
   - preserve canonical runtime/contract paths and keep legacy/source-staging artifacts out of API runtime handlers
   - add ingest audit/provenance metadata in staging artifacts (`source`, `fetched_at`, `raw_hash`, `parser_version`, `affiliate_url_present`)
   - add reproducible ingest commands and documentation so expansion can be rerun without manual DB row edits
@@ -1117,6 +1126,7 @@ This file is the operating contract for scope, architecture, data, and decision 
   - affiliate link fields are captured as outbound purchase URLs only (no in-app checkout semantics)
   - source adapters fail closed for unknown/untrusted domains or malformed records
   - local verification commands succeed:
+    - `npm run seed:source:check`
     - `npm run seed:validate`
     - `npm run seed:import:db`
     - `npm run seed:import:test`

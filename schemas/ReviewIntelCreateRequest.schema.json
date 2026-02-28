@@ -1,0 +1,63 @@
+{
+  "$id": "https://camping-trip.local/schemas/ReviewIntelCreateRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReviewIntelCreateRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "gear_item_id",
+    "gear_class_id",
+    "location_id",
+    "system_ids",
+    "author_id",
+    "review_date",
+    "source_type",
+    "rating",
+    "durability",
+    "value",
+    "packability",
+    "conditions_observed",
+    "pros",
+    "cons",
+    "use_case",
+    "version"
+  ],
+  "properties": {
+    "gear_item_id": { "type": "string" },
+    "gear_class_id": { "type": "string" },
+    "location_id": { "type": "string" },
+    "system_ids": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "author_id": { "type": "string" },
+    "review_date": { "type": "string", "format": "date" },
+    "source_type": { "type": "string", "enum": ["internal_admin", "field_note", "third_party_review", "manufacturer_spec"] },
+    "source_url": { "type": ["string", "null"] },
+    "rating": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "durability": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "value": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "packability": { "type": "integer", "minimum": 1, "maximum": 5 },
+    "usage_cycles_observed": { "type": ["number", "null"] },
+    "usage_runtime_hours": { "type": ["number", "null"] },
+    "failure_event_count": { "type": ["integer", "null"], "minimum": 0 },
+    "repair_event_count": { "type": ["integer", "null"], "minimum": 0 },
+    "conditions_observed": { "type": "string" },
+    "pros": { "type": "array", "items": { "type": "string" } },
+    "cons": { "type": "array", "items": { "type": "string" } },
+    "use_case": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "source_type": { "enum": ["third_party_review", "manufacturer_spec"] }
+        }
+      },
+      "then": {
+        "required": ["source_url"],
+        "properties": {
+          "source_url": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  ]
+}

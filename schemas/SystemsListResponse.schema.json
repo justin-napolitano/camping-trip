@@ -1,0 +1,24 @@
+{
+  "$id": "https://camping-trip.local/schemas/SystemsListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SystemsListResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "slug", "name"],
+        "properties": {
+          "id": { "type": "string" },
+          "slug": { "type": "string" },
+          "name": { "type": "string" },
+          "deprecated": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

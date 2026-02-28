@@ -13,12 +13,13 @@ This plan delivers the first working version of the project by making the API co
 - [x] (2026-02-25T15:47:00Z) ExecPlan compliance rewrite completed (prose-first structure, explicit validation outputs, explicit rollback commands).
 - [x] (2026-02-28T16:01:14Z) Milestone 0: Bootstrap and command scaffold verification completed (bootstrap/env + script help checks pass).
 - [x] (2026-02-28T16:01:14Z) Milestone 0.5: Repo bootstrap readiness gate completed (required paths/scripts exist; path checks pass).
-- [ ] (2026-02-25T15:47:00Z) Milestone 1: Complete T12 API contracts and runtime validation.
+- [x] (2026-02-28T16:23:18Z) Milestone 1: T12 completed with locked endpoint schemas, OpenAPI route coverage, runtime handler/validator wiring, and passing `contract:validate` + `test:contract` (including endpoint-handler contract suite).
+- [ ] (2026-02-28T16:11:09Z) Milestone 2 in progress: full Prisma schema + initial SQL migration and passing local T13 command gates (`db:migrate:reset-test`, `db:migrate:check`, `db:backup:create`, `db:restore:dry-run`) implemented; preview-environment apply evidence still pending.
 - [ ] (2026-02-25T15:47:00Z) Milestone 2: Complete T13 Prisma schema and initial migration.
-- [ ] (2026-02-25T15:47:00Z) Milestone 3: Complete T11 Sand Rock seed dataset build and validation.
-- [ ] (2026-02-25T15:47:00Z) Milestone 4: Complete T10 integration scaffolding with Notion disabled (parallel-safe, non-blocking for T12/T13/T11 closure).
+- [x] (2026-02-28T16:17:08Z) Milestone 3: T11 seed dataset build and validation completed (`seed:validate`, `seed:import:test`, `seed:report`, `test:capability-rules`, `test:trip-evaluation` all pass with report artifacts).
+- [x] (2026-02-28T16:12:41Z) Milestone 4: T10 integration scaffolding completed with Notion disabled guardrails; `integration:check` + `test:integration-adapters` passing and evidence artifact recorded.
 - [ ] (2026-02-25T15:47:00Z) Milestone 5: Run global local test gate and finalize completion evidence.
-- [ ] (2026-02-25T16:10:00Z) Milestone 6: Complete T81 capability-policy implementation (hard rules, TSI, field-test constraints).
+- [x] (2026-02-28T16:23:18Z) Milestone 6: T81 completed with deterministic capability engine, trip-evaluation handler wiring, and passing `test:capability-rules`, `test:trip-evaluation`, and endpoint handler tests.
 - [ ] (2026-02-25T16:10:00Z) Milestone 7: Complete T82 homepage kit endpoint/UI contract integration.
 
 ## Surprises & Discoveries
@@ -28,6 +29,12 @@ No implementation surprises have occurred yet because implementation has not sta
 Hostile review discovery on 2026-02-28: repository scaffolding paths required by T12/T13 were still absent, and seed-package contracts conflicted with AGENTS-locked contracts. Milestone 0.5 was added as a hard prerequisite and seed package usage was constrained to reference-only.
 
 Execution discovery on 2026-02-28: command surface now exists, but several commands are intentionally bootstrap no-op placeholders pending real T12/T13/T11 implementations.
+Execution discovery on 2026-02-28: contract validation and contract tests now run as real checks, not placeholders, and include legacy leakage blocking.
+Execution discovery on 2026-02-28: T13 local verification commands pass using repository-level migration artifact checks; no live database apply has been executed yet in this workspace.
+Execution discovery on 2026-02-28: T10 acceptance can be closed independently (parallel-safe) once disabled-provider tests and artifact evidence are present.
+Execution discovery on 2026-02-28: seed quality thresholds are now measurable and passing via scripted reports; remaining T11 closure dependency is deterministic hard-rule fixture alignment with T81 implementation.
+Execution discovery on 2026-02-28: T11 can be closed with deterministic fixtures once capability engine tests are green, even before endpoint runtime wiring is completed.
+Execution discovery on 2026-02-28: endpoint-handler contract suite is effective for verifying request-validation/runtime wiring across the locked endpoint set without requiring a full Next.js runtime boot.
 
 Evidence:
 

@@ -6,10 +6,21 @@
     "typecheck": "bash scripts/tasks/noop.sh typecheck",
     "test:unit": "bash scripts/tasks/noop.sh test:unit",
     "test:integration": "bash scripts/tasks/noop.sh test:integration",
-    "test:contract": "bash scripts/tasks/noop.sh test:contract",
-    "db:migrate:check": "bash scripts/tasks/noop.sh db:migrate:check",
-    "seed:validate": "bash scripts/tasks/noop.sh seed:validate",
+    "test:contract": "node scripts/contract/run-contract-tests.mjs && node scripts/contract/test-endpoint-handlers.mjs",
+    "db:migrate:check": "bash scripts/db/check-schema.sh",
+    "db:migrate:reset-test": "bash scripts/db/reset-test.sh",
+    "db:backup:create": "bash scripts/db/backup-create.sh",
+    "db:restore:dry-run": "bash scripts/db/restore-dry-run.sh",
+    "integration:check": "bash scripts/integration/check.sh",
+    "test:integration-adapters": "node scripts/integration/test-adapters.mjs",
+    "seed:generate": "node scripts/seed/generate-fixture.mjs",
+    "seed:validate": "node scripts/seed/validate.mjs",
+    "seed:import:test": "node scripts/seed/import-test.mjs",
+    "seed:report": "node scripts/seed/report.mjs",
+    "test:capability-rules": "node scripts/capability/test-rules.mjs",
+    "test:trip-evaluation": "node scripts/capability/test-trip-evaluation.mjs",
+    "test:trip-endpoint": "node scripts/capability/test-trip-endpoint.mjs",
     "contract:guard:legacy": "bash scripts/contract/check-legacy-leak.sh",
-    "contract:validate": "npm run contract:guard:legacy"
+    "contract:validate": "bash scripts/contract/validate-contracts.sh"
   }
 }

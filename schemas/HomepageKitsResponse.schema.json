@@ -1,0 +1,47 @@
+{
+  "$id": "https://camping-trip.local/schemas/HomepageKitsResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HomepageKitsResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["kits"],
+  "properties": {
+    "kits": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["kit_id", "name", "items"],
+        "properties": {
+          "kit_id": { "type": "string" },
+          "name": { "type": "string" },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["gear_item_id", "name", "system", "suitability_score", "top_factors", "hard_rule_summary"],
+              "properties": {
+                "gear_item_id": { "type": "string" },
+                "name": { "type": "string" },
+                "system": { "type": "string" },
+                "suitability_score": { "type": "number" },
+                "top_factors": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string" } },
+                "hard_rule_summary": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["passed", "failures"],
+                  "properties": {
+                    "passed": { "type": "boolean" },
+                    "failures": { "type": "array", "items": { "type": "string" } }
+                  }
+                },
+                "purchase_url": { "type": ["string", "null"] }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

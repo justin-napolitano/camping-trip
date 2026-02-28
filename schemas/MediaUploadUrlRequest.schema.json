@@ -1,0 +1,13 @@
+{
+  "$id": "https://camping-trip.local/schemas/MediaUploadUrlRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MediaUploadUrlRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["filename", "mime_type", "size_bytes"],
+  "properties": {
+    "filename": { "type": "string", "minLength": 1 },
+    "mime_type": { "type": "string", "enum": ["image/jpeg", "image/png", "image/webp"] },
+    "size_bytes": { "type": "integer", "minimum": 1, "maximum": 10485760 }
+  }
+}

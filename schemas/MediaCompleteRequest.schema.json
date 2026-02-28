@@ -1,0 +1,12 @@
+{
+  "$id": "https://camping-trip.local/schemas/MediaCompleteRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MediaCompleteRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["media_id", "storage_key"],
+  "properties": {
+    "media_id": { "type": "string" },
+    "storage_key": { "type": "string" }
+  }
+}

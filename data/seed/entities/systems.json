@@ -1,0 +1,22 @@
+[
+  {
+    "id": "sys-clothing",
+    "slug": "clothing",
+    "name": "Clothing"
+  },
+  {
+    "id": "sys-sleep",
+    "slug": "sleep",
+    "name": "Sleep"
+  },
+  {
+    "id": "sys-cooking",
+    "slug": "cooking",
+    "name": "Cooking"
+  },
+  {
+    "id": "sys-water",
+    "slug": "water",
+    "name": "Water"
+  }
+]

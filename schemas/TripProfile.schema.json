@@ -1,0 +1,25 @@
+{
+  "$id": "https://camping-trip.local/schemas/TripProfile.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TripProfile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "trip_type",
+    "expected_low_c",
+    "wind_mph",
+    "precipitation_risk",
+    "remoteness",
+    "static_exposure",
+    "precipitation_expected"
+  ],
+  "properties": {
+    "trip_type": { "type": "string", "enum": ["weekend_backpacking", "day_climb_car_camp", "alpine_weekend"] },
+    "expected_low_c": { "type": "number" },
+    "wind_mph": { "type": "number", "minimum": 0 },
+    "precipitation_risk": { "type": "string", "enum": ["low", "medium", "high", "wintry"] },
+    "remoteness": { "type": "string", "enum": ["frontcountry", "semi_remote", "remote"] },
+    "static_exposure": { "type": "string", "enum": ["low", "medium", "high"] },
+    "precipitation_expected": { "type": "boolean" }
+  }
+}

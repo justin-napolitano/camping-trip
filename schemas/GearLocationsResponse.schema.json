@@ -1,0 +1,25 @@
+{
+  "$id": "https://camping-trip.local/schemas/GearLocationsResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GearLocationsResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["gear_slug", "locations"],
+  "properties": {
+    "gear_slug": { "type": "string" },
+    "locations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["location_slug", "location_name", "composite_score", "confidence_score"],
+        "properties": {
+          "location_slug": { "type": "string" },
+          "location_name": { "type": "string" },
+          "composite_score": { "type": "number" },
+          "confidence_score": { "type": "number" }
+        }
+      }
+    }
+  }
+}

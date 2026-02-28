@@ -1,0 +1,14 @@
+{
+  "$id": "https://camping-trip.local/schemas/ErrorResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ErrorResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["error_code", "message", "request_id"],
+  "properties": {
+    "error_code": { "type": "string", "minLength": 1 },
+    "message": { "type": "string", "minLength": 1 },
+    "details": { "type": ["object", "array", "null"] },
+    "request_id": { "type": "string", "minLength": 1 }
+  }
+}

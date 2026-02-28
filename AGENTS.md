@@ -976,10 +976,10 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T7 | Media/storage lock | You + Codex | High | Done | 2026-02-25 | GCS + signed URLs |
 | T8 | Sponsorship policy lock | You + Codex | Medium | Done | 2026-02-25 | Schema only in v1 |
 | T9 | DB migration + CI gate lock | You + Codex | High | Done | 2026-02-25 | Preview migration required |
-| T10 | Integration scaffolding | You + Codex | Medium | Todo | 2026-02-27 | Notion adapter disabled; tracked in `.agent/execplans/v1-implementation.md` |
-| T11 | Build first validated data slice | You + Codex | Medium | Todo | 2026-03-01 | Sand Rock initial dataset; tracked in `.agent/execplans/v1-implementation.md` |
-| T12 | Define API request/response contracts for locked endpoints | You + Codex | High | Todo | 2026-02-27 | Endpoint list locked; tracked in `.agent/execplans/v1-implementation.md` |
-| T13 | Create Prisma schema + initial migration | You + Codex | High | Todo | 2026-02-28 | Tracked in `.agent/execplans/v1-implementation.md` |
+| T10 | Integration scaffolding | You + Codex | Medium | Done | 2026-02-27 | Notion adapter disabled; evidence report added under `artifacts/integration-reports/`; tracked in `.agent/execplans/v1-implementation.md` |
+| T11 | Build first validated data slice | You + Codex | Medium | Done | 2026-03-01 | Sand Rock entity/review seed files + import report scripts implemented; threshold/FK/fixture commands passing; tracked in `.agent/execplans/v1-implementation.md` |
+| T12 | Define API request/response contracts for locked endpoints | You + Codex | High | Done | 2026-02-27 | Locked endpoint schemas + OpenAPI + runtime handlers/validators implemented; `contract:validate` and `test:contract` passing; tracked in `.agent/execplans/v1-implementation.md` |
+| T13 | Create Prisma schema + initial migration | You + Codex | High | In Progress | 2026-02-28 | Tracked in `.agent/execplans/v1-implementation.md` |
 | T14 | Lock entity identity + provenance requirements | You + Codex | High | Done | 2026-02-25 | UUID PK + unique slug + required ReviewIntel provenance/version fields |
 | T15 | Lock ranking tie-breaker policy | You + Codex | High | Done | 2026-02-25 | `review_count` then `updated_at` |
 | T16 | Lock media security baseline | You + Codex | High | Done | 2026-02-25 | Images only, 10MB max, auth upload, queued scanning |
@@ -1047,7 +1047,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T78 | Lock capability-framework authoritative standards | You + Codex | High | Done | 2026-02-25 | ECWCS/WMS/sleep/fuel doctrine and hard blocks codified |
 | T79 | Lock deterministic TSI + minimum-level mapping | You + Codex | High | Done | 2026-02-25 | Explicit formula, bands, and system minimums |
 | T80 | Add homepage kit objective and contracts | You + Codex | High | Done | 2026-02-25 | `/homepage/kits` + explainable bundle outputs |
-| T81 | Implement capability policy in API/schema/seed tasks | You + Codex | High | Todo | 2026-03-03 | Expand T12/T13/T11 artifacts and tests for hard-rule evaluation |
+| T81 | Implement capability policy in API/schema/seed tasks | You + Codex | High | Done | 2026-03-03 | Deterministic capability engine + trip endpoint runtime wiring + rule/TSI/recency tests passing |
 | T82 | Implement homepage kits UI + endpoint integration | You + Codex | Medium | Todo | 2026-03-04 | Homepage shows best-fit bundles with optional outbound purchase links |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.

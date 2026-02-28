@@ -20,7 +20,7 @@ This plan delivers the first working version of the project by making the API co
 - [x] (2026-02-28T16:12:41Z) Milestone 4: T10 integration scaffolding completed with Notion disabled guardrails; `integration:check` + `test:integration-adapters` passing and evidence artifact recorded.
 - [x] (2026-02-28T17:23:20Z) Milestone 5: Global local test gate completed with real (non-noop) command implementations and passing results.
 - [x] (2026-02-28T16:23:18Z) Milestone 6: T81 completed with deterministic capability engine, trip-evaluation handler wiring, and passing `test:capability-rules`, `test:trip-evaluation`, and endpoint handler tests.
-- [ ] (2026-02-25T16:10:00Z) Milestone 7: Complete T82 homepage kit endpoint/UI contract integration.
+- [x] (2026-02-28T17:26:44Z) Milestone 7: T82 completed with homepage kits endpoint payload enhancement, homepage UI rendering, optional purchase-link handling, and passing `test:homepage-kits` + `test:e2e -- --grep "homepage kits"`.
 - [x] (2026-02-28T17:18:20Z) Milestone 8: T83 completed; DB command path hardened and verified with real operations (`db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, `db:restore:dry-run` all pass).
 - [x] (2026-02-28T17:19:56Z) Post-hardening verification rerun completed: `db:migrate:check`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` all pass with real DB side effects and artifact outputs.
 - [x] (2026-02-28T17:21:47Z) Milestone 9: T84 completed (search-index drift closure) with full-text and name/model trigram index enforcement + preview apply pass.
@@ -43,6 +43,7 @@ Execution discovery on 2026-02-28: preview-like live migration apply path exists
 Execution discovery on 2026-02-28: preview-like DB credentials are now available via local Docker bring-up; after T83 patching, preview migration check now fails on apply conflicts and passes only after successful clean reset + apply verification.
 Execution discovery on 2026-02-28: T84 search-index drift was resolved by adding a canonical-search full-text GIN index and a name/model trigram GIN index, with `db:migrate:check` asserting both.
 Execution discovery on 2026-02-28: T85 gate hardening replaced all no-op global gate scripts with real lint/type/unit/integration validation command paths that now pass locally.
+Execution discovery on 2026-02-28: T82 closure required adding explicit test scripts (`test:homepage-kits`, `test:e2e`) to make homepage endpoint/UI integration auditable in this repository.
 
 Evidence:
 

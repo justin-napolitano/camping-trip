@@ -7,6 +7,8 @@ cd "$ROOT_DIR"
 echo "[test:integration] running integration and data-flow suites..."
 npm run integration:check
 npm run test:integration-adapters
+npm run seed:source:check
+npm run seed:source:normalize
 npm run seed:validate
 npm run seed:import:test
 npm run seed:report

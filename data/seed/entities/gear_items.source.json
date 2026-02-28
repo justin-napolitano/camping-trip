@@ -1,0 +1,177 @@
+[
+  {
+    "id": "src-backcountry_affiliate_feed-aeb74279f5ba",
+    "slug": "sawyer-squeeze-filter-system-aeb742",
+    "name": "Sawyer Squeeze Filter System",
+    "gear_class_id": "cls-filter",
+    "price_usd": 44.95,
+    "weight_g": 85,
+    "packed_volume_l": 0.5,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "flow-rate",
+      "backflush",
+      "flow_rate"
+    ],
+    "purchase_url": "https://www.backcountry.com/sawyer-squeeze-filter-system"
+  },
+  {
+    "id": "src-backcountry_affiliate_feed-a5411c4a9162",
+    "slug": "garmin-inreach-mini-2-a5411c",
+    "name": "Garmin InReach Mini 2",
+    "gear_class_id": "cls-nav",
+    "price_usd": 299.99,
+    "weight_g": 100,
+    "packed_volume_l": 0.4,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "offline-maps",
+      "satellite-messaging",
+      "offline_maps"
+    ],
+    "purchase_url": "https://www.steepandcheap.com/garmin-inreach-mini-2"
+  },
+  {
+    "id": "src-backcountry_affiliate_feed-8702205b9487",
+    "slug": "patagonia-torrentshell-jacket-870220",
+    "name": "Patagonia Torrentshell Jacket",
+    "gear_class_id": "cls-shell",
+    "price_usd": 179,
+    "weight_g": 394,
+    "packed_volume_l": 3.9,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood",
+      "pit-zips"
+    ],
+    "purchase_url": "https://www.backcountry.com/patagonia-torrentshell-jacket"
+  },
+  {
+    "id": "src-backcountry_affiliate_feed-c575b806b18f",
+    "slug": "marmot-tungsten-ul-2p-tent-c575b8",
+    "name": "Marmot Tungsten UL 2P Tent",
+    "gear_class_id": "cls-tent",
+    "price_usd": 399.95,
+    "weight_g": 1715,
+    "packed_volume_l": 7.2,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "rainfly",
+      "stakes",
+      "double-wall"
+    ],
+    "purchase_url": "https://www.backcountry.com/marmot-tungsten-ultralight-2p-tent"
+  },
+  {
+    "id": "src-rei_affiliate_feed-e7c2771639a4",
+    "slug": "mountain-hardwear-alpine-down-jacket-e7c277",
+    "name": "Mountain Hardwear Alpine Down Jacket",
+    "gear_class_id": "cls-insul",
+    "price_usd": 299,
+    "weight_g": 410,
+    "packed_volume_l": 4.3,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": "down",
+    "fill_weight_g": 120,
+    "fill_power": 800,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "insulation",
+      "helmet-compatible-hood"
+    ],
+    "purchase_url": "https://www.rei.com/product/239910/alpine-down-jacket"
+  },
+  {
+    "id": "src-rei_affiliate_feed-3c2155eabdc7",
+    "slug": "black-diamond-stormline-rain-shell-3c2155",
+    "name": "Black Diamond Stormline Rain Shell",
+    "gear_class_id": "cls-shell",
+    "price_usd": 189,
+    "weight_g": 320,
+    "packed_volume_l": 5.1,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 15000,
+    "features_present": [
+      "waterproof",
+      "hood",
+      "pit-zips"
+    ],
+    "purchase_url": "https://www.rei.com/product/242100/stormline-rain-shell"
+  },
+  {
+    "id": "src-rei_affiliate_feed-934a84f513b3",
+    "slug": "msr-solo-canister-stove-934a84",
+    "name": "MSR Solo Canister Stove",
+    "gear_class_id": "cls-stove",
+    "price_usd": 59.95,
+    "weight_g": 87,
+    "packed_volume_l": 0.8,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "fuel-type",
+      "simmer-control",
+      "fuel_type"
+    ],
+    "purchase_url": "https://www.rei.com/product/251550/solo-canister-stove"
+  },
+  {
+    "id": "src-rei_affiliate_feed-ba1382224614",
+    "slug": "zempire-evo-tl-v2-aerobase-link-ba1382",
+    "name": "Zempire Evo TL V2 Aerobase Link",
+    "gear_class_id": "cls-tent",
+    "price_usd": 349.95,
+    "weight_g": 4200,
+    "packed_volume_l": 18,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "rainfly",
+      "stakes",
+      "freestanding"
+    ],
+    "purchase_url": "https://www.rei.com/product/252240/zempire-evo-tl-v2-aerobase-link"
+  }
+]

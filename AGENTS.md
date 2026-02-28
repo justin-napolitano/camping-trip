@@ -38,6 +38,7 @@ This file is the operating contract for scope, architecture, data, and decision 
   - identify missing enum values, threshold values, formulas, and transition rules
   - identify contradictions between sections, milestones, and workboard tasks
   - identify missing security, reliability, and audit controls that block implementation safety
+  - verify canonical runtime/contract paths have no dependency on legacy seed-package artifacts
 - Required hostile-review output format:
   - findings first, ordered by severity (`Critical`, `High`, `Medium`)
   - each finding includes exact file reference(s)
@@ -147,7 +148,7 @@ This file is the operating contract for scope, architecture, data, and decision 
   - `fuel_available` < `fuel_required * 1.3`
   - `expected_low_c <= 0` and canister-only stove without backup or cold-start field test
   - precipitation risk present and no clothing Level 6-equivalent rain shell coverage
-  - static exposure expected below `5C` and no clothing Level 7-equivalent static insulation
+  - `expected_low_c < 5` with `static_exposure in {medium, high}` and no clothing Level 7-equivalent static insulation
   - remote trip without navigation redundancy (minimum N3-equivalent capability)
   - no medical policy record present for trip evaluation context
 
@@ -241,6 +242,15 @@ This file is the operating contract for scope, architecture, data, and decision 
 - `waterproof_mmv` (nullable)
 - `seam_sealed` (nullable boolean)
 - `breathability_gm2` (nullable)
+- `features_present` (required canonical feature-key array; may be empty for classes with no required features)
+- `created_at`
+- `updated_at`
+
+### Required Fields: `GearClass` (v1)
+- `id`
+- `slug`
+- `name`
+- `required_features` (required canonical feature-key array; may be empty)
 - `created_at`
 - `updated_at`
 
@@ -263,6 +273,10 @@ This file is the operating contract for scope, architecture, data, and decision 
 - `durability`
 - `value`
 - `packability`
+- `usage_cycles_observed` (nullable)
+- `usage_runtime_hours` (nullable)
+- `failure_event_count` (nullable)
+- `repair_event_count` (nullable)
 - `pros`
 - `cons`
 - `use_case`
@@ -375,6 +389,13 @@ This file is the operating contract for scope, architecture, data, and decision 
 - Class normalization rule:
   - objective scores are normalized within `GearClass` (not across all gear)
   - normalized scale maps to 1.0-5.0 before blending
+- Deterministic normalization algorithm (v1 locked):
+  - compute ascending percentile rank inside each `GearClass` cohort:
+    - `pct = (rank_index) / max(1, cohort_size - 1)` where `rank_index` is 0-based
+  - map to score:
+    - higher-is-better metric: `score_obj = 1.0 + 4.0*pct`
+    - lower-is-better metric: `score_obj = 1.0 + 4.0*(1.0 - pct)`
+  - ties are broken deterministically by `GearItem.id` ascending before rank assignment
 - Objective score bounds:
   - all objective metric scores are clamped to `[1.0, 5.0]` after normalization
 
@@ -424,6 +445,15 @@ This file is the operating contract for scope, architecture, data, and decision 
 - Objective field completeness is tracked and reported in admin QA views.
 - Durability partial-data rule:
   - if `repair_event_count` is missing but other durability inputs exist, compute durability objective with `repair_event_count=0` and set `metric_confidence=0.8`.
+
+### Objective Evidence Field Requirements (v1 Locked)
+- `GearClass.required_features`: required array of canonical feature keys for that class (`string[]`, unique per class).
+- `GearItem.features_present`: required array of canonical feature keys present on item (`string[]`, deduplicated).
+- `ReviewIntel.usage_cycles_observed`: nullable numeric, required for durability objective when cycles are applicable.
+- `ReviewIntel.usage_runtime_hours`: nullable numeric alternative when cycles are not applicable.
+- `ReviewIntel.failure_event_count`: nullable integer, required for durability objective unless reviewer-only fallback is used.
+- `ReviewIntel.repair_event_count`: nullable integer, defaults to `0` in partial-data fallback path.
+- Validation rule: at least one of `usage_cycles_observed` or `usage_runtime_hours` must be present to compute durability objective.
 
 ### Ranking Order (v1)
 - Order of precedence: admin curation/pinning -> composite score -> confidence.
@@ -622,6 +652,9 @@ This file is the operating contract for scope, architecture, data, and decision 
   - `schemas/*.schema.json` is source-of-truth for payload/domain structure.
   - `docs/openapi/v1.yaml` is source-of-truth for HTTP behavior (routes, methods, params, auth, status codes, examples).
   - `src/contracts/` is runtime enforcement layer; validators are generated from or strictly aligned to `schemas/`.
+- Legacy seed-package governance:
+  - `capability-engine-seed-final/` is reference material only and must not be treated as canonical runtime contract source.
+  - If any seed schema or mapping conflicts with this file, this file and root `schemas/`/OpenAPI/runtime contracts take precedence.
 - OpenAPI must reference schema-backed request/response models for locked endpoints.
 - Runtime request/response schema validation is required in handlers.
 - Contract changes require versioned updates and review before merge.
@@ -775,8 +808,38 @@ This file is the operating contract for scope, architecture, data, and decision 
 4. Build first validated dataset slice (Sand Rock).
 5. Implement v1 UI surface (search, gear detail, location performance, homepage kits).
 6. Ship preview deploy and validate end-to-end flow.
+7. Implement deterministic capability-policy runtime (T81) and pass hard-rule/TSI tests.
+8. Implement homepage kits endpoint/UI integration (T82) with explainability and e2e validation.
 
 ## Implementation Execution Spec (T10-T13, T11)
+### T0.5: Repo Bootstrap Readiness Gate (Required Before T12)
+- Required deliverables:
+  - `package.json` with all acceptance-gate scripts declared
+  - root `schemas/` directory initialized for canonical contract files
+  - `docs/openapi/v1.yaml` scaffold created
+  - `src/contracts/` scaffold created
+  - `prisma/` scaffold created
+  - bootstrap scripts created: `scripts/bootstrap.sh`, `scripts/validate_env.sh`, `scripts/seed_local.sh`
+- Acceptance criteria:
+  - all required paths exist and are committed
+  - command help checks run without missing-script errors for:
+    - `npm run lint -- --help`
+    - `npm run typecheck -- --help`
+    - `npm run test:unit -- --help`
+    - `npm run test:integration -- --help`
+    - `npm run contract:validate -- --help`
+    - `npm run db:migrate:check -- --help`
+    - `npm run seed:validate -- --help`
+  - local verification commands succeed:
+    - `test -f package.json`
+    - `test -d schemas`
+    - `test -f docs/openapi/v1.yaml`
+    - `test -d src/contracts`
+    - `test -d prisma`
+    - `test -f scripts/bootstrap.sh`
+    - `test -f scripts/validate_env.sh`
+    - `test -f scripts/seed_local.sh`
+
 ### T12: API Contracts and Runtime Validation
 - Required deliverables:
   - schema source files committed under `schemas/`

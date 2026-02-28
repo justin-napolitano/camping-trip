@@ -1,0 +1,8 @@
+openapi: 3.1.0
+info:
+  title: Camping Trip API
+  version: 0.1.0
+  description: Bootstrap OpenAPI scaffold. Endpoint contracts to be defined in T12.
+paths: {}
+components:
+  schemas: {}

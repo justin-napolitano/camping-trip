@@ -1,6 +1,11 @@
 Capability Engine Seed - Final (json-rules-engine based evaluator)
 =================================================================
 
+Repository governance notice
+- In this repo, `AGENTS.md` plus root-level `schemas/`, `docs/openapi/v1.yaml`, and `src/contracts/` are canonical.
+- This `capability-engine-seed-final/` package is reference-only input material.
+- If any file in this package conflicts with locked policy/contracts, do not implement from this package directly.
+
 This package seeds a capability-driven gear engine with:
 - Canonical JSON Schemas (schemas/)
 - Policy-as-data rules (rules/)
@@ -10,7 +15,7 @@ This package seeds a capability-driven gear engine with:
 
 Important notes
 - This package **does not** include package.json or node_modules. You will wire package manager and add dependencies (e.g., json-rules-engine, ajv) in your project.
-- Schemas are the source of truth. Generate runtime TS types into src/contracts/ from schemas/ (recommended json-schema-to-typescript).
+- Within this package, schemas are the source of truth. In this repository, follow the canonical contract sources defined in `AGENTS.md`.
 - Rules are policy-as-data and are loaded by the evaluator. The evaluator skeleton provided expects the 'json-rules-engine' npm package.
 
 Quick usage (local)

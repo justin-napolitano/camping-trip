@@ -1,0 +1,15 @@
+{
+  "name": "camping-trip",
+  "private": true,
+  "scripts": {
+    "lint": "bash scripts/tasks/noop.sh lint",
+    "typecheck": "bash scripts/tasks/noop.sh typecheck",
+    "test:unit": "bash scripts/tasks/noop.sh test:unit",
+    "test:integration": "bash scripts/tasks/noop.sh test:integration",
+    "test:contract": "bash scripts/tasks/noop.sh test:contract",
+    "db:migrate:check": "bash scripts/tasks/noop.sh db:migrate:check",
+    "seed:validate": "bash scripts/tasks/noop.sh seed:validate",
+    "contract:guard:legacy": "bash scripts/contract/check-legacy-leak.sh",
+    "contract:validate": "npm run contract:guard:legacy"
+  }
+}

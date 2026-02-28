@@ -1,4 +1,4 @@
-# Execute V1 Core Build (T12 -> T13 -> T11 -> T10 -> T81 -> T82)
+# Execute V1 Core Build (T0.5 -> T12 -> T13 -> T11 + T10 parallel -> T81 -> T82)
 
 This ExecPlan is a living document. The sections `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be kept up to date as work proceeds.
 
@@ -11,11 +11,12 @@ This plan delivers the first working version of the project by making the API co
 ## Progress
 
 - [x] (2026-02-25T15:47:00Z) ExecPlan compliance rewrite completed (prose-first structure, explicit validation outputs, explicit rollback commands).
-- [ ] (2026-02-25T15:47:00Z) Milestone 0: Bootstrap and command scaffold verification.
+- [x] (2026-02-28T16:01:14Z) Milestone 0: Bootstrap and command scaffold verification completed (bootstrap/env + script help checks pass).
+- [x] (2026-02-28T16:01:14Z) Milestone 0.5: Repo bootstrap readiness gate completed (required paths/scripts exist; path checks pass).
 - [ ] (2026-02-25T15:47:00Z) Milestone 1: Complete T12 API contracts and runtime validation.
 - [ ] (2026-02-25T15:47:00Z) Milestone 2: Complete T13 Prisma schema and initial migration.
 - [ ] (2026-02-25T15:47:00Z) Milestone 3: Complete T11 Sand Rock seed dataset build and validation.
-- [ ] (2026-02-25T15:47:00Z) Milestone 4: Complete T10 integration scaffolding with Notion disabled.
+- [ ] (2026-02-25T15:47:00Z) Milestone 4: Complete T10 integration scaffolding with Notion disabled (parallel-safe, non-blocking for T12/T13/T11 closure).
 - [ ] (2026-02-25T15:47:00Z) Milestone 5: Run global local test gate and finalize completion evidence.
 - [ ] (2026-02-25T16:10:00Z) Milestone 6: Complete T81 capability-policy implementation (hard rules, TSI, field-test constraints).
 - [ ] (2026-02-25T16:10:00Z) Milestone 7: Complete T82 homepage kit endpoint/UI contract integration.
@@ -24,9 +25,14 @@ This plan delivers the first working version of the project by making the API co
 
 No implementation surprises have occurred yet because implementation has not started. One planning discovery is that command-level acceptance was specified in AGENTS, but expected output transcripts and explicit rollback command paths were not yet encoded in this ExecPlan. This rewrite resolves that gap.
 
+Hostile review discovery on 2026-02-28: repository scaffolding paths required by T12/T13 were still absent, and seed-package contracts conflicted with AGENTS-locked contracts. Milestone 0.5 was added as a hard prerequisite and seed package usage was constrained to reference-only.
+
+Execution discovery on 2026-02-28: command surface now exists, but several commands are intentionally bootstrap no-op placeholders pending real T12/T13/T11 implementations.
+
 Evidence:
 
     Prior draft had command lists but no expected output snippets and no concrete rollback command sequence.
+    2026-02-28 bootstrap evidence: scripts/bootstrap.sh and scripts/validate_env.sh pass; npm help checks pass for lint/typecheck/test/unit/integration/contract/db/seed command names; required paths exist.
 
 ## Decision Log
 
@@ -45,6 +51,10 @@ Evidence:
 - Decision: Extend v1 execution sequence with T81 and T82 to include capability-policy enforcement and homepage kit outputs.
   Rationale: AGENTS scope now includes deterministic trip evaluation and homepage best-fit bundles.
   Date/Author: 2026-02-25 / Codex
+
+- Decision: Add explicit Milestone 0.5 path-existence checks and enforce T10 as parallel-safe non-blocking track.
+  Rationale: Prevent false "implementation-ready" status and preserve AGENTS dependency order without serializing unrelated scaffolding.
+  Date/Author: 2026-02-28 / Codex
 
 ## Outcomes & Retrospective
 
@@ -71,7 +81,7 @@ Expected implementation paths after completion are:
 
 ## Plan of Work
 
-Milestone 0 verifies the environment and command surface that later milestones depend on. If required scripts are missing, they are added before implementation starts. Milestone 1 then locks and validates API contracts and runtime schema validation behavior. Milestone 2 translates locked policy into Prisma schema and migration files and verifies migration behavior locally. Milestone 3 builds and validates Sand Rock-first seed data against quality gates. Milestone 4 adds integration adapter scaffolding with Notion disabled by default. Milestone 5 executes the global local quality gate and records closure evidence.
+Milestone 0 verifies the environment and command surface that later milestones depend on. Milestone 0.5 then enforces repository bootstrap readiness so T12 starts from a valid base. Milestone 1 locks and validates API contracts and runtime schema validation behavior. Milestone 2 translates locked policy into Prisma schema and migration files and verifies migration behavior locally. Milestone 3 builds and validates Sand Rock-first seed data against quality gates. Milestone 4 adds integration adapter scaffolding with Notion disabled by default and can run in parallel as long as it does not change T12/T13/T11 acceptance gates. Milestone 5 executes the global local quality gate and records closure evidence.
 
 Each milestone must end with updated `Progress`, any discoveries, and explicit command evidence.
 
@@ -95,6 +105,22 @@ Expected outcomes for Milestone 0:
 
     Each command returns exit code 0.
     If a command is missing, implement it before proceeding.
+
+Milestone 0.5 commands (repo readiness):
+
+    test -f package.json
+    test -d schemas
+    test -f docs/openapi/v1.yaml
+    test -d src/contracts
+    test -d prisma
+    test -f scripts/bootstrap.sh
+    test -f scripts/validate_env.sh
+    test -f scripts/seed_local.sh
+
+Expected outcomes for Milestone 0.5:
+
+    each path check exits 0.
+    missing path means Milestone 0.5 fails and T12 cannot start.
 
 Milestone 1 commands (T12):
 

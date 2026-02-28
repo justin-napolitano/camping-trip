@@ -91,12 +91,15 @@ This file is the operating contract for scope, architecture, data, and decision 
   - `.agent/execplans/v2-engine-hardening.md`
 - Active implementation for prior DB-seed/runtime-wiring branch was driven by:
   - `.agent/execplans/v3-db-seed-runtime-wiring.md`
-- Active implementation for current gear-explorer branch must be driven by:
+- Active implementation for prior gear-explorer branch was driven by:
   - `.agent/execplans/v4-gear-explorer-ui.md`
+- Active implementation for current source-ingest-affiliate-seeding branch must be driven by:
+  - `.agent/execplans/v5-source-ingest-affiliate-seeding.md`
 - Historical-plan rule:
   - `.agent/execplans/v1-implementation.md` is retained as closed historical evidence and is not the active execution source-of-truth for new tasks.
   - `.agent/execplans/v2-engine-hardening.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
   - `.agent/execplans/v3-db-seed-runtime-wiring.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
+  - `.agent/execplans/v4-gear-explorer-ui.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
 - ExecPlan usage rules:
   - the ExecPlan is the execution source-of-truth during implementation
   - the ExecPlan must be treated as a living document and updated at every stopping point
@@ -1100,6 +1103,31 @@ This file is the operating contract for scope, architecture, data, and decision 
     - `npm run lint`
     - `npm run typecheck`
 
+### T89: Affiliate-Source Seed Expansion (Agentic Ingest Workflow)
+- Required deliverables:
+  - define and implement an agentic source-ingest workflow for affiliate-safe gear catalog expansion
+  - add source adapter layer for affiliate/product-feed ingestion with strict source allowlist controls
+  - extend seed normalization so incoming source records map deterministically into canonical `GearItem`, `GearClass`, and optional `ReviewIntel` seed structures
+  - preserve canonical runtime/contract paths and keep legacy/source-staging artifacts out of API runtime handlers
+  - add ingest audit/provenance metadata in staging artifacts (`source`, `fetched_at`, `raw_hash`, `parser_version`, `affiliate_url_present`)
+  - add reproducible ingest commands and documentation so expansion can be rerun without manual DB row edits
+- Acceptance criteria:
+  - source-ingest pipeline is idempotent and rerunnable without duplicate canonical entity creation
+  - generated seed artifacts pass existing validation gates and import into DB with no FK violations
+  - affiliate link fields are captured as outbound purchase URLs only (no in-app checkout semantics)
+  - source adapters fail closed for unknown/untrusted domains or malformed records
+  - local verification commands succeed:
+    - `npm run seed:validate`
+    - `npm run seed:import:db`
+    - `npm run seed:import:test`
+    - `npm run seed:report`
+    - `npm run test:contract`
+    - `npm run contract:validate`
+    - `npm run test:unit`
+    - `npm run test:integration`
+    - `npm run lint`
+    - `npm run typecheck`
+
 ### Implementation Dependency Order (Locked)
 1. T12 (contracts) must be completed before T13 (schema migration finalization).
 2. T13 must be completed before T11 (seed import validation).
@@ -1223,6 +1251,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 | T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
 | T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, expanded gear detail payload/UI surfacing (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`), and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
+| T89 | Implement affiliate-source seed expansion workflow | You + Codex | High | In Progress | 2026-03-16 | Active plan: `.agent/execplans/v5-source-ingest-affiliate-seeding.md`; scope is agentic ingest adapters + canonical seed normalization + auditable provenance and command-gated validation |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 

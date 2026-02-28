@@ -13,11 +13,11 @@ This work makes seed updates and frontend responses flow through real Postgres d
 ## Progress
 
 - [x] (2026-02-28T20:05:00Z) Converted branch context note into full PLANS-compliant ExecPlan and aligned AGENTS active-plan registration to this file.
-- [ ] (2026-02-28T20:05:00Z) Milestone 1 pending: implement real seed import runtime with transaction-safe idempotent writes.
-- [ ] (2026-02-28T20:05:00Z) Milestone 2 pending: add DB repository access layer for target endpoints.
-- [ ] (2026-02-28T20:05:00Z) Milestone 3 pending: wire target endpoints to DB-backed reads.
-- [ ] (2026-02-28T20:05:00Z) Milestone 4 pending: switch trip-evaluation context loading from seed files to DB while preserving T86 behavior.
-- [ ] (2026-02-28T20:05:00Z) Milestone 5 pending: run full validation gates and record closure evidence.
+- [x] (2026-02-28T20:45:00Z) Milestone 1 completed: implemented `seed:import:db` transactional import runtime with deterministic ID mapping/upserts and updated `scripts/seed_local.sh` workflow.
+- [x] (2026-02-28T20:45:00Z) Milestone 2 completed: added DB access layer under `src/db/` (`pg-shell` + runtime repositories) for seed import and endpoint read paths.
+- [x] (2026-02-28T20:45:00Z) Milestone 3 completed: wired `homepage/kits`, `gear`, `gear/:slug`, and `gear/:slug/locations` routes to DB-first reads with contract-shape payload mapping.
+- [x] (2026-02-28T20:45:00Z) Milestone 4 completed: trip-evaluation route now uses DB-derived policy/field-test/factor context via repository while preserving T86 deterministic handler semantics.
+- [x] (2026-02-28T20:45:00Z) Milestone 5 completed: validation gates passed (`test:contract`, capability/endpoint tests, unit, integration, lint, typecheck, contract validate) and DB evidence collected.
 
 ## Surprises & Discoveries
 
@@ -26,6 +26,9 @@ This work makes seed updates and frontend responses flow through real Postgres d
 
 - Observation: several frontend-facing endpoints still return static payloads.
   Evidence: handlers under `src/api/v1/*` currently return constant data for gear/homepage list paths.
+
+- Observation: this environment does not expose `DATABASE_URL` by default and direct Docker socket access requires elevated execution in the tool sandbox.
+  Evidence: `db:migrate:reset-test` and `seed:import:db` initially failed with missing `DATABASE_URL`; non-elevated DB route checks fell back due Docker permission errors.
 
 ## Decision Log
 
@@ -41,9 +44,24 @@ This work makes seed updates and frontend responses flow through real Postgres d
   Rationale: enforces anti-drift policy and auditable closure.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: route handlers use DB-first reads with static-handler fallback when DB access is unavailable.
+  Rationale: preserves local/dev/test stability while enabling real DB-backed behavior in configured environments.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
-Completion target: frontend-visible endpoints read DB-backed data, seed import runtime is idempotent and transactional, trip-evaluation context is DB-derived without T86 regression, and all locked verification commands pass. Retrospective will capture final evidence, residual risks, and deferred follow-up items.
+Completion target achieved for T87 scope: seed import runtime writes transactionally to Postgres with deterministic upserts, target frontend routes are DB-first, and trip-evaluation context is DB-derived while preserving T86 deterministic behavior.
+
+Evidence summary:
+
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run db:migrate:reset-test`: PASS
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run seed:import:db`: PASS (`systems=7 locations=3 gear_classes=10 gear_items=60 reviews=420`)
+- DB evidence query: `gear_items=60`, `reviews=420`, `policies=1`, `kit_bundles=2`, `kit_items=3`
+- Full gate bundle: PASS for `test:contract`, `test:capability-rules`, `test:trip-evaluation`, `test:trip-endpoint`, `test:unit`, `test:integration`, `lint`, `typecheck`, `contract:validate`
+
+Residual risk:
+
+- DB route reads rely on `psql` or Docker-backed `psql` execution in this implementation; production hardening should replace shell-based query execution with a direct DB client/runtime pool.
 
 ## Context and Orientation
 
@@ -164,3 +182,4 @@ New code in this milestone should prefer additive repository/service modules for
 ## Change Notes
 
 - 2026-02-28: Upgraded branch context note into full PLANS-compliant active ExecPlan, aligned to AGENTS T87 task and command-manifest anti-drift rules.
+- 2026-02-28: Completed T87 implementation milestones and recorded DB import/runtime evidence; added environment discovery and DB-first fallback decision notes.

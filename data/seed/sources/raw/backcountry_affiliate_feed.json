@@ -1,0 +1,61 @@
+[
+  {
+    "source_product_id": "bc-80122",
+    "source_url": "https://www.backcountry.com/marmot-tungsten-ultralight-2p-tent",
+    "name": "Tungsten UL 2P Tent",
+    "brand": "Marmot",
+    "category": "Tent",
+    "subcategory": "Shelter",
+    "price_usd": 399.95,
+    "currency": "USD",
+    "weight_g": 1715,
+    "packed_volume_l": 7.2,
+    "features": ["rainfly", "stakes", "double-wall"],
+    "fetched_at": "2026-02-28T22:42:00Z"
+  },
+  {
+    "source_product_id": "bc-70055",
+    "source_url": "https://www.backcountry.com/patagonia-torrentshell-jacket",
+    "name": "Torrentshell Jacket",
+    "brand": "Patagonia",
+    "category": "Shell Jacket",
+    "subcategory": "Clothing",
+    "price_usd": 179,
+    "currency": "USD",
+    "weight_g": 394,
+    "packed_volume_l": 3.9,
+    "waterproof_mmv": 20000,
+    "breathability_gm2": 12000,
+    "seam_sealed": true,
+    "features": ["waterproof", "hood", "pit-zips"],
+    "fetched_at": "2026-02-28T22:42:00Z"
+  },
+  {
+    "source_product_id": "bc-60421",
+    "source_url": "https://www.steepandcheap.com/garmin-inreach-mini-2",
+    "name": "InReach Mini 2",
+    "brand": "Garmin",
+    "category": "Navigation Device",
+    "subcategory": "Electronics",
+    "price_usd": 299.99,
+    "currency": "USD",
+    "weight_g": 100,
+    "packed_volume_l": 0.4,
+    "features": ["offline_maps", "satellite_messaging"],
+    "fetched_at": "2026-02-28T22:42:00Z"
+  },
+  {
+    "source_product_id": "bc-60233",
+    "source_url": "https://www.backcountry.com/sawyer-squeeze-filter-system",
+    "name": "Squeeze Filter System",
+    "brand": "Sawyer",
+    "category": "Water Filter",
+    "subcategory": "Water",
+    "price_usd": 44.95,
+    "currency": "USD",
+    "weight_g": 85,
+    "packed_volume_l": 0.5,
+    "features": ["flow_rate", "backflush"],
+    "fetched_at": "2026-02-28T22:42:00Z"
+  }
+]

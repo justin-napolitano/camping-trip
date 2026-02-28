@@ -3,6 +3,7 @@ import path from "node:path";
 
 const root = process.cwd();
 const entitiesDir = path.join(root, "data/seed/entities");
+const sourceNormalizedFile = path.join(root, "data/seed/sources/normalized/normalized-source-records.json");
 const reviewFile = path.join(root, "data/seed/review_intel/review_intel.csv");
 const outDir = path.join(root, "artifacts/import-reports");
 
@@ -10,6 +11,14 @@ const systems = JSON.parse(fs.readFileSync(path.join(entitiesDir, "systems.json"
 const gearClasses = JSON.parse(fs.readFileSync(path.join(entitiesDir, "gear_classes.json"), "utf8"));
 const locations = JSON.parse(fs.readFileSync(path.join(entitiesDir, "locations.json"), "utf8"));
 const gearItems = JSON.parse(fs.readFileSync(path.join(entitiesDir, "gear_items.json"), "utf8"));
+const sourceGearItemsFile = path.join(entitiesDir, "gear_items.source.json");
+const sourceGearItems = fs.existsSync(sourceGearItemsFile)
+  ? JSON.parse(fs.readFileSync(sourceGearItemsFile, "utf8"))
+  : [];
+const totalGearItems = gearItems.length + sourceGearItems.length;
+const sourceNormalized = fs.existsSync(sourceNormalizedFile)
+  ? JSON.parse(fs.readFileSync(sourceNormalizedFile, "utf8"))
+  : [];
 
 const lines = fs.readFileSync(reviewFile, "utf8").trim().split("\n");
 const header = lines[0].split(",");
@@ -38,8 +47,15 @@ const report = {
     systems: systems.length,
     gear_classes: gearClasses.length,
     locations: locations.length,
-    gear_items: gearItems.length,
+    gear_items: totalGearItems,
+    gear_items_base: gearItems.length,
+    gear_items_source: sourceGearItems.length,
     review_intel: reviewRows
+  },
+  source_provenance: {
+    normalized_rows: sourceNormalized.length,
+    source_ids: Array.from(new Set(sourceNormalized.map((row) => row.source_id))).sort(),
+    parser_versions: Array.from(new Set(sourceNormalized.map((row) => row.parser_version))).sort()
   },
   thresholds: {
     min_systems: 3,
@@ -54,7 +70,7 @@ const report = {
     min_reviews_per_gear_item: minPerGear,
     medium_high_evidence_pct: Number(evidencePct.toFixed(2))
   },
-  pass: systems.length >= 3 && gearClasses.length >= 6 && locations.length >= 1 && gearItems.length >= 25 && reviewRows >= 100 && minPerGear >= 2 && evidencePct >= 80
+  pass: systems.length >= 3 && gearClasses.length >= 6 && locations.length >= 1 && totalGearItems >= 25 && reviewRows >= 100 && minPerGear >= 2 && evidencePct >= 80
 };
 
 if (!fs.existsSync(outDir)) {

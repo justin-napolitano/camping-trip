@@ -18,6 +18,7 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
 - [x] (2026-02-28T20:40:00Z) Milestone 3 completed: detail UI now loads `/api/v1/gear/:slug` and `/api/v1/gear/:slug/locations` and renders aggregate/location views.
 - [x] (2026-02-28T20:40:00Z) Milestone 4 completed: homepage kit items now include in-app links to gear detail routes and explorer entrypoint link.
 - [x] (2026-02-28T20:40:00Z) Milestone 5 completed: validation gates passed (`test:homepage-kits`, `test:e2e -- --grep \"homepage kits\"`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`).
+- [x] (2026-02-28T21:25:00Z) Milestone 6 completed: expanded gear detail endpoint/UI to surface full payload sections (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`) and reran T88 gate bundle.
 
 ## Surprises & Discoveries
 
@@ -29,6 +30,9 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
 
 - Observation: DB-backed homepage kit payloads used UUID-like `gear_item_id` values, which broke direct slug-based detail links.
   Evidence: updated DB repository mapping to return gear slug for `gear_item_id` in homepage kits payload to preserve current contract while enabling links.
+
+- Observation: fallback gear detail handler returned a minimal payload that no longer matched the expanded detail schema.
+  Evidence: `src/api/v1/gear/detail-handler.mjs` only returned `aggregated_scores` before Milestone 6.
 
 ## Decision Log
 
@@ -44,9 +48,15 @@ This work adds a real browse/discovery UX on top of existing gear APIs so users 
   Rationale: avoids contract expansion while supporting immediate in-app detail navigation.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: keep expanded detail surfacing under T88 instead of creating a new branch task.
+  Rationale: change is a direct extension of the existing gear detail UX scope and uses the same validation gates.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
 T88 completed: users can now explore gear via `/gear`, open detail pages under `/gear/[slug]`, inspect location performance, and navigate from homepage kit cards into detail routes. All locked validation gates passed.
+
+Milestone 6 extended T88 to surface full gear-detail information for hostile review workflows. Detail responses and UI now expose structured specs, classification, review/evidence summaries, field tests, kit membership, and strongest/weakest location summaries while preserving prior explorer/location behavior.
 
 Validation evidence:
 
@@ -57,6 +67,7 @@ Validation evidence:
 - `npm run test:integration`: PASS
 - `npm run lint`: PASS
 - `npm run typecheck`: PASS
+- `npm run contract:validate`: PASS
 
 ## Context and Orientation
 
@@ -156,3 +167,4 @@ UI pages should consume existing response shapes directly and avoid introducing 
 
 - 2026-02-28: Created active V4 ExecPlan for gear explorer browse/detail UX and synced AGENTS task/command manifest.
 - 2026-02-28: Completed T88 implementation and recorded full gate evidence for explorer/detail UI rollout.
+- 2026-02-28: Extended T88 detail endpoint/UI coverage to expose full payload sections and updated fallback handler shape to match expanded schema.

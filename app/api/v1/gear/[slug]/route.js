@@ -15,19 +15,7 @@ export async function GET(request, { params }) {
       const fallback = handleGearDetail(null, requestId);
       return json(fallback.body, fallback.status);
     }
-    return json(
-      {
-        id: detail.id,
-        slug: detail.slug,
-        name: detail.name,
-        aggregated_scores: {
-          composite_score: Number(detail.composite_score),
-          confidence_score: Number(detail.confidence_score),
-          review_count: Number(detail.review_count)
-        }
-      },
-      200
-    );
+    return json(detail, 200);
   } catch {
     const res = handleGearDetail(slug, requestId);
     return json(res.body, res.status);

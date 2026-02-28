@@ -22,6 +22,8 @@
     "test:capability-rules": "node scripts/capability/test-rules.mjs",
     "test:trip-evaluation": "node scripts/capability/test-trip-evaluation.mjs",
     "test:trip-endpoint": "node scripts/capability/test-trip-endpoint.mjs",
+    "test:homepage-kits": "node scripts/homepage/test-homepage-kits.mjs",
+    "test:e2e": "node scripts/e2e/run.mjs",
     "contract:guard:legacy": "bash scripts/contract/check-legacy-leak.sh",
     "contract:validate": "bash scripts/contract/validate-contracts.sh"
   }

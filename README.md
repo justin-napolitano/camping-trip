@@ -30,6 +30,7 @@ For database setup and `T13` closeout on a personal machine, use:
 - `T12`: Done
 - `T13`: Done
 - `T81`: Done
+- `T82`: Done
 - `T84`: Done
 - `T85`: Done
 

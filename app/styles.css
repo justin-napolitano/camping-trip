@@ -1,0 +1,156 @@
+:root {
+  --bg-top: #e9f1e5;
+  --bg-bottom: #f7f2e8;
+  --panel: #fffaf1;
+  --ink: #1d2a20;
+  --muted: #4f6354;
+  --accent: #2f6f4f;
+  --warning: #7c3d2a;
+  --border: #c8d3c5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  color: var(--ink);
+  font-family: "Avenir Next", "Gill Sans", "Trebuchet MS", sans-serif;
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-bottom) 70%);
+}
+
+.page-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 16px 48px;
+}
+
+.hero {
+  margin-bottom: 20px;
+  padding: 20px;
+  border-radius: 16px;
+  background: radial-gradient(circle at top right, #d9ebdb 0%, #f9f7ef 62%);
+  border: 1px solid var(--border);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+
+.hero h1 {
+  margin: 0 0 8px;
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+}
+
+.hero-copy {
+  margin: 0;
+  color: var(--muted);
+}
+
+.kits-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.kit-card {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--panel);
+  padding: 14px;
+}
+
+.kit-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.kit-header h2 {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.chip {
+  border: 1px solid #b9c8bc;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+}
+
+.item-stack {
+  margin-top: 10px;
+  display: grid;
+  gap: 10px;
+}
+
+.item-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border-top: 1px dashed #d9e1d6;
+  padding-top: 10px;
+}
+
+.item-name {
+  margin: 0;
+  font-weight: 700;
+}
+
+.item-meta,
+.item-factors {
+  margin: 3px 0 0;
+  color: var(--muted);
+}
+
+.hard-pass,
+.hard-fail {
+  margin: 3px 0 0;
+  font-weight: 600;
+}
+
+.hard-pass {
+  color: var(--accent);
+}
+
+.hard-fail {
+  color: var(--warning);
+}
+
+.item-cta {
+  display: flex;
+  align-items: center;
+}
+
+.buy-link {
+  text-decoration: none;
+  background: var(--accent);
+  color: #f5fff7;
+  padding: 8px 10px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.no-link {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.state-note {
+  padding: 10px 0;
+}
+
+.state-note.error {
+  color: #7b2f24;
+}
+
+@media (max-width: 720px) {
+  .item-row {
+    flex-direction: column;
+  }
+}

@@ -1098,7 +1098,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T79 | Lock deterministic TSI + minimum-level mapping | You + Codex | High | Done | 2026-02-25 | Explicit formula, bands, and system minimums |
 | T80 | Add homepage kit objective and contracts | You + Codex | High | Done | 2026-02-25 | `/homepage/kits` + explainable bundle outputs |
 | T81 | Implement capability policy in API/schema/seed tasks | You + Codex | High | Done | 2026-03-03 | Deterministic capability engine + trip endpoint runtime wiring + rule/TSI/recency tests passing |
-| T82 | Implement homepage kits UI + endpoint integration | You + Codex | Medium | Todo | 2026-03-04 | Homepage shows best-fit bundles with optional outbound purchase links |
+| T82 | Implement homepage kits UI + endpoint integration | You + Codex | Medium | Done | 2026-03-04 | Homepage UI now fetches `/api/v1/homepage/kits`, renders explainable kit cards, handles optional purchase links, and passes `test:homepage-kits` + `test:e2e -- --grep "homepage kits"` |
 | T83 | Harden DB command scripts for truthful migration/rollback validation | You + Codex | High | Done | 2026-03-02 | `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` now perform real DB operations and fail on real apply/restore errors |
 | T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Done | 2026-03-02 | Added full-text canonical-search GIN index + name/model trigram GIN index; `db:migrate:check` enforcement added and preview apply verified |
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
@@ -1107,6 +1107,5 @@ Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
 1. Execute `.agent/execplans/v1-implementation.md` in milestone order.
-2. Execute T82 homepage kits implementation after T81 API contract/schema support is complete.
-3. Run release hardening closeout and final evidence capture.
-4. Keep AGENTS workboard and ExecPlan progress log synchronized.
+2. Run release hardening closeout and final evidence capture.
+3. Keep AGENTS workboard and ExecPlan progress log synchronized.

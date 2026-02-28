@@ -865,12 +865,16 @@ This file is the operating contract for scope, architecture, data, and decision 
   - index and constraint definitions matching locked policy set
   - schema includes `TripProfile`, `FieldTestLog`, `CapabilityPolicy`, and `HomepageKitBundle` models
   - schema includes enums for capability levels and trip context fields
+  - deterministic database bring-up script committed at `scripts/db/up.sh`
 - Acceptance criteria:
   - migration applies successfully on clean database
   - migration applies successfully in preview environment
   - no FK/index policy drift from AGENTS.md
   - hard-rule prerequisite schema constraints present (including policy-presence and required evidence fields)
+  - database command scripts execute real DB operations (no metadata-only placeholder pass paths)
+  - `db:migrate:preview-check` returns failure when live apply fails and pass only after successful live apply
   - local verification commands succeed:
+    - `npm run db:up`
     - `npm run db:migrate:reset-test`
     - `npm run db:migrate:check`
     - `npm run db:migrate:preview-check` (requires preview-like DB URL env)
@@ -938,13 +942,56 @@ This file is the operating contract for scope, architecture, data, and decision 
     - `npm run test:homepage-kits`
     - `npm run test:e2e -- --grep "homepage kits"`
 
+### T83: DB Command Hardening (Post-Bringup)
+- Required deliverables:
+  - `scripts/db/preview-check.sh` fails hard on migration apply failure and does not emit false PASS
+  - `scripts/db/reset-test.sh` performs real clean-reset + migration-apply verification
+  - `scripts/db/backup-create.sh` writes real backup artifact suitable for restore validation
+  - `scripts/db/restore-dry-run.sh` validates restore path against backup artifact with non-destructive checks
+- Acceptance criteria:
+  - command behavior is deterministic and reflects true DB state
+  - failure paths are tested and documented in implementation notes
+  - local verification commands succeed:
+    - `npm run db:up`
+    - `npm run db:migrate:reset-test`
+    - `npm run db:migrate:preview-check`
+    - `npm run db:backup:create`
+    - `npm run db:restore:dry-run`
+
+### T84: Search Index Policy Drift Closure
+- Required deliverables:
+  - migration updates add full-text `GIN` index for canonical searchable text vector
+  - migration updates add trigram `GIN` index on gear name/model fields
+  - schema/migration checks assert both required search index classes are present
+- Acceptance criteria:
+  - migration includes both locked search index requirements from AGENTS policy
+  - preview-like migration apply succeeds after index changes
+  - local verification commands succeed:
+    - `npm run db:migrate:check`
+    - `npm run db:migrate:preview-check`
+
+### T85: Global Gate Command Hardening
+- Required deliverables:
+  - replace placeholder `lint`, `typecheck`, `test:unit`, `test:integration` no-op runners with real implementations
+  - ensure command failures correctly fail CI/local gates
+- Acceptance criteria:
+  - no production gate command uses `scripts/tasks/noop.sh`
+  - global local test gate represents real validation signal
+  - local verification commands succeed:
+    - `npm run lint`
+    - `npm run typecheck`
+    - `npm run test:unit`
+    - `npm run test:integration`
+
 ### Implementation Dependency Order (Locked)
 1. T12 (contracts) must be completed before T13 (schema migration finalization).
 2. T13 must be completed before T11 (seed import validation).
 3. T10 can proceed in parallel but cannot block T12/T13 closure.
-4. T81 must begin only after T12 + T13 + T11 acceptance criteria pass.
-5. T82 must begin after T81 contract/schema wiring is complete.
-6. UI implementation begins only after T12 + T13 + T11 acceptance criteria pass.
+4. T83 must be completed before T13 can be marked `Done`.
+5. T81 must begin only after T12 + T13 + T11 acceptance criteria pass.
+6. T82 must begin after T81 contract/schema wiring is complete.
+7. T84 and T85 must be completed before release hardening closeout.
+8. UI implementation begins only after T12 + T13 + T11 acceptance criteria pass.
 
 ### Bootstrap and Portability Requirements (v1)
 - Required bootstrap artifacts:
@@ -952,9 +999,11 @@ This file is the operating contract for scope, architecture, data, and decision 
   - `.env.example` with all required variables (no secrets)
   - `scripts/validate_env.sh` for preflight checks
   - `scripts/seed_local.sh` for deterministic local seed import
+  - `scripts/db/up.sh` for deterministic local DB bring-up
 - Portability criteria:
   - fresh-clone setup on a new machine succeeds using bootstrap scripts
   - all required local tests run without manual undocumented steps
+  - local DB startup succeeds via `npm run db:up`
   - setup instructions documented in `README.md`
 
 ### Global Local Test Gate (v1)
@@ -980,7 +1029,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T10 | Integration scaffolding | You + Codex | Medium | Done | 2026-02-27 | Notion adapter disabled; evidence report added under `artifacts/integration-reports/`; tracked in `.agent/execplans/v1-implementation.md` |
 | T11 | Build first validated data slice | You + Codex | Medium | Done | 2026-03-01 | Sand Rock entity/review seed files + import report scripts implemented; threshold/FK/fixture commands passing; tracked in `.agent/execplans/v1-implementation.md` |
 | T12 | Define API request/response contracts for locked endpoints | You + Codex | High | Done | 2026-02-27 | Locked endpoint schemas + OpenAPI + runtime handlers/validators implemented; `contract:validate` and `test:contract` passing; tracked in `.agent/execplans/v1-implementation.md` |
-| T13 | Create Prisma schema + initial migration | You + Codex | High | Blocked | 2026-02-28 | Local schema/migration gates pass; preview-like live apply requires `PREVIEW_DATABASE_URL`/`DATABASE_URL_PREVIEW` credential to run `npm run db:migrate:preview-check`; tracked in `.agent/execplans/v1-implementation.md` |
+| T13 | Create Prisma schema + initial migration | You + Codex | High | Blocked | 2026-02-28 | DB bring-up now exists (`npm run db:up`) and preview-like DB is reachable; task remains blocked until T83 hardening removes false-pass/placeholder DB command behavior and rerun evidence is captured in `.agent/execplans/v1-implementation.md` |
 | T14 | Lock entity identity + provenance requirements | You + Codex | High | Done | 2026-02-25 | UUID PK + unique slug + required ReviewIntel provenance/version fields |
 | T15 | Lock ranking tie-breaker policy | You + Codex | High | Done | 2026-02-25 | `review_count` then `updated_at` |
 | T16 | Lock media security baseline | You + Codex | High | Done | 2026-02-25 | Images only, 10MB max, auth upload, queued scanning |
@@ -1050,12 +1099,16 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T80 | Add homepage kit objective and contracts | You + Codex | High | Done | 2026-02-25 | `/homepage/kits` + explainable bundle outputs |
 | T81 | Implement capability policy in API/schema/seed tasks | You + Codex | High | Done | 2026-03-03 | Deterministic capability engine + trip endpoint runtime wiring + rule/TSI/recency tests passing |
 | T82 | Implement homepage kits UI + endpoint integration | You + Codex | Medium | Todo | 2026-03-04 | Homepage shows best-fit bundles with optional outbound purchase links |
+| T83 | Harden DB command scripts for truthful migration/rollback validation | You + Codex | High | Done | 2026-03-02 | `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` now perform real DB operations and fail on real apply/restore errors |
+| T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Todo | 2026-03-02 | Add required full-text + name/model trigram indexes and enforce via checks |
+| T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Todo | 2026-03-03 | Remove `scripts/tasks/noop.sh` from production gate command paths |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
 1. Execute `.agent/execplans/v1-implementation.md` in milestone order.
-2. Complete T12-T13 first, then T11, with ExecPlan evidence updates at each stop.
-3. Execute T81 (capability-policy implementation) immediately after T12/T13/T11 foundations pass.
-4. Execute T82 homepage kits implementation after T81 API contract/schema support is complete.
-5. Keep AGENTS workboard and ExecPlan progress log synchronized.
+2. Complete T83 hardening and then close T13 with preview-like live apply evidence.
+3. Execute T84 search-index drift closure and re-run migration checks.
+4. Execute T85 global gate hardening before release hardening closeout.
+5. Execute T82 homepage kits implementation after T81 API contract/schema support is complete.
+6. Keep AGENTS workboard and ExecPlan progress log synchronized.

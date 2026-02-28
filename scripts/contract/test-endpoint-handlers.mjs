@@ -52,6 +52,13 @@ const tripRes = handleTripsEvaluate(
       has_navigation_n3: true,
       has_medical_policy: true,
       field_test_recency_days: 180
+    },
+    selected_item_factors: {
+      "gear-01": {
+        suitability_score: 0.86,
+        top_factors: ["fit", "durability", "value"],
+        redundancy_warnings: []
+      }
     }
   }
 );

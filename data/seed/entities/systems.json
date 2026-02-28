@@ -5,6 +5,11 @@
     "name": "Clothing"
   },
   {
+    "id": "sys-shelter",
+    "slug": "shelter",
+    "name": "Shelter"
+  },
+  {
     "id": "sys-sleep",
     "slug": "sleep",
     "name": "Sleep"
@@ -18,5 +23,15 @@
     "id": "sys-water",
     "slug": "water",
     "name": "Water"
+  },
+  {
+    "id": "sys-navigation",
+    "slug": "navigation-comms",
+    "name": "Navigation and Comms"
+  },
+  {
+    "id": "sys-medical",
+    "slug": "medical",
+    "name": "Medical"
   }
 ]

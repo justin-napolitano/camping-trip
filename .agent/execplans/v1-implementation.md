@@ -1,4 +1,6 @@
-# Execute V1 Core Build (T0.5 -> T12 -> T13/T83 -> T11 + T10 parallel -> T81 -> T84/T85 -> T82)
+# [Historical Closed] Execute V1 Core Build (T0.5 -> T12 -> T13/T83 -> T11 + T10 parallel -> T81 -> T84/T85 -> T82)
+
+Status: Closed historical execution record. Active engine hardening work now runs from `.agent/execplans/v2-engine-hardening.md`.
 
 This ExecPlan is a living document. The sections `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be kept up to date as work proceeds.
 

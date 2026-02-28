@@ -1,4 +1,9 @@
-import { validateGearListQuery, validateTripsEvaluateRequest, validateReviewIntelCreate } from "../../src/contracts/index.mjs";
+import {
+  validateAffiliateResolveQuery,
+  validateGearListQuery,
+  validateReviewIntelCreate,
+  validateTripsEvaluateRequest
+} from "../../src/contracts/index.mjs";
 
 function assert(condition, message) {
   if (!condition) {
@@ -101,5 +106,19 @@ const invalidReview = validateReviewIntelCreate({
   source_url: ""
 });
 assert(!invalidReview.ok, "expected third_party_review review to fail without source_url");
+
+const validAffiliateResolve = validateAffiliateResolveQuery({
+  url: "https://www.rei.com/product/1/demo",
+  placement: "homepage_kit",
+  gear_item_id: "gear-01",
+  kit_id: "wknd-1"
+});
+assert(validAffiliateResolve.ok, "expected affiliate resolve query to pass");
+
+const invalidAffiliateResolve = validateAffiliateResolveQuery({
+  placement: "homepage_kit",
+  url_extra: "x"
+});
+assert(!invalidAffiliateResolve.ok, "expected affiliate resolve query to fail");
 
 console.log("[test:contract] PASS");

@@ -262,6 +262,61 @@ paths:
                     error_code: INTERNAL_ERROR
                     message: Unexpected error
                     request_id: req-4
+  /api/v1/affiliate/resolve:
+    get:
+      summary: Resolve outbound affiliate purchase link
+      operationId: resolveAffiliateLink
+      x-auth-scope: public
+      parameters:
+        - in: query
+          name: url
+          required: true
+          schema: { type: string, maxLength: 2000 }
+        - in: query
+          name: placement
+          schema: { type: string, maxLength: 64 }
+        - in: query
+          name: gear_item_id
+          schema: { type: string, maxLength: 128 }
+        - in: query
+          name: kit_id
+          schema: { type: string, maxLength: 128 }
+      responses:
+        "302":
+          description: Redirect to policy-compliant affiliate URL
+          headers:
+            Location:
+              schema: { type: string }
+            X-Request-Id:
+              schema: { type: string }
+            X-Affiliate-Provider:
+              schema: { type: string }
+        "400":
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: INVALID_QUERY
+                    message: Invalid affiliate resolve query
+                    details: ["url is required"]
+                    request_id: req-aff-1
+        "422":
+          description: Untrusted or invalid outbound url
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                blocked:
+                  value:
+                    error_code: AFFILIATE_URL_INVALID
+                    message: Affiliate link cannot be resolved
+                    details: { reason: AFFILIATE_DOMAIN_UNTRUSTED }
+                    request_id: req-aff-2
   /api/v1/locations:
     get:
       summary: List or search locations

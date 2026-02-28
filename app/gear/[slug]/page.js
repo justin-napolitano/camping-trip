@@ -2,6 +2,7 @@
 
 import { use, useEffect, useState } from "react";
 import Link from "next/link";
+import { buildAffiliateResolveHref, hasPurchaseUrl } from "../../../src/ui/homepage/kits-view.mjs";
 
 export default function GearDetailPage({ params }) {
   const slug = use(params)?.slug;
@@ -94,6 +95,23 @@ export default function GearDetailPage({ params }) {
               <p className="item-meta">Waterproof {detail.specs?.waterproof_mmv ?? "n/a"} mm</p>
               <p className="item-meta">Seam sealed {String(detail.specs?.seam_sealed)}</p>
               <p className="item-meta">Breathability {detail.specs?.breathability_gm2 ?? "n/a"} gm2</p>
+              {hasPurchaseUrl({ purchase_url: detail.specs?.purchase_url }) ? (
+                <p className="item-meta">
+                  <a
+                    href={buildAffiliateResolveHref(detail.specs.purchase_url, {
+                      placement: "gear_detail",
+                      gear_item_id: detail.slug
+                    })}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="buy-link"
+                  >
+                    Buy
+                  </a>
+                </p>
+              ) : (
+                <p className="item-meta">Purchase link n/a</p>
+              )}
             </div>
           </section>
 

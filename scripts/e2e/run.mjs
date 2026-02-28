@@ -1,5 +1,5 @@
 import { GET as getHomepageKits } from "../../app/api/v1/homepage/kits/route.js";
-import { hasPurchaseUrl } from "../../src/ui/homepage/kits-view.mjs";
+import { buildAffiliateResolveHref, hasPurchaseUrl } from "../../src/ui/homepage/kits-view.mjs";
 
 function assert(condition, message) {
   if (!condition) {
@@ -25,6 +25,11 @@ async function runHomepageKitsE2E() {
   assert(items.length > 0, "homepage kits route should include at least one item");
   assert(items.some((item) => hasPurchaseUrl(item)), "homepage view should support outbound purchase link rendering");
   assert(items.some((item) => !hasPurchaseUrl(item)), "homepage view should support missing purchase link rendering");
+  const linked = body.kits.flatMap((kit) => (kit.items || []).map((item) => ({
+    href: buildAffiliateResolveHref(item.purchase_url, { placement: "homepage_kits_e2e", gear_item_id: item.gear_item_id, kit_id: kit.kit_id }),
+    hasUrl: hasPurchaseUrl(item)
+  })));
+  assert(linked.some((item) => item.hasUrl && item.href.startsWith("/api/v1/affiliate/resolve?")), "purchase links should resolve via affiliate endpoint");
 
   console.log("[test:e2e] PASS: homepage kits");
 }

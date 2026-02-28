@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { hasPurchaseUrl } from "../src/ui/homepage/kits-view.mjs";
 
 export default function HomePage() {
@@ -53,6 +54,11 @@ export default function HomePage() {
 
       {status === "ready" && (
         <section className="kits-grid" aria-label="Homepage kits">
+          <div className="explore-row">
+            <Link href="/gear" className="explore-link">
+              Explore All Gear
+            </Link>
+          </div>
           {kits.map((kit) => (
             <article key={kit.kit_id} className="kit-card">
               <header className="kit-header">
@@ -73,9 +79,12 @@ export default function HomePage() {
                       </p>
                     </div>
                     <div className="item-cta">
+                      <Link href={`/gear/${encodeURIComponent(item.gear_item_id)}`} className="detail-link">
+                        View Details
+                      </Link>
                       {hasPurchaseUrl(item) ? (
                         <a href={item.purchase_url} target="_blank" rel="noreferrer" className="buy-link">
-                          View Item
+                          Buy
                         </a>
                       ) : (
                         <span className="no-link">No outbound link</span>

@@ -873,6 +873,7 @@ This file is the operating contract for scope, architecture, data, and decision 
   - local verification commands succeed:
     - `npm run db:migrate:reset-test`
     - `npm run db:migrate:check`
+    - `npm run db:migrate:preview-check` (requires preview-like DB URL env)
   - rollback command availability verified:
     - `npm run db:backup:create`
     - `npm run db:restore:dry-run`
@@ -979,7 +980,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T10 | Integration scaffolding | You + Codex | Medium | Done | 2026-02-27 | Notion adapter disabled; evidence report added under `artifacts/integration-reports/`; tracked in `.agent/execplans/v1-implementation.md` |
 | T11 | Build first validated data slice | You + Codex | Medium | Done | 2026-03-01 | Sand Rock entity/review seed files + import report scripts implemented; threshold/FK/fixture commands passing; tracked in `.agent/execplans/v1-implementation.md` |
 | T12 | Define API request/response contracts for locked endpoints | You + Codex | High | Done | 2026-02-27 | Locked endpoint schemas + OpenAPI + runtime handlers/validators implemented; `contract:validate` and `test:contract` passing; tracked in `.agent/execplans/v1-implementation.md` |
-| T13 | Create Prisma schema + initial migration | You + Codex | High | In Progress | 2026-02-28 | Tracked in `.agent/execplans/v1-implementation.md` |
+| T13 | Create Prisma schema + initial migration | You + Codex | High | Blocked | 2026-02-28 | Local schema/migration gates pass; preview-like live apply requires `PREVIEW_DATABASE_URL`/`DATABASE_URL_PREVIEW` credential to run `npm run db:migrate:preview-check`; tracked in `.agent/execplans/v1-implementation.md` |
 | T14 | Lock entity identity + provenance requirements | You + Codex | High | Done | 2026-02-25 | UUID PK + unique slug + required ReviewIntel provenance/version fields |
 | T15 | Lock ranking tie-breaker policy | You + Codex | High | Done | 2026-02-25 | `review_count` then `updated_at` |
 | T16 | Lock media security baseline | You + Codex | High | Done | 2026-02-25 | Images only, 10MB max, auth upload, queued scanning |

@@ -14,7 +14,7 @@ export function handleHomepageKits() {
             suitability_score: 0.91,
             top_factors: ["rain_shell_coverage", "wind_protection", "confidence"],
             hard_rule_summary: { passed: true, failures: [] },
-            purchase_url: "https://example.com/stormline-rain-shell"
+            purchase_url: "https://www.rei.com/"
           },
           {
             gear_item_id: "gear-02",
@@ -38,7 +38,7 @@ export function handleHomepageKits() {
             suitability_score: 0.87,
             top_factors: ["cold_start_validation", "fuel_margin", "redundancy"],
             hard_rule_summary: { passed: false, failures: ["fuel_margin_below_buffer"] },
-            purchase_url: "https://example.com/cold-start-stove-kit"
+            purchase_url: "https://www.rei.com/"
           }
         ]
       }

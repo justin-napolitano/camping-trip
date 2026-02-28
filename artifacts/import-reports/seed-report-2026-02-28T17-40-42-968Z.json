@@ -1,0 +1,24 @@
+{
+  "generated_at": "2026-02-28T17:40:42.967Z",
+  "counts": {
+    "systems": 7,
+    "gear_classes": 10,
+    "locations": 3,
+    "gear_items": 60,
+    "review_intel": 420
+  },
+  "thresholds": {
+    "min_systems": 3,
+    "min_gear_classes": 6,
+    "min_locations": 1,
+    "min_gear_items": 25,
+    "min_review_intel": 100,
+    "min_reviews_per_gear_item": 2,
+    "min_medium_high_evidence_pct": 80
+  },
+  "observed": {
+    "min_reviews_per_gear_item": 7,
+    "medium_high_evidence_pct": 100
+  },
+  "pass": true
+}

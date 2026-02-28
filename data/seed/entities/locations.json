@@ -7,5 +7,23 @@
     "region_code": "AL",
     "latitude": 34.2357,
     "longitude": -85.7833
+  },
+  {
+    "id": "loc-linville-gorge",
+    "slug": "linville-gorge",
+    "name": "Linville Gorge",
+    "country_code": "US",
+    "region_code": "NC",
+    "latitude": 35.9134,
+    "longitude": -81.9349
+  },
+  {
+    "id": "loc-red-river-gorge",
+    "slug": "red-river-gorge",
+    "name": "Red River Gorge",
+    "country_code": "US",
+    "region_code": "KY",
+    "latitude": 37.8245,
+    "longitude": -83.6283
   }
 ]

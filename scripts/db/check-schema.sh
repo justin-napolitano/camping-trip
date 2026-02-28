@@ -69,4 +69,24 @@ if ! rg -q "CREATE EXTENSION IF NOT EXISTS pg_trgm" "$latest_migration/migration
   exit 1
 fi
 
+if ! rg -q "gear_item_canonical_search_text_fts_idx" "$latest_migration/migration.sql"; then
+  echo "[db:migrate:check] migration missing full-text GIN search index on canonical searchable text" >&2
+  exit 1
+fi
+
+if ! rg -q "to_tsvector\\('english', COALESCE\\(canonical_search_text, ''\\)\\)" "$latest_migration/migration.sql"; then
+  echo "[db:migrate:check] migration missing full-text to_tsvector expression for canonical searchable text" >&2
+  exit 1
+fi
+
+if ! rg -q "gear_item_name_model_trgm_idx" "$latest_migration/migration.sql"; then
+  echo "[db:migrate:check] migration missing trigram GIN index on gear name/model fields" >&2
+  exit 1
+fi
+
+if ! rg -q "COALESCE\\(name, ''\\) \\|\\| ' ' \\|\\| COALESCE\\(model, ''\\)\\) gin_trgm_ops" "$latest_migration/migration.sql"; then
+  echo "[db:migrate:check] migration missing name/model trigram expression index" >&2
+  exit 1
+fi
+
 echo "[db:migrate:check] PASS"

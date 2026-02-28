@@ -1029,7 +1029,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T10 | Integration scaffolding | You + Codex | Medium | Done | 2026-02-27 | Notion adapter disabled; evidence report added under `artifacts/integration-reports/`; tracked in `.agent/execplans/v1-implementation.md` |
 | T11 | Build first validated data slice | You + Codex | Medium | Done | 2026-03-01 | Sand Rock entity/review seed files + import report scripts implemented; threshold/FK/fixture commands passing; tracked in `.agent/execplans/v1-implementation.md` |
 | T12 | Define API request/response contracts for locked endpoints | You + Codex | High | Done | 2026-02-27 | Locked endpoint schemas + OpenAPI + runtime handlers/validators implemented; `contract:validate` and `test:contract` passing; tracked in `.agent/execplans/v1-implementation.md` |
-| T13 | Create Prisma schema + initial migration | You + Codex | High | Blocked | 2026-02-28 | DB bring-up now exists (`npm run db:up`) and preview-like DB is reachable; task remains blocked until T83 hardening removes false-pass/placeholder DB command behavior and rerun evidence is captured in `.agent/execplans/v1-implementation.md` |
+| T13 | Create Prisma schema + initial migration | You + Codex | High | Done | 2026-02-28 | Real DB bring-up + truthful migration/rollback command path verified; `db:migrate:check`, `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` passing with evidence in `.agent/execplans/v1-implementation.md` |
 | T14 | Lock entity identity + provenance requirements | You + Codex | High | Done | 2026-02-25 | UUID PK + unique slug + required ReviewIntel provenance/version fields |
 | T15 | Lock ranking tie-breaker policy | You + Codex | High | Done | 2026-02-25 | `review_count` then `updated_at` |
 | T16 | Lock media security baseline | You + Codex | High | Done | 2026-02-25 | Images only, 10MB max, auth upload, queued scanning |
@@ -1100,15 +1100,13 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T81 | Implement capability policy in API/schema/seed tasks | You + Codex | High | Done | 2026-03-03 | Deterministic capability engine + trip endpoint runtime wiring + rule/TSI/recency tests passing |
 | T82 | Implement homepage kits UI + endpoint integration | You + Codex | Medium | Todo | 2026-03-04 | Homepage shows best-fit bundles with optional outbound purchase links |
 | T83 | Harden DB command scripts for truthful migration/rollback validation | You + Codex | High | Done | 2026-03-02 | `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` now perform real DB operations and fail on real apply/restore errors |
-| T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Todo | 2026-03-02 | Add required full-text + name/model trigram indexes and enforce via checks |
-| T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Todo | 2026-03-03 | Remove `scripts/tasks/noop.sh` from production gate command paths |
+| T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Done | 2026-03-02 | Added full-text canonical-search GIN index + name/model trigram GIN index; `db:migrate:check` enforcement added and preview apply verified |
+| T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
 1. Execute `.agent/execplans/v1-implementation.md` in milestone order.
-2. Complete T83 hardening and then close T13 with preview-like live apply evidence.
-3. Execute T84 search-index drift closure and re-run migration checks.
-4. Execute T85 global gate hardening before release hardening closeout.
-5. Execute T82 homepage kits implementation after T81 API contract/schema support is complete.
-6. Keep AGENTS workboard and ExecPlan progress log synchronized.
+2. Execute T82 homepage kits implementation after T81 API contract/schema support is complete.
+3. Run release hardening closeout and final evidence capture.
+4. Keep AGENTS workboard and ExecPlan progress log synchronized.

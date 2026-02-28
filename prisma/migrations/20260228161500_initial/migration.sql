@@ -322,5 +322,9 @@ CREATE INDEX trip_profile_deleted_at_idx ON trip_profile (deleted_at);
 CREATE INDEX homepage_kit_bundle_deleted_at_idx ON homepage_kit_bundle (deleted_at);
 
 -- Search indexes
-CREATE INDEX gear_item_canonical_search_text_trgm_idx ON gear_item USING GIN (canonical_search_text gin_trgm_ops);
-
+CREATE INDEX gear_item_canonical_search_text_fts_idx
+  ON gear_item
+  USING GIN (to_tsvector('english', COALESCE(canonical_search_text, '')));
+CREATE INDEX gear_item_name_model_trgm_idx
+  ON gear_item
+  USING GIN ((COALESCE(name, '') || ' ' || COALESCE(model, '')) gin_trgm_ops);

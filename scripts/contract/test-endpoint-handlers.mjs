@@ -10,6 +10,7 @@ import { handleImportReviewIntel } from "../../src/api/v1/import/review-intel/ha
 import { handleImportEntities } from "../../src/api/v1/import/entities/handler.mjs";
 import { handleMediaUploadUrl } from "../../src/api/v1/media/upload-url/handler.mjs";
 import { handleMediaComplete } from "../../src/api/v1/media/complete/handler.mjs";
+import { handleAffiliateResolve } from "../../src/api/v1/affiliate/resolve-handler.mjs";
 
 function assert(condition, message) {
   if (!condition) {
@@ -75,5 +76,8 @@ assert(handleMediaUploadUrl({ filename: "img.jpg", mime_type: "image/jpeg", size
 assert(handleMediaUploadUrl({ filename: "img.jpg", mime_type: "application/pdf", size_bytes: 2048 }).status === 422, "media upload-url should reject disallowed type");
 assert(handleMediaComplete({ media_id: "m1", storage_key: "uploads/m1" }).status === 200, "media complete should pass");
 assert(handleMediaComplete({ media_id: "", storage_key: "" }).status === 422, "media complete should validate required fields");
+assert(handleAffiliateResolve({ url: "https://www.rei.com/product/1/demo" }).status === 302, "affiliate resolve should redirect for trusted urls");
+assert(handleAffiliateResolve({ url: "https://example.com/unsafe" }).status === 422, "affiliate resolve should reject untrusted urls");
+assert(handleAffiliateResolve({}).status === 400, "affiliate resolve should validate required query fields");
 
 console.log("[test:endpoint-handlers] PASS");

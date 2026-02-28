@@ -14,7 +14,8 @@ This work expands database seeding so the product has much deeper gear coverage 
 
 - [x] (2026-02-28T22:25:00Z) Created V5 ExecPlan and registered it as the active plan path in `AGENTS.md`.
 - [x] (2026-02-28T22:25:00Z) Registered `T89` in AGENTS implementation tasks and workboard with locked acceptance commands.
-- [ ] Milestone 1: add source-ingest policy module and allowlist guardrails (completed: none; remaining: implement domain/source trust gates and fail-closed behavior).
+- [x] (2026-02-28T22:45:00Z) Hostile review pass completed for v5/T89; patched undefined policy/interface gaps in AGENTS and this plan before implementation.
+- [x] (2026-02-28T22:58:00Z) Milestone 1 completed: implemented `src/seed/source-policy.mjs` fail-closed source/domain policy gates and added executable guard command `npm run seed:source:check`.
 - [ ] Milestone 2: add adapter/normalization pipeline for affiliate-source records into canonical seed artifacts.
 - [ ] Milestone 3: integrate generated artifacts with existing seed validation/import workflow and add provenance reports.
 - [ ] Milestone 4: run full T89 command bundle, update AGENTS/ExecPlan closure evidence, and prepare PR.
@@ -30,6 +31,12 @@ This work expands database seeding so the product has much deeper gear coverage 
 - Observation: canonical contract guardrails already exist and must remain clean of source-staging leakage.
   Evidence: `npm run contract:validate` runs `scripts/contract/check-legacy-leak.sh` before schema/openapi checks.
 
+- Observation: hostile review found undefined source-policy details that would cause adapter drift and non-deterministic behavior.
+  Evidence: v5 initially lacked explicit approved source ids/domain allowlist and did not define deterministic dedupe key fields.
+
+- Observation: source policy checks are currently unit-style script assertions and are not yet wired into global `test:unit`.
+  Evidence: `scripts/tasks/test-unit.sh` does not currently include `npm run seed:source:check`.
+
 ## Decision Log
 
 - Decision: implement source ingestion as a pre-canonicalization pipeline that writes canonical seed files, not as direct writes to runtime tables.
@@ -44,9 +51,27 @@ This work expands database seeding so the product has much deeper gear coverage 
   Rationale: enables auditability, replay debugging, and deterministic de-duplication behavior.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: lock v1 approved source ids and domain allowlist now, with fail-closed handling for all others.
+  Rationale: removes ambiguity and prevents accidental ingestion from untrusted sources.
+  Date/Author: 2026-02-28 / Codex
+
+- Decision: lock deterministic source dedupe key formula and required raw/normalized adapter fields before coding adapters.
+  Rationale: makes idempotency and merge behavior testable and reproducible.
+  Date/Author: 2026-02-28 / Codex
+
+- Decision: implement Milestone 1 as a standalone reusable policy module plus dedicated executable guard script.
+  Rationale: allows adapters/generators to consume one canonical trust policy and provides a fast gate for hostile review loops.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
-Planning kickoff complete. The branch now has a locked active ExecPlan and AGENTS workboard registration for T89. Implementation and validation evidence are not complete yet.
+Planning and hostile-review hardening are complete, and Milestone 1 is implemented. The branch now has executable fail-closed source policy controls and a dedicated validation command.
+
+Milestone 1 validation evidence:
+
+- `npm run seed:source:check`: PASS
+- `npm run lint`: PASS
+- `npm run typecheck`: PASS
 
 ## Context and Orientation
 
@@ -71,12 +96,29 @@ Milestone 3 connects generation and import workflows. Add or extend seed scripts
 
 Milestone 4 performs command-gated closure and governance sync. Run full T89 command bundle, record evidence in this plan, and update AGENTS workboard notes in the same session before marking T89 done.
 
+Locked policy values for implementation:
+
+- Approved source ids in v1:
+  - `rei_affiliate_feed`
+  - `backcountry_affiliate_feed`
+  - `manual_admin_fixture`
+- Trusted domains in v1:
+  - REI: `rei.com`, `www.rei.com`
+  - Backcountry family: `backcountry.com`, `www.backcountry.com`, `steepandcheap.com`, `www.steepandcheap.com`
+- Deterministic dedupe key:
+  - `source_dedupe_key = sha256(source_id + "|" + source_product_id + "|" + normalized_brand + "|" + normalized_model)`
+- Required raw adapter fields:
+  - `source_id`, `source_product_id`, `source_url`, `name`, `brand`, `price_usd`, `currency`, `fetched_at`
+- Required normalized adapter fields:
+  - `slug`, `name`, `gear_class_slug`, `system_slugs`, `price_usd`, `purchase_url`, `source_id`, `source_product_id`, `source_dedupe_key`, `raw_hash`, `parser_version`
+
 ## Concrete Steps
 
 Run commands from repository root (`/Users/justin/repos/camping-trip`).
 
 Milestone 1 (policy + scaffolding):
 
+    npm run seed:source:check
     npm run lint
     npm run typecheck
 
@@ -94,6 +136,7 @@ Milestone 3 (pipeline integration + DB import flow):
 
 Milestone 4 (full closure gates):
 
+    npm run seed:source:check
     npm run seed:validate
     npm run seed:import:db
     npm run seed:import:test
@@ -111,6 +154,7 @@ T89 is accepted only when all are true:
 
 - source adapter workflow is deterministic and idempotent for repeated ingest runs.
 - unknown source/domain input fails closed before canonical artifact emission.
+- approved source and domain allowlists are enforced by executable policy checks (`seed:source:check`).
 - canonical seed artifacts remain schema-compatible and pass `seed:validate`.
 - DB import path succeeds with no FK violations and import reports pass threshold checks.
 - runtime contracts remain intact (`test:contract` and `contract:validate` pass).
@@ -164,3 +208,5 @@ Dependencies and guardrails:
 ## Change Notes
 
 - 2026-02-28: Created active V5 ExecPlan for T89 affiliate-source seed expansion and synchronized AGENTS registration before implementation work.
+- 2026-02-28: Hostile-review hardening pass added locked source allowlist values, deterministic dedupe formula, and adapter field contracts.
+- 2026-02-28: Implemented source-policy guardrails in code (`src/seed/source-policy.mjs`, `scripts/seed/source-policy-check.mjs`) and validated Milestone 1 command set.

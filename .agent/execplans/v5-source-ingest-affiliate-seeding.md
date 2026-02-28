@@ -17,8 +17,8 @@ This work expands database seeding so the product has much deeper gear coverage 
 - [x] (2026-02-28T22:45:00Z) Hostile review pass completed for v5/T89; patched undefined policy/interface gaps in AGENTS and this plan before implementation.
 - [x] (2026-02-28T22:58:00Z) Milestone 1 completed: implemented `src/seed/source-policy.mjs` fail-closed source/domain policy gates and added executable guard command `npm run seed:source:check`.
 - [x] (2026-02-28T23:15:00Z) Milestone 2 completed: added source normalization pipeline (`src/seed/sources/normalize-record.mjs`, `scripts/seed/source-normalize.mjs`) and fixture source feeds emitting canonical `data/seed/entities/gear_items.source.json`.
-- [ ] Milestone 3: integrate generated artifacts with existing seed validation/import workflow and add provenance reports.
-- [ ] Milestone 4: run full T89 command bundle, update AGENTS/ExecPlan closure evidence, and prepare PR.
+- [x] (2026-02-28T23:30:00Z) Milestone 3 completed: integrated source artifacts into `seed:import:db`, `seed:report`, `seed_local.sh`, and integration task flow; import now includes source gear items and report includes provenance/source counters.
+- [x] (2026-02-28T23:36:00Z) Milestone 4 completed: full T89 command bundle passed and AGENTS/ExecPlan closure sync completed in the same session.
 
 ## Surprises & Discoveries
 
@@ -39,6 +39,9 @@ This work expands database seeding so the product has much deeper gear coverage 
 
 - Observation: source feature names can include hyphenated variants that differ from canonical underscore keys.
   Evidence: normalized records include pairs such as `flow-rate` and canonical `flow_rate`.
+
+- Observation: local DB import command fails immediately when `DATABASE_URL` is unset in shell environment.
+  Evidence: `npm run seed:import:db` returned `FAIL DATABASE_URL is not set` until command was rerun with explicit environment variable.
 
 ## Decision Log
 
@@ -70,9 +73,13 @@ This work expands database seeding so the product has much deeper gear coverage 
   Rationale: allows deterministic review of generated data without mutating baseline canonical fixture files prematurely.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: import source-generated gear artifacts additively (base + source) with id/slug dedupe inside importer, rather than mutating baseline fixture files.
+  Rationale: keeps baseline fixtures stable while enabling expanded coverage in DB runtime import.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
-Planning and hostile-review hardening are complete, and Milestone 1 is implemented. The branch now has executable fail-closed source policy controls and a dedicated validation command.
+T89 completed. The ingest workflow now has executable trust policy gates, deterministic normalization, source-generated canonical artifacts, additive DB import integration, and provenance-aware reporting.
 
 Milestone 1 validation evidence:
 
@@ -85,6 +92,28 @@ Milestone 2 validation evidence:
 - `npm run seed:source:normalize`: PASS (`sources=2 input_rows=8 normalized=8 emitted_gear_items=8`)
 - `npm run seed:validate`: PASS
 - `npm run test:unit`: PASS
+
+Milestone 3 validation evidence:
+
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run seed:import:db`: PASS (`gear_items=68 base_gear_items=60 source_gear_items=8`)
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run seed:import:test`: PASS
+- `npm run seed:report`: PASS
+- `npm run test:integration`: PASS
+
+Milestone 4 closure evidence:
+
+- `npm run seed:source:check`: PASS
+- `npm run seed:source:normalize`: PASS
+- `npm run seed:validate`: PASS
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run seed:import:db`: PASS
+- `DATABASE_URL=postgresql://postgres:postgres@localhost:5432/camping_trip_dev npm run seed:import:test`: PASS
+- `npm run seed:report`: PASS
+- `npm run test:contract`: PASS
+- `npm run contract:validate`: PASS
+- `npm run test:unit`: PASS
+- `npm run test:integration`: PASS
+- `npm run lint`: PASS
+- `npm run typecheck`: PASS
 
 ## Context and Orientation
 
@@ -137,11 +166,14 @@ Milestone 1 (policy + scaffolding):
 
 Milestone 2 (adapter + normalization implementation):
 
+    npm run seed:source:normalize
     npm run seed:validate
     npm run test:unit
 
 Milestone 3 (pipeline integration + DB import flow):
 
+    npm run seed:source:check
+    npm run seed:source:normalize
     npm run seed:import:db
     npm run seed:import:test
     npm run seed:report
@@ -150,6 +182,7 @@ Milestone 3 (pipeline integration + DB import flow):
 Milestone 4 (full closure gates):
 
     npm run seed:source:check
+    npm run seed:source:normalize
     npm run seed:validate
     npm run seed:import:db
     npm run seed:import:test
@@ -168,6 +201,7 @@ T89 is accepted only when all are true:
 - source adapter workflow is deterministic and idempotent for repeated ingest runs.
 - unknown source/domain input fails closed before canonical artifact emission.
 - approved source and domain allowlists are enforced by executable policy checks (`seed:source:check`).
+- source normalization command emits deterministic canonical-shape seed artifacts (`seed:source:normalize`).
 - canonical seed artifacts remain schema-compatible and pass `seed:validate`.
 - DB import path succeeds with no FK violations and import reports pass threshold checks.
 - runtime contracts remain intact (`test:contract` and `contract:validate` pass).
@@ -224,3 +258,4 @@ Dependencies and guardrails:
 - 2026-02-28: Hostile-review hardening pass added locked source allowlist values, deterministic dedupe formula, and adapter field contracts.
 - 2026-02-28: Implemented source-policy guardrails in code (`src/seed/source-policy.mjs`, `scripts/seed/source-policy-check.mjs`) and validated Milestone 1 command set.
 - 2026-02-28: Implemented source adapter/normalization pipeline and fixture source feeds; generated canonical-shape output artifact `data/seed/entities/gear_items.source.json`.
+- 2026-02-28: Integrated source artifacts into importer/report/integration flows and completed full T89 command-gate closure.

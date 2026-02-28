@@ -1127,6 +1127,7 @@ This file is the operating contract for scope, architecture, data, and decision 
   - source adapters fail closed for unknown/untrusted domains or malformed records
   - local verification commands succeed:
     - `npm run seed:source:check`
+    - `npm run seed:source:normalize`
     - `npm run seed:validate`
     - `npm run seed:import:db`
     - `npm run seed:import:test`
@@ -1261,7 +1262,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 | T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
 | T88 | Implement gear explorer browse/detail UI flow | You + Codex | High | Done | 2026-03-12 | Completed: `/gear` explorer + `/gear/[slug]` detail pages, location-performance rendering, homepage kit -> detail navigation wiring, expanded gear detail payload/UI surfacing (`specs`, `classification`, `review_summary`, `field_tests_recent`, `kit_presence`, `location_summary`), and passing T88 command gates (`test:homepage-kits`, `test:e2e`, `test:contract`, `test:unit`, `test:integration`, `lint`, `typecheck`) tracked in `.agent/execplans/v4-gear-explorer-ui.md` |
-| T89 | Implement affiliate-source seed expansion workflow | You + Codex | High | In Progress | 2026-03-16 | Active plan: `.agent/execplans/v5-source-ingest-affiliate-seeding.md`; Milestone 1+2 complete (`seed:source:check`, source normalization pipeline, fixture feeds, `gear_items.source.json` generation); remaining work is import integration + full closure gate bundle |
+| T89 | Implement affiliate-source seed expansion workflow | You + Codex | High | Done | 2026-03-16 | Completed under `.agent/execplans/v5-source-ingest-affiliate-seeding.md`: fail-closed source policy gates, deterministic normalization pipeline + fixture affiliate feeds, additive source artifact import wiring (`gear_items.source.json`), provenance-aware seed reporting, and passing gate bundle (`seed:source:check`, `seed:source:normalize`, `seed:validate`, `seed:import:db`, `seed:import:test`, `seed:report`, `test:contract`, `contract:validate`, `test:unit`, `test:integration`, `lint`, `typecheck`) |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 

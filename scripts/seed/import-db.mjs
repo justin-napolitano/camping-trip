@@ -13,6 +13,30 @@ function readJson(name) {
   return JSON.parse(fs.readFileSync(path.join(entitiesDir, name), "utf8"));
 }
 
+function readJsonIfExists(name, fallback = []) {
+  const file = path.join(entitiesDir, name);
+  if (!fs.existsSync(file)) {
+    return fallback;
+  }
+  return JSON.parse(fs.readFileSync(file, "utf8"));
+}
+
+function dedupeGearItems(items) {
+  const byId = new Map();
+  const bySlug = new Set();
+  for (const row of items) {
+    if (!row || typeof row !== "object") continue;
+    if (typeof row.id !== "string" || row.id.trim() === "") continue;
+    if (typeof row.slug !== "string" || row.slug.trim() === "") continue;
+    if (byId.has(row.id) || bySlug.has(row.slug)) {
+      continue;
+    }
+    byId.set(row.id, row);
+    bySlug.add(row.slug);
+  }
+  return Array.from(byId.values());
+}
+
 function stableUuid(namespace, value) {
   const digest = createHash("sha1").update(`${namespace}:${value}`).digest("hex");
   const hex = digest.slice(0, 32).split("");
@@ -101,12 +125,12 @@ function splitSystems(value) {
 }
 
 function classSlugToSystemSlug(classSlug) {
-  if (["shell-jacket", "insulated-jacket", "base-layer"].includes(classSlug)) return "clothing";
+  if (["shell-jacket", "insulation-jacket", "base-layer"].includes(classSlug)) return "clothing";
   if (["tent"].includes(classSlug)) return "shelter";
-  if (["sleeping-bag", "sleeping-pad"].includes(classSlug)) return "sleep";
-  if (["stove", "cookset"].includes(classSlug)) return "cooking";
+  if (["sleep-bag", "sleep-pad"].includes(classSlug)) return "sleep";
+  if (["stove", "cook-pot"].includes(classSlug)) return "cooking";
   if (["water-filter"].includes(classSlug)) return "water";
-  if (["nav-device"].includes(classSlug)) return "navigation";
+  if (["navigation-device"].includes(classSlug)) return "navigation-comms";
   if (["first-aid-kit"].includes(classSlug)) return "medical";
   return "clothing";
 }
@@ -132,7 +156,9 @@ async function main() {
   const systems = readJson("systems.json");
   const locations = readJson("locations.json");
   const gearClasses = readJson("gear_classes.json");
-  const gearItems = readJson("gear_items.json");
+  const baseGearItems = readJson("gear_items.json");
+  const sourceGearItems = readJsonIfExists("gear_items.source.json", []);
+  const gearItems = dedupeGearItems([...baseGearItems, ...sourceGearItems]);
   const tripProfiles = readJson("trip_profiles.json");
   const capabilityPolicies = readJson("capability_policies.json");
   const fieldTests = readJson("field_test_logs.json");
@@ -493,7 +519,9 @@ ON CONFLICT (id) DO UPDATE SET
 
   await executeSql(sql.join("\n"));
 
-  console.log(`[seed:import:db] PASS systems=${systems.length} locations=${locations.length} gear_classes=${gearClasses.length} gear_items=${gearItems.length} reviews=${reviews.length}`);
+  console.log(
+    `[seed:import:db] PASS systems=${systems.length} locations=${locations.length} gear_classes=${gearClasses.length} gear_items=${gearItems.length} base_gear_items=${baseGearItems.length} source_gear_items=${sourceGearItems.length} reviews=${reviews.length}`
+  );
 }
 
 main().catch((error) => {

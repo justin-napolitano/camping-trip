@@ -2,6 +2,9 @@
   "name": "camping-trip",
   "private": true,
   "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "bash scripts/tasks/lint.sh",
     "typecheck": "bash scripts/tasks/typecheck.sh",
     "test:unit": "bash scripts/tasks/test-unit.sh",
@@ -26,5 +29,10 @@
     "test:e2e": "node scripts/e2e/run.mjs",
     "contract:guard:legacy": "bash scripts/contract/check-legacy-leak.sh",
     "contract:validate": "bash scripts/contract/validate-contracts.sh"
+  },
+  "dependencies": {
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
   }
 }

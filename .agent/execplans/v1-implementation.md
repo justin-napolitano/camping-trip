@@ -1,4 +1,4 @@
-# Execute V1 Core Build (T0.5 -> T12 -> T13 -> T11 + T10 parallel -> T81 -> T82)
+# Execute V1 Core Build (T0.5 -> T12 -> T13/T83 -> T11 + T10 parallel -> T81 -> T84/T85 -> T82)
 
 This ExecPlan is a living document. The sections `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective` must be kept up to date as work proceeds.
 
@@ -14,14 +14,19 @@ This plan delivers the first working version of the project by making the API co
 - [x] (2026-02-28T16:01:14Z) Milestone 0: Bootstrap and command scaffold verification completed (bootstrap/env + script help checks pass).
 - [x] (2026-02-28T16:01:14Z) Milestone 0.5: Repo bootstrap readiness gate completed (required paths/scripts exist; path checks pass).
 - [x] (2026-02-28T16:23:18Z) Milestone 1: T12 completed with locked endpoint schemas, OpenAPI route coverage, runtime handler/validator wiring, and passing `contract:validate` + `test:contract` (including endpoint-handler contract suite).
-- [ ] (2026-02-28T16:11:09Z) Milestone 2 in progress: full Prisma schema + initial SQL migration and passing local T13 command gates (`db:migrate:reset-test`, `db:migrate:check`, `db:backup:create`, `db:restore:dry-run`) implemented; preview-environment apply evidence still pending.
-- [ ] (2026-02-28T16:25:15Z) Milestone 2 blocked pending preview DB credentials: `db:migrate:preview-check` command path implemented, but execution requires `PREVIEW_DATABASE_URL` (or `DATABASE_URL_PREVIEW`) and currently fails without env.
+- [ ] (2026-02-28T16:11:09Z) Milestone 2 in progress: full Prisma schema + initial SQL migration is implemented, but closure is pending truthful DB command hardening and clean evidence rerun.
 - [ ] (2026-02-25T15:47:00Z) Milestone 2: Complete T13 Prisma schema and initial migration.
+- [x] (2026-02-28T17:03:29Z) Preview-like DB environment bootstrapped via `npm run db:up`; both local dev and preview DBs are running and reachable.
+- [ ] (2026-02-28T17:18:20Z) Milestone 2 remains open: T83 hardening is complete; remaining T13 blocker is T84 search-index policy drift closure and rerun evidence.
 - [x] (2026-02-28T16:17:08Z) Milestone 3: T11 seed dataset build and validation completed (`seed:validate`, `seed:import:test`, `seed:report`, `test:capability-rules`, `test:trip-evaluation` all pass with report artifacts).
 - [x] (2026-02-28T16:12:41Z) Milestone 4: T10 integration scaffolding completed with Notion disabled guardrails; `integration:check` + `test:integration-adapters` passing and evidence artifact recorded.
 - [ ] (2026-02-25T15:47:00Z) Milestone 5: Run global local test gate and finalize completion evidence.
 - [x] (2026-02-28T16:23:18Z) Milestone 6: T81 completed with deterministic capability engine, trip-evaluation handler wiring, and passing `test:capability-rules`, `test:trip-evaluation`, and endpoint handler tests.
 - [ ] (2026-02-25T16:10:00Z) Milestone 7: Complete T82 homepage kit endpoint/UI contract integration.
+- [x] (2026-02-28T17:18:20Z) Milestone 8: T83 completed; DB command path hardened and verified with real operations (`db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, `db:restore:dry-run` all pass).
+- [x] (2026-02-28T17:19:56Z) Post-hardening verification rerun completed: `db:migrate:check`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` all pass with real DB side effects and artifact outputs.
+- [ ] (2026-02-28T17:10:00Z) Milestone 9: Complete T84 hardening (search-index drift closure).
+- [ ] (2026-02-28T17:10:00Z) Milestone 10: Complete T85 hardening (real global gate commands).
 
 ## Surprises & Discoveries
 
@@ -36,7 +41,8 @@ Execution discovery on 2026-02-28: T10 acceptance can be closed independently (p
 Execution discovery on 2026-02-28: seed quality thresholds are now measurable and passing via scripted reports; remaining T11 closure dependency is deterministic hard-rule fixture alignment with T81 implementation.
 Execution discovery on 2026-02-28: T11 can be closed with deterministic fixtures once capability engine tests are green, even before endpoint runtime wiring is completed.
 Execution discovery on 2026-02-28: endpoint-handler contract suite is effective for verifying request-validation/runtime wiring across the locked endpoint set without requiring a full Next.js runtime boot.
-Execution discovery on 2026-02-28: preview-like live migration apply can now be executed via `npm run db:migrate:preview-check`, but this workspace has no preview DB URL configured, so final T13 closure remains credential-blocked.
+Execution discovery on 2026-02-28: preview-like live migration apply path exists via `npm run db:migrate:preview-check`; initial credential block was resolved by local Docker DB bring-up.
+Execution discovery on 2026-02-28: preview-like DB credentials are now available via local Docker bring-up; after T83 patching, preview migration check now fails on apply conflicts and passes only after successful clean reset + apply verification.
 
 Evidence:
 
@@ -65,13 +71,17 @@ Evidence:
   Rationale: Prevent false "implementation-ready" status and preserve AGENTS dependency order without serializing unrelated scaffolding.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: Add explicit hardening track (T83/T84/T85) before further milestone closure.
+  Rationale: Current DB and global-gate commands include placeholder/false-pass behavior that violates acceptance intent.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
 Current outcome: execution governance is now stricter and more testable. The remaining outcome work is implementation itself. Final retrospective will compare delivered behavior against the purpose section and AGENTS success KPI gates.
 
 ## Context and Orientation
 
-This repository has two coordination layers. `AGENTS.md` is the policy and governance contract, and this ExecPlan is the active implementation playbook for multi-hour work. The active tasks for this plan are T12 (contracts), T13 (schema and migration), T11 (seed dataset), T10 (integration scaffold), T81 (capability-policy implementation), and T82 (homepage kits). The policy already defines acceptance criteria, but this file must provide concrete execution steps and verification artifacts for a novice with no prior context.
+This repository has two coordination layers. `AGENTS.md` is the policy and governance contract, and this ExecPlan is the active implementation playbook for multi-hour work. The active tasks for this plan are T12 (contracts), T13 (schema and migration), T83 (DB command hardening), T84 (search-index drift closure), T85 (global gate hardening), T11 (seed dataset), T10 (integration scaffold), T81 (capability-policy implementation), and T82 (homepage kits). The policy already defines acceptance criteria, but this file must provide concrete execution steps and verification artifacts for a novice with no prior context.
 
 Expected implementation paths after completion are:
 
@@ -90,7 +100,7 @@ Expected implementation paths after completion are:
 
 ## Plan of Work
 
-Milestone 0 verifies the environment and command surface that later milestones depend on. Milestone 0.5 then enforces repository bootstrap readiness so T12 starts from a valid base. Milestone 1 locks and validates API contracts and runtime schema validation behavior. Milestone 2 translates locked policy into Prisma schema and migration files and verifies migration behavior locally. Milestone 3 builds and validates Sand Rock-first seed data against quality gates. Milestone 4 adds integration adapter scaffolding with Notion disabled by default and can run in parallel as long as it does not change T12/T13/T11 acceptance gates. Milestone 5 executes the global local quality gate and records closure evidence.
+Milestone 0 verifies the environment and command surface that later milestones depend on. Milestone 0.5 then enforces repository bootstrap readiness so T12 starts from a valid base. Milestone 1 locks and validates API contracts and runtime schema validation behavior. Milestone 2 translates locked policy into Prisma schema and migration files and verifies migration behavior locally. Milestone 8 hardens DB command behavior so T13 closure signals are trustworthy. Milestone 3 builds and validates Sand Rock-first seed data against quality gates. Milestone 4 adds integration adapter scaffolding with Notion disabled by default and can run in parallel as long as it does not change T12/T13/T11 acceptance gates. Milestone 9 closes remaining hardening drift in search index coverage. Milestone 10 closes global local gate implementation hardening. Milestone 5 executes the global local quality gate and records closure evidence.
 
 Each milestone must end with updated `Progress`, any discoveries, and explicit command evidence.
 
@@ -143,17 +153,35 @@ Expected outcomes for Milestone 1:
 
 Milestone 2 commands (T13):
 
+    npm run db:up
     npm run db:migrate:reset-test
     npm run db:migrate:check
+    npm run db:migrate:preview-check
     npm run db:backup:create
     npm run db:restore:dry-run
 
 Expected outcomes for Milestone 2:
 
+    db:up starts/creates local dev + preview-like Postgres successfully.
     reset-test applies migrations on a clean database and exits 0.
     migrate:check exits 0 with no policy/index/FK drift.
+    migrate:preview-check applies migration in preview-like DB and exits 0.
     backup:create completes and produces restorable backup artifact metadata.
     restore:dry-run exits 0 and validates rollback runbook path without destructive restore.
+
+Milestone 8 commands (T83):
+
+    npm run db:up
+    npm run db:migrate:reset-test
+    npm run db:migrate:preview-check
+    npm run db:backup:create
+    npm run db:restore:dry-run
+
+Expected outcomes for Milestone 8:
+
+    db command scripts report pass/fail based on real DB operations only.
+    preview-check cannot emit PASS if migration apply command fails.
+    backup/restore checks validate real artifact and restore path semantics.
 
 Milestone 3 commands (T11):
 
@@ -186,7 +214,7 @@ Milestone 5 commands (global closeout gate):
 
 Expected outcomes for Milestone 5:
 
-    all four commands exit 0.
+    all four commands exit 0 and are non-placeholder quality checks.
 
 Milestone 6 commands (T81):
 
@@ -207,6 +235,26 @@ Expected outcomes for Milestone 7:
 
     homepage kits endpoint returns explainable, capability-compliant bundles.
     e2e homepage flow passes for gear discovery from homepage to gear detail.
+
+Milestone 9 commands (T84):
+
+    npm run db:migrate:check
+    npm run db:migrate:preview-check
+
+Expected outcomes for Milestone 9:
+
+    migration/search-index policy checks pass with required full-text + trigram index coverage.
+
+Milestone 10 commands (T85):
+
+    npm run lint
+    npm run typecheck
+    npm run test:unit
+    npm run test:integration
+
+Expected outcomes for Milestone 10:
+
+    global gate commands run real tooling and fail correctly on validation errors.
 
 ## Validation and Acceptance
 
@@ -273,3 +321,4 @@ Change Note
 - 2026-02-25: Rewritten for strict PLANS compliance with prose-first narrative, explicit expected outputs, concrete recovery commands, and milestone 0 bootstrap preflight.
 - 2026-02-25: Synced Milestone 2 command manifest with AGENTS T13 rollback command availability requirements to remove acceptance drift risk.
 - 2026-02-25: Expanded ExecPlan scope to include T81 capability-policy implementation and T82 homepage kits integration.
+- 2026-02-28: Added T83/T84/T85 hardening milestones and synchronized command manifests with AGENTS (including `npm run db:up` for T13/T83).

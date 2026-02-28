@@ -60,15 +60,16 @@ Use any Postgres method you prefer on personal machine.
 Option A: Docker (if available)
 
 ```bash
-docker run -d --name camping-dev-db \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=camping_trip_dev \
-  -p 5432:5432 postgres:16
+npm run db:up
+```
 
-docker run -d --name camping-preview-db \
-  -e POSTGRES_PASSWORD=postgres \
-  -e POSTGRES_DB=camping_trip_preview \
-  -p 5433:5432 postgres:16
+This script is idempotent: it creates missing containers or starts existing ones, waits for readiness, and prints the expected DB URLs.
+
+Manual Docker fallback:
+
+```bash
+docker run -d --name camping-dev-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=camping_trip_dev -p 5432:5432 postgres:16
+docker run -d --name camping-preview-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=camping_trip_preview -p 5433:5432 postgres:16
 ```
 
 Option B: local/service Postgres

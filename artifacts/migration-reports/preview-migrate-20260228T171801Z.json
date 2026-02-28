@@ -1,0 +1,7 @@
+{
+  "executed_at": "2026-02-28T17:18:07Z",
+  "status": "pass",
+  "migration": "prisma/migrations/20260228161500_initial/migration.sql",
+  "note": "Migration applied against preview-like database URL",
+  "table_count_public": 17
+}

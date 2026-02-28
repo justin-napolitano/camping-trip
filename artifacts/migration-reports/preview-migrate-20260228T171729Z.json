@@ -1,0 +1,6 @@
+{
+  "executed_at": "2026-02-28T17:17:30Z",
+  "status": "fail",
+  "migration": "prisma/migrations/20260228161500_initial/migration.sql",
+  "note": "Migration apply failed against preview-like database URL"
+}

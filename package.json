@@ -8,6 +8,7 @@
     "test:integration": "bash scripts/tasks/noop.sh test:integration",
     "test:contract": "node scripts/contract/run-contract-tests.mjs && node scripts/contract/test-endpoint-handlers.mjs",
     "db:migrate:check": "bash scripts/db/check-schema.sh",
+    "db:up": "bash scripts/db/up.sh",
     "db:migrate:reset-test": "bash scripts/db/reset-test.sh",
     "db:migrate:preview-check": "bash scripts/db/preview-check.sh",
     "db:backup:create": "bash scripts/db/backup-create.sh",

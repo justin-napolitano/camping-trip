@@ -7,8 +7,10 @@ function json(body, status) {
 
 export async function GET(request, { params }) {
   const requestId = request.headers.get("x-request-id") || crypto.randomUUID();
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
   try {
-    const detail = await fetchGearDetailDb(params?.slug);
+    const detail = await fetchGearDetailDb(slug);
     if (!detail) {
       const fallback = handleGearDetail(null, requestId);
       return json(fallback.body, fallback.status);
@@ -27,7 +29,7 @@ export async function GET(request, { params }) {
       200
     );
   } catch {
-    const res = handleGearDetail(params?.slug, requestId);
+    const res = handleGearDetail(slug, requestId);
     return json(res.body, res.status);
   }
 }

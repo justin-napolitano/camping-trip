@@ -15,6 +15,7 @@ This plan delivers the first working version of the project by making the API co
 - [x] (2026-02-28T16:01:14Z) Milestone 0.5: Repo bootstrap readiness gate completed (required paths/scripts exist; path checks pass).
 - [x] (2026-02-28T16:23:18Z) Milestone 1: T12 completed with locked endpoint schemas, OpenAPI route coverage, runtime handler/validator wiring, and passing `contract:validate` + `test:contract` (including endpoint-handler contract suite).
 - [ ] (2026-02-28T16:11:09Z) Milestone 2 in progress: full Prisma schema + initial SQL migration and passing local T13 command gates (`db:migrate:reset-test`, `db:migrate:check`, `db:backup:create`, `db:restore:dry-run`) implemented; preview-environment apply evidence still pending.
+- [ ] (2026-02-28T16:25:15Z) Milestone 2 blocked pending preview DB credentials: `db:migrate:preview-check` command path implemented, but execution requires `PREVIEW_DATABASE_URL` (or `DATABASE_URL_PREVIEW`) and currently fails without env.
 - [ ] (2026-02-25T15:47:00Z) Milestone 2: Complete T13 Prisma schema and initial migration.
 - [x] (2026-02-28T16:17:08Z) Milestone 3: T11 seed dataset build and validation completed (`seed:validate`, `seed:import:test`, `seed:report`, `test:capability-rules`, `test:trip-evaluation` all pass with report artifacts).
 - [x] (2026-02-28T16:12:41Z) Milestone 4: T10 integration scaffolding completed with Notion disabled guardrails; `integration:check` + `test:integration-adapters` passing and evidence artifact recorded.
@@ -35,6 +36,7 @@ Execution discovery on 2026-02-28: T10 acceptance can be closed independently (p
 Execution discovery on 2026-02-28: seed quality thresholds are now measurable and passing via scripted reports; remaining T11 closure dependency is deterministic hard-rule fixture alignment with T81 implementation.
 Execution discovery on 2026-02-28: T11 can be closed with deterministic fixtures once capability engine tests are green, even before endpoint runtime wiring is completed.
 Execution discovery on 2026-02-28: endpoint-handler contract suite is effective for verifying request-validation/runtime wiring across the locked endpoint set without requiring a full Next.js runtime boot.
+Execution discovery on 2026-02-28: preview-like live migration apply can now be executed via `npm run db:migrate:preview-check`, but this workspace has no preview DB URL configured, so final T13 closure remains credential-blocked.
 
 Evidence:
 

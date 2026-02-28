@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { hasPurchaseUrl } from "../src/ui/homepage/kits-view.mjs";
+import { buildAffiliateResolveHref, hasPurchaseUrl } from "../src/ui/homepage/kits-view.mjs";
 
 export default function HomePage() {
   const [kits, setKits] = useState([]);
@@ -83,7 +83,16 @@ export default function HomePage() {
                         View Details
                       </Link>
                       {hasPurchaseUrl(item) ? (
-                        <a href={item.purchase_url} target="_blank" rel="noreferrer" className="buy-link">
+                        <a
+                          href={buildAffiliateResolveHref(item.purchase_url, {
+                            placement: "homepage_kit",
+                            gear_item_id: item.gear_item_id,
+                            kit_id: kit.kit_id
+                          })}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="buy-link"
+                        >
                           Buy
                         </a>
                       ) : (

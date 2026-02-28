@@ -178,3 +178,37 @@ export function validateMediaCompleteRequest(body) {
 
   return { ok: errors.length === 0, errors };
 }
+
+export function validateAffiliateResolveQuery(query) {
+  const errors = [];
+  const allowed = new Set(["url", "placement", "gear_item_id", "kit_id"]);
+  const keys = Object.keys(query ?? {});
+  const unknown = keys.filter((k) => !allowed.has(k));
+  if (unknown.length > 0) {
+    errors.push(`unknown query params: ${unknown.join(",")}`);
+  }
+
+  const url = typeof query?.url === "string" ? query.url.trim() : "";
+  if (!url) {
+    errors.push("url is required");
+  } else if (url.length > 2000) {
+    errors.push("url must be at most 2000 characters");
+  }
+
+  const placement = typeof query?.placement === "string" ? query.placement.trim() : "";
+  if (placement.length > 64) {
+    errors.push("placement must be at most 64 characters");
+  }
+
+  const gearItemId = typeof query?.gear_item_id === "string" ? query.gear_item_id.trim() : "";
+  if (gearItemId.length > 128) {
+    errors.push("gear_item_id must be at most 128 characters");
+  }
+
+  const kitId = typeof query?.kit_id === "string" ? query.kit_id.trim() : "";
+  if (kitId.length > 128) {
+    errors.push("kit_id must be at most 128 characters");
+  }
+
+  return { ok: errors.length === 0, errors };
+}

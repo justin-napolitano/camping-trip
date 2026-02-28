@@ -9,5 +9,27 @@
     "remoteness": "semi_remote",
     "static_exposure": "medium",
     "precipitation_expected": true
+  },
+  {
+    "id": "trip-lg-001",
+    "location_id": "loc-linville-gorge",
+    "trip_type": "alpine_weekend",
+    "expected_low_c": -5,
+    "wind_mph": 24,
+    "precipitation_risk": "high",
+    "remoteness": "remote",
+    "static_exposure": "high",
+    "precipitation_expected": true
+  },
+  {
+    "id": "trip-rrg-001",
+    "location_id": "loc-red-river-gorge",
+    "trip_type": "day_climb_car_camp",
+    "expected_low_c": 8,
+    "wind_mph": 9,
+    "precipitation_risk": "low",
+    "remoteness": "frontcountry",
+    "static_exposure": "low",
+    "precipitation_expected": false
   }
 ]

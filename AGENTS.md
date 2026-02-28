@@ -7,7 +7,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 ## Project Snapshot
 - Project: `camping-trip` (gear intelligence)
 - Phase: Planning complete -> implementation-ready blueprint locked
-- Last updated: 2026-02-25
+- Last updated: 2026-02-28
 - Owners: You + Codex
 
 ## AI/Codex Operating Role
@@ -85,8 +85,12 @@ This file is the operating contract for scope, architecture, data, and decision 
 
 ## ExecPlans
 - For complex features, significant refactors, or any multi-hour implementation effort, Codex must use an ExecPlan maintained in `.agent/PLANS.md` format.
-- Active implementation for v1 must be driven by:
+- Active implementation for v1 was driven by:
   - `.agent/execplans/v1-implementation.md`
+- Active implementation for current engine hardening branch must be driven by:
+  - `.agent/execplans/v2-engine-hardening.md`
+- Historical-plan rule:
+  - `.agent/execplans/v1-implementation.md` is retained as closed historical evidence and is not the active execution source-of-truth for new tasks.
 - ExecPlan usage rules:
   - the ExecPlan is the execution source-of-truth during implementation
   - the ExecPlan must be treated as a living document and updated at every stopping point
@@ -97,6 +101,32 @@ This file is the operating contract for scope, architecture, data, and decision 
   - command lists in AGENTS and the active ExecPlan must be identical for active tasks and global test gates
   - if command changes in either file, update the other file in the same session before proceeding
   - if mismatch is discovered during hostile review, task status must be set to `Blocked` until reconciled
+
+### ExecPlan Standard (Anti-Drift, All Branches)
+- Precedence rule (authoritative order):
+  - `AGENTS.md` defines governance policy and task/workboard truth
+  - `.agent/PLANS.md` defines ExecPlan structure/process mechanics
+  - active branch ExecPlan file defines implementation execution steps
+- Branch registration rule:
+  - every feature branch using an ExecPlan must declare one active plan path in this `ExecPlans` section before implementation
+  - if active plan changes, update this section in the same session
+- Strict tracking gate (locked):
+  - implementation code changes are blocked when the active ExecPlan file is untracked in git
+  - no feature-branch implementation commit may proceed until the active ExecPlan file and governing plan docs are tracked/committed
+  - when this gate is violated, affected implementation tasks must be set to `Blocked` until reconciled
+- Plan lifecycle states:
+  - `Draft`: plan exists but is not execution source-of-truth
+  - `Active`: sole execution source-of-truth for branch/task
+  - `Historical Closed`: completed evidence record, not active
+  - `Superseded`: replaced by another active plan
+- Closure ceremony (required before marking a task `Done`):
+  - update plan `Progress`, `Surprises & Discoveries`, `Decision Log`, and `Outcomes & Retrospective`
+  - record final command evidence summary in the active plan
+  - update AGENTS workboard status/notes in same session
+  - mark prior active plan as `Historical Closed` or `Superseded` if a successor exists
+- Format policy for this repository:
+  - follow `.agent/PLANS.md` formatting rules as canonical for repo plans
+  - for standalone `.md` ExecPlan files, do not wrap entire file in an outer triple-backtick fence
 
 ## Terminology Definitions (v1 Locked)
 - `valid gear/class query`: a `GET /api/v1/gear` request that passes query schema validation and includes at least one of `q`, `gear_class`, `system`, or `location`.
@@ -983,6 +1013,32 @@ This file is the operating contract for scope, architecture, data, and decision 
     - `npm run test:unit`
     - `npm run test:integration`
 
+### T86: Engine Hostile Hardening (DB-Derived Context + Strict Explainability)
+- Required deliverables:
+  - runtime request validator parity with `TripsEvaluateRequest` schema (including unknown-field rejection and typed selected-system arrays)
+  - trip-evaluation route derives policy and field-test context from persisted records instead of always-false defaults
+  - field-test hard-rule logic requires recent passed test (`passed=true`) for qualifying scenarios
+  - qualifying field tests are limited to selected gear ids and recency-window constrained
+  - strict explainability enforcement for all selected items with exactly top-3 factors
+  - deterministic failure response when required policy/evidence context cannot be derived, with explicit status/error mapping
+  - deterministic policy/evidence context selection precedence with explicit tie-breakers
+- Acceptance criteria:
+  - no contract drift between `schemas/`, `docs/openapi/v1.yaml`, and `src/contracts/` for trip evaluation path
+  - cold/remote field-test requirement cannot be satisfied by failed test records
+  - every selected gear item in request has explainability payload or request fails deterministically with `422` + `error_code=EXPLAINABILITY_INCOMPLETE`
+  - missing policy context fails deterministically with `409` + `error_code=POLICY_CONTEXT_MISSING`
+  - DB-derived context selection is deterministic via precedence (`updated_at DESC`, tie-break `id ASC`)
+  - required new tests exist and pass for: unknown-field rejection, typed selected-system arrays, failed/stale field-test rejection, selected-gear field-test scoping, explainability-missing deterministic failure, and policy-context-missing deterministic failure
+  - local verification commands succeed:
+    - `npm run test:contract`
+    - `npm run test:capability-rules`
+    - `npm run test:trip-evaluation`
+    - `npm run test:trip-endpoint`
+    - `npm run lint`
+    - `npm run typecheck`
+    - `npm run test:unit`
+    - `npm run test:integration`
+
 ### Implementation Dependency Order (Locked)
 1. T12 (contracts) must be completed before T13 (schema migration finalization).
 2. T13 must be completed before T11 (seed import validation).
@@ -991,7 +1047,8 @@ This file is the operating contract for scope, architecture, data, and decision 
 5. T81 must begin only after T12 + T13 + T11 acceptance criteria pass.
 6. T82 must begin after T81 contract/schema wiring is complete.
 7. T84 and T85 must be completed before release hardening closeout.
-8. UI implementation begins only after T12 + T13 + T11 acceptance criteria pass.
+8. T86 must be completed before trip-evaluation hostile-review closure.
+9. UI implementation begins only after T12 + T13 + T11 acceptance criteria pass.
 
 ### Bootstrap and Portability Requirements (v1)
 - Required bootstrap artifacts:
@@ -1102,10 +1159,11 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T83 | Harden DB command scripts for truthful migration/rollback validation | You + Codex | High | Done | 2026-03-02 | `db:migrate:reset-test`, `db:migrate:preview-check`, `db:backup:create`, and `db:restore:dry-run` now perform real DB operations and fail on real apply/restore errors |
 | T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Done | 2026-03-02 | Added full-text canonical-search GIN index + name/model trigram GIN index; `db:migrate:check` enforcement added and preview apply verified |
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
+| T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 
 ## Next Actions
-1. Execute `.agent/execplans/v1-implementation.md` in milestone order.
-2. Run release hardening closeout and final evidence capture.
-3. Keep AGENTS workboard and ExecPlan progress log synchronized.
+1. Run release hardening closeout and final evidence capture.
+2. Keep AGENTS workboard and ExecPlan progress log synchronized.
+3. Start next feature/task only after creating/updating the active branch ExecPlan path.

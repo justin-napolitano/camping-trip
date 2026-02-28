@@ -49,15 +49,22 @@ function requiredCombinedR(expectedLowC) {
   return 6.0;
 }
 
-function hasRecentFieldTest(fieldTests, nowIso, recencyDays) {
+function hasRecentFieldTest(fieldTests, nowIso, recencyDays, selectedGearIds) {
   if (!Array.isArray(fieldTests) || fieldTests.length === 0) {
     return false;
   }
   const now = new Date(nowIso);
   const maxAgeMs = recencyDays * 24 * 60 * 60 * 1000;
+  const selectedIds = new Set(selectedGearIds || []);
 
   return fieldTests.some((test) => {
     if (!test || !test.test_date || !test.test_type) {
+      return false;
+    }
+    if (test.passed !== true) {
+      return false;
+    }
+    if (typeof test.gear_item_id !== "string" || !selectedIds.has(test.gear_item_id)) {
       return false;
     }
     if (test.test_type !== "sleep_overnight" && test.test_type !== "stove_cold_start") {
@@ -78,6 +85,7 @@ export function evaluateTripPolicy({
 }) {
   const tsiResult = computeTsi(trip_profile);
   const hardRuleFailures = [];
+  const selectedGearIds = Object.values(selected_gear_by_system || {}).flatMap((ids) => Array.isArray(ids) ? ids : []);
 
   const combinedR = Number((policy_inputs.pad_rvalue || 0) + (policy_inputs.bag_r_equivalent || 0));
   const combinedRRequired = requiredCombinedR(trip_profile.expected_low_c);
@@ -110,7 +118,7 @@ export function evaluateTripPolicy({
   }
 
   const requiresFieldTest = trip_profile.expected_low_c < -6 || trip_profile.remoteness === "remote";
-  if (requiresFieldTest && !hasRecentFieldTest(field_tests, now, policy_inputs.field_test_recency_days || 180)) {
+  if (requiresFieldTest && !hasRecentFieldTest(field_tests, now, policy_inputs.field_test_recency_days || 180, selectedGearIds)) {
     hardRuleFailures.push("missing_recent_field_test");
   }
 

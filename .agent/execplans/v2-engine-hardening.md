@@ -11,16 +11,22 @@ This plan hardens the trip-evaluation runtime path so hostile-review concerns ar
 - [x] (2026-02-28T18:05:00Z) V2 ExecPlan created for branch `feature/engine-hostile-hardening`.
 - [x] (2026-02-28T18:05:00Z) Governance sync prepared in AGENTS: T86 added with matching command manifest and acceptance criteria.
 - [x] (2026-02-28T19:20:00Z) Governance strict-tracking gate cleared via commit `d53a069`; T86 moved from `Blocked` to `In Progress` in AGENTS with same-session sync.
-- [ ] (2026-02-28T18:05:00Z) Milestone 1 pending: contract/runtime validator parity for `TripsEvaluateRequest`.
-- [ ] (2026-02-28T18:05:00Z) Milestone 2 pending: engine hard-rule semantics update (field-test `passed=true` gating).
-- [ ] (2026-02-28T18:05:00Z) Milestone 3 pending: strict explainability enforcement for all selected items.
-- [ ] (2026-02-28T18:05:00Z) Milestone 4 pending: route DB-derived context path + deterministic failure mode.
-- [ ] (2026-02-28T18:05:00Z) Milestone 5 pending: test expansion and full local verification gates.
-- [ ] (2026-02-28T18:05:00Z) Milestone 6 pending: evidence capture and task closure sync.
+- [x] (2026-02-28T19:35:00Z) Milestone 1 completed: runtime validator now enforces unknown-field rejection and typed `selected_gear_by_system` arrays, endpoint emits `VALIDATION_ERROR`, and `npm run test:contract` + `npm run test:trip-endpoint` pass.
+- [x] (2026-02-28T19:50:00Z) Milestone 2 completed: field-test gating now requires `passed=true`, recency-window validity, and selected-gear scoping; `npm run test:capability-rules` + `npm run test:trip-evaluation` pass.
+- [x] (2026-02-28T19:50:00Z) Milestone 3 completed: strict selected-item explainability completeness is enforced, with deterministic `422 EXPLAINABILITY_INCOMPLETE`; `npm run test:trip-evaluation` + `npm run test:trip-endpoint` pass.
+- [x] (2026-02-28T19:50:00Z) Milestone 4 completed: route now derives policy/field-test/factor context from persisted records and returns deterministic `409 POLICY_CONTEXT_MISSING` when policy context is absent.
+- [x] (2026-02-28T19:50:00Z) Milestone 5 completed: full gate bundle passed (`test:contract`, `test:capability-rules`, `test:trip-evaluation`, `test:trip-endpoint`, `lint`, `typecheck`, `test:unit`, `test:integration`).
+- [x] (2026-02-28T19:50:00Z) Milestone 6 completed: closure evidence captured via `git status --short` and `rg -n "T86|v2-engine-hardening|trip-evaluation|hostile" AGENTS.md .agent/execplans/v2-engine-hardening.md`.
 
 ## Surprises & Discoveries
 
 Hostile review identified that route defaults currently provide always-false policy context, creating policy-behavior ambiguity. It also identified a safety bug where failed field tests can satisfy recency checks. These are treated as first-order blockers for trustworthy trip approvals.
+
+Milestone 1 implementation discovery: the runtime validator previously accepted unknown top-level and nested `trip_profile` fields and did not enforce per-system selected-gear array item typing. These gaps were closed with explicit checks and regression tests.
+
+Milestone 4 implementation discovery: policy-context detection initially ran after default-context merge, which masked missing-context failures. The check was moved to raw input context before merge so `POLICY_CONTEXT_MISSING` is observable and testable.
+
+Milestone 5 observation: `lint`, `typecheck`, and integration shell wrappers emit locale warnings (`LC_ALL: C.UTF-8`) in this environment, but gates still pass and do not affect exit codes.
 
 ## Decision Log
 
@@ -44,9 +50,15 @@ Hostile review identified that route defaults currently provide always-false pol
   Rationale: prevents non-repeatable behavior when multiple policy/field-test rows qualify.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: Use persisted seed entity files as the current deterministic context source for route-level policy and field-test derivation.
+  Rationale: enables DB-derived behavior semantics now, while remaining compatible with future Prisma-backed context loaders.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
-Success means T86 closes with passing command evidence and no unresolved hostile-review blockers in the trip-evaluation runtime path. Final retrospective will summarize which findings were fixed, any residual risks, and explicit deferred items (if any).
+T86 achieved the intended hardening outcomes. Runtime validation is schema-aligned and rejects unknown fields, field-test requirement semantics now require recent passed evidence scoped to selected gear, and selected-item explainability is enforced with deterministic failure behavior. Route context now derives from persisted records with deterministic policy selection precedence and deterministic missing-policy failure. Full local verification gates passed.
+
+Residual risk: route context currently sources persisted seed files rather than live Prisma reads; the behavior contract is deterministic, but a later increment should switch the loader to production DB queries while preserving the same precedence and error semantics.
 
 ## Context and Orientation
 
@@ -195,3 +207,5 @@ Deterministic DB selection rules for T86:
 - 2026-02-28: Added dedicated `Change Notes` section to satisfy revision-trace requirement in `.agent/PLANS.md`.
 - 2026-02-28: Recorded strict-gate clearance and AGENTS status transition (`Blocked` -> `In Progress`) after governance commit `d53a069`.
 - 2026-02-28: Hardened kickoff semantics with explicit error/status mapping, deterministic DB-selection precedence, and required milestone test intents.
+- 2026-02-28: Recorded Milestone 1 completion evidence after validator hardening and endpoint error-code alignment (`VALIDATION_ERROR`).
+- 2026-02-28: Recorded T86 completion across Milestones 2-6, including deterministic policy/explainability failures and full local gate evidence.

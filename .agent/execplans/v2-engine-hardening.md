@@ -36,6 +36,14 @@ Hostile review identified that route defaults currently provide always-false pol
   Rationale: prevents false approval/failure outcomes caused by static defaults.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: Lock deterministic runtime failure mapping for T86 hardening paths.
+  Rationale: removes ambiguity during implementation and test-writing, and keeps contract behavior auditable.
+  Date/Author: 2026-02-28 / Codex
+
+- Decision: Lock deterministic DB context selection precedence and tie-breakers.
+  Rationale: prevents non-repeatable behavior when multiple policy/field-test rows qualify.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
 Success means T86 closes with passing command evidence and no unresolved hostile-review blockers in the trip-evaluation runtime path. Final retrospective will summarize which findings were fixed, any residual risks, and explicit deferred items (if any).
@@ -64,7 +72,7 @@ Policy anchors:
 
 ## Plan of Work
 
-Milestone 1 enforces strict request validation parity with schema. Milestone 2 updates engine hard-rule semantics so field-test safety requirements require passing evidence. Milestone 3 enforces strict explainability completeness for every selected item. Milestone 4 replaces static route defaults with DB-derived context assembly and deterministic failure behavior when required inputs are unavailable. Milestone 5 expands and runs tests/gates. Milestone 6 records evidence and synchronizes AGENTS + ExecPlan status.
+Milestone 1 enforces strict request validation parity with schema and locks unknown-field rejection behavior. Milestone 2 updates engine hard-rule semantics so field-test safety requirements require recent passing evidence tied to selected gear. Milestone 3 enforces strict explainability completeness for every selected item, with deterministic structured request failure when completeness cannot be met. Milestone 4 replaces static route defaults with DB-derived context assembly, deterministic policy-selection precedence, and deterministic failure behavior when required context is unavailable. Milestone 5 expands and runs tests/gates, including required new test intents listed below. Milestone 6 records evidence and synchronizes AGENTS + ExecPlan status.
 
 ## Concrete Steps
 
@@ -73,20 +81,44 @@ Milestone 1 commands:
     npm run test:contract
     npm run test:trip-endpoint
 
+Milestone 1 required test intents:
+
+- unknown request fields are rejected with `422` and structured `error_code`
+- `selected_gear_by_system` arrays reject non-string ids and non-array values
+
 Milestone 2 commands:
 
     npm run test:capability-rules
     npm run test:trip-evaluation
+
+Milestone 2 required test intents:
+
+- recent failed field tests (`passed=false`) do not satisfy cold/remote requirement
+- recent passed field tests (`passed=true`) do satisfy requirement when all other hard rules pass
+- stale passed tests outside recency window do not satisfy requirement
+- qualifying field tests must belong to selected gear ids
 
 Milestone 3 commands:
 
     npm run test:trip-evaluation
     npm run test:trip-endpoint
 
+Milestone 3 required test intents:
+
+- each selected item returns explainability with exactly 3 factors
+- missing explainability for any selected item fails deterministically with `422` + `error_code=EXPLAINABILITY_INCOMPLETE`
+
 Milestone 4 commands:
 
     npm run test:trip-endpoint
     npm run test:contract
+
+Milestone 4 required test intents:
+
+- policy context is loaded from DB (not static defaults)
+- policy selection precedence is deterministic: `updated_at DESC`, tie-break `id ASC`
+- when no policy row exists, request fails with `409` + `error_code=POLICY_CONTEXT_MISSING`
+- multiple qualifying policy rows produce repeatable selection under precedence rule
 
 Milestone 5 commands:
 
@@ -110,8 +142,10 @@ T86 is accepted only when all are true:
 
 - request runtime validation is schema-equivalent for trip-evaluation payloads
 - field-test recency hard rule accepts only recent passed tests
-- explainability payload is complete for every selected item or request fails deterministically with structured error
+- explainability payload is complete for every selected item or request fails deterministically (`422`, `error_code=EXPLAINABILITY_INCOMPLETE`)
 - route no longer uses always-false static policy defaults in runtime path
+- missing policy context fails deterministically (`409`, `error_code=POLICY_CONTEXT_MISSING`)
+- DB context selection is deterministic under locked precedence (`updated_at DESC`, tie-break `id ASC`)
 - command bundle in Milestone 5 passes without manual exceptions
 - AGENTS workboard + ExecPlan progress are synchronized in the same session
 
@@ -142,8 +176,22 @@ Record any new tests and exact command outputs summarized in closure notes.
 
 This track depends on existing contract files, policy module, and route handlers. Because DB-derived context is required, route behavior must clearly define fallback/error behavior when policy or field-test records are unavailable. Any contract-affecting behavior change must be synchronized across `schemas/`, `docs/openapi/v1.yaml`, and `src/contracts/` in the same change set.
 
+Deterministic runtime mapping for T86:
+
+- request schema mismatch or unknown fields -> `422`, `error_code=VALIDATION_ERROR`
+- explainability missing for any selected item -> `422`, `error_code=EXPLAINABILITY_INCOMPLETE`
+- required policy context unavailable from DB -> `409`, `error_code=POLICY_CONTEXT_MISSING`
+- field-test requirement unmet due to missing/failed/stale evidence -> `200` with `approved=false` and explicit hard-rule failure code in `hard_rule_failures`
+
+Deterministic DB selection rules for T86:
+
+- policy row precedence: latest `updated_at`; tie-break by `id` ascending
+- qualifying field-test rows: `passed=true`, within recency window, and `gear_item_id` in selected gear ids
+- field-test evidence precedence for traceability: latest `test_date`; tie-break by `id` ascending
+
 ## Change Notes
 
 - 2026-02-28: Added explicit lifecycle state (`Status: Active`) to align with `.agent/PLANS.md` lifecycle-state requirement.
 - 2026-02-28: Added dedicated `Change Notes` section to satisfy revision-trace requirement in `.agent/PLANS.md`.
 - 2026-02-28: Recorded strict-gate clearance and AGENTS status transition (`Blocked` -> `In Progress`) after governance commit `d53a069`.
+- 2026-02-28: Hardened kickoff semantics with explicit error/status mapping, deterministic DB-selection precedence, and required milestone test intents.

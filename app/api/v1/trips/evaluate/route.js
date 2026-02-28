@@ -1,6 +1,7 @@
 import { handleTripsEvaluate } from "../../../../../src/api/v1/trips/evaluate/handler.mjs";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { fetchTripEvaluationContextDb } from "../../../../../src/db/runtime-repository.mjs";
 
 function jsonResponse(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -63,6 +64,17 @@ function deriveSelectedItemFactors(selectedGearBySystem, gearItems) {
 }
 
 async function buildEvaluationContext(body) {
+  const selectedGearIds = Object.values(body?.selected_gear_by_system || {}).flatMap((ids) => Array.isArray(ids) ? ids : []);
+
+  try {
+    const dbContext = await fetchTripEvaluationContextDb(selectedGearIds);
+    if (dbContext) {
+      return dbContext;
+    }
+  } catch {
+    // Fallback to seed file context for environments without DB access.
+  }
+
   const [policies, fieldTests, gearItems] = await Promise.all([
     loadSeedJson("capability_policies.json"),
     loadSeedJson("field_test_logs.json"),

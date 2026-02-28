@@ -1018,12 +1018,17 @@ This file is the operating contract for scope, architecture, data, and decision 
   - runtime request validator parity with `TripsEvaluateRequest` schema (including unknown-field rejection and typed selected-system arrays)
   - trip-evaluation route derives policy and field-test context from persisted records instead of always-false defaults
   - field-test hard-rule logic requires recent passed test (`passed=true`) for qualifying scenarios
+  - qualifying field tests are limited to selected gear ids and recency-window constrained
   - strict explainability enforcement for all selected items with exactly top-3 factors
-  - deterministic failure response when required policy/evidence context cannot be derived
+  - deterministic failure response when required policy/evidence context cannot be derived, with explicit status/error mapping
+  - deterministic policy/evidence context selection precedence with explicit tie-breakers
 - Acceptance criteria:
   - no contract drift between `schemas/`, `docs/openapi/v1.yaml`, and `src/contracts/` for trip evaluation path
   - cold/remote field-test requirement cannot be satisfied by failed test records
-  - every selected gear item in request has explainability payload or request fails deterministically with structured error
+  - every selected gear item in request has explainability payload or request fails deterministically with `422` + `error_code=EXPLAINABILITY_INCOMPLETE`
+  - missing policy context fails deterministically with `409` + `error_code=POLICY_CONTEXT_MISSING`
+  - DB-derived context selection is deterministic via precedence (`updated_at DESC`, tie-break `id ASC`)
+  - required new tests exist and pass for: unknown-field rejection, typed selected-system arrays, failed/stale field-test rejection, selected-gear field-test scoping, explainability-missing deterministic failure, and policy-context-missing deterministic failure
   - local verification commands succeed:
     - `npm run test:contract`
     - `npm run test:capability-rules`

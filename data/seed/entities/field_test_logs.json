@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ft-001",
+    "gear_item_id": "gear-03",
+    "test_type": "sleep_overnight",
+    "test_date": "2026-02-01",
+    "expected_low_c": -2,
+    "passed": true,
+    "notes": "Sleep system held warm overnight.",
+    "created_by": "admin-seed"
+  },
+  {
+    "id": "ft-002",
+    "gear_item_id": "gear-05",
+    "test_type": "stove_cold_start",
+    "test_date": "2026-02-05",
+    "expected_low_c": -4,
+    "passed": true,
+    "notes": "Cold-start test passed with backup plan.",
+    "created_by": "admin-seed"
+  }
+]

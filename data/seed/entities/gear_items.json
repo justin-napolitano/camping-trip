@@ -1,0 +1,507 @@
+[
+  {
+    "id": "gear-01",
+    "slug": "gear-01",
+    "name": "Gear Item 1",
+    "gear_class_id": "cls-shell",
+    "price_usd": 52,
+    "weight_g": 215,
+    "packed_volume_l": 1.1,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood"
+    ],
+    "purchase_url": "https://example.com/gear-01"
+  },
+  {
+    "id": "gear-02",
+    "slug": "gear-02",
+    "name": "Gear Item 2",
+    "gear_class_id": "cls-insul",
+    "price_usd": 55,
+    "weight_g": 230,
+    "packed_volume_l": 1.2,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": "synthetic",
+    "fill_weight_g": 110,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "insulation"
+    ],
+    "purchase_url": "https://example.com/gear-02"
+  },
+  {
+    "id": "gear-03",
+    "slug": "gear-03",
+    "name": "Gear Item 3",
+    "gear_class_id": "cls-pad",
+    "price_usd": 58,
+    "weight_g": 245,
+    "packed_volume_l": 1.3,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "r_value"
+    ],
+    "purchase_url": "https://example.com/gear-03"
+  },
+  {
+    "id": "gear-04",
+    "slug": "gear-04",
+    "name": "Gear Item 4",
+    "gear_class_id": "cls-bag",
+    "price_usd": 61,
+    "weight_g": 260,
+    "packed_volume_l": 1.4,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "temp_rating"
+    ],
+    "purchase_url": "https://example.com/gear-04"
+  },
+  {
+    "id": "gear-05",
+    "slug": "gear-05",
+    "name": "Gear Item 5",
+    "gear_class_id": "cls-stove",
+    "price_usd": 64,
+    "weight_g": 275,
+    "packed_volume_l": 1.5,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "fuel_type"
+    ],
+    "purchase_url": "https://example.com/gear-05"
+  },
+  {
+    "id": "gear-06",
+    "slug": "gear-06",
+    "name": "Gear Item 6",
+    "gear_class_id": "cls-pot",
+    "price_usd": 67,
+    "weight_g": 290,
+    "packed_volume_l": null,
+    "packability_mode": "non_packable",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "volume"
+    ],
+    "purchase_url": "https://example.com/gear-06"
+  },
+  {
+    "id": "gear-07",
+    "slug": "gear-07",
+    "name": "Gear Item 7",
+    "gear_class_id": "cls-shell",
+    "price_usd": 70,
+    "weight_g": 305,
+    "packed_volume_l": 1.7,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood"
+    ],
+    "purchase_url": "https://example.com/gear-07"
+  },
+  {
+    "id": "gear-08",
+    "slug": "gear-08",
+    "name": "Gear Item 8",
+    "gear_class_id": "cls-insul",
+    "price_usd": 73,
+    "weight_g": 320,
+    "packed_volume_l": 1.8,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": "synthetic",
+    "fill_weight_g": 110,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "insulation"
+    ],
+    "purchase_url": "https://example.com/gear-08"
+  },
+  {
+    "id": "gear-09",
+    "slug": "gear-09",
+    "name": "Gear Item 9",
+    "gear_class_id": "cls-pad",
+    "price_usd": 76,
+    "weight_g": 335,
+    "packed_volume_l": 1.9,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "r_value"
+    ],
+    "purchase_url": "https://example.com/gear-09"
+  },
+  {
+    "id": "gear-10",
+    "slug": "gear-10",
+    "name": "Gear Item 10",
+    "gear_class_id": "cls-bag",
+    "price_usd": 79,
+    "weight_g": 350,
+    "packed_volume_l": 2,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "temp_rating"
+    ],
+    "purchase_url": "https://example.com/gear-10"
+  },
+  {
+    "id": "gear-11",
+    "slug": "gear-11",
+    "name": "Gear Item 11",
+    "gear_class_id": "cls-stove",
+    "price_usd": 82,
+    "weight_g": 365,
+    "packed_volume_l": 2.1,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "fuel_type"
+    ],
+    "purchase_url": "https://example.com/gear-11"
+  },
+  {
+    "id": "gear-12",
+    "slug": "gear-12",
+    "name": "Gear Item 12",
+    "gear_class_id": "cls-pot",
+    "price_usd": 85,
+    "weight_g": 380,
+    "packed_volume_l": null,
+    "packability_mode": "non_packable",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "volume"
+    ],
+    "purchase_url": "https://example.com/gear-12"
+  },
+  {
+    "id": "gear-13",
+    "slug": "gear-13",
+    "name": "Gear Item 13",
+    "gear_class_id": "cls-shell",
+    "price_usd": 88,
+    "weight_g": 395,
+    "packed_volume_l": 2.3,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood"
+    ],
+    "purchase_url": "https://example.com/gear-13"
+  },
+  {
+    "id": "gear-14",
+    "slug": "gear-14",
+    "name": "Gear Item 14",
+    "gear_class_id": "cls-insul",
+    "price_usd": 91,
+    "weight_g": 410,
+    "packed_volume_l": 2.4,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": "synthetic",
+    "fill_weight_g": 110,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "insulation"
+    ],
+    "purchase_url": "https://example.com/gear-14"
+  },
+  {
+    "id": "gear-15",
+    "slug": "gear-15",
+    "name": "Gear Item 15",
+    "gear_class_id": "cls-pad",
+    "price_usd": 94,
+    "weight_g": 425,
+    "packed_volume_l": 2.5,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "r_value"
+    ],
+    "purchase_url": "https://example.com/gear-15"
+  },
+  {
+    "id": "gear-16",
+    "slug": "gear-16",
+    "name": "Gear Item 16",
+    "gear_class_id": "cls-bag",
+    "price_usd": 97,
+    "weight_g": 440,
+    "packed_volume_l": 2.6,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "temp_rating"
+    ],
+    "purchase_url": "https://example.com/gear-16"
+  },
+  {
+    "id": "gear-17",
+    "slug": "gear-17",
+    "name": "Gear Item 17",
+    "gear_class_id": "cls-stove",
+    "price_usd": 100,
+    "weight_g": 455,
+    "packed_volume_l": 2.7,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "fuel_type"
+    ],
+    "purchase_url": "https://example.com/gear-17"
+  },
+  {
+    "id": "gear-18",
+    "slug": "gear-18",
+    "name": "Gear Item 18",
+    "gear_class_id": "cls-pot",
+    "price_usd": 103,
+    "weight_g": 470,
+    "packed_volume_l": null,
+    "packability_mode": "non_packable",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "volume"
+    ],
+    "purchase_url": "https://example.com/gear-18"
+  },
+  {
+    "id": "gear-19",
+    "slug": "gear-19",
+    "name": "Gear Item 19",
+    "gear_class_id": "cls-shell",
+    "price_usd": 106,
+    "weight_g": 485,
+    "packed_volume_l": 2.9,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood"
+    ],
+    "purchase_url": "https://example.com/gear-19"
+  },
+  {
+    "id": "gear-20",
+    "slug": "gear-20",
+    "name": "Gear Item 20",
+    "gear_class_id": "cls-insul",
+    "price_usd": 109,
+    "weight_g": 500,
+    "packed_volume_l": 3,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": "synthetic",
+    "fill_weight_g": 110,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "insulation"
+    ],
+    "purchase_url": "https://example.com/gear-20"
+  },
+  {
+    "id": "gear-21",
+    "slug": "gear-21",
+    "name": "Gear Item 21",
+    "gear_class_id": "cls-pad",
+    "price_usd": 112,
+    "weight_g": 515,
+    "packed_volume_l": 3.1,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "r_value"
+    ],
+    "purchase_url": "https://example.com/gear-21"
+  },
+  {
+    "id": "gear-22",
+    "slug": "gear-22",
+    "name": "Gear Item 22",
+    "gear_class_id": "cls-bag",
+    "price_usd": 115,
+    "weight_g": 530,
+    "packed_volume_l": 3.2,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "temp_rating"
+    ],
+    "purchase_url": "https://example.com/gear-22"
+  },
+  {
+    "id": "gear-23",
+    "slug": "gear-23",
+    "name": "Gear Item 23",
+    "gear_class_id": "cls-stove",
+    "price_usd": 118,
+    "weight_g": 545,
+    "packed_volume_l": 3.3,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "fuel_type"
+    ],
+    "purchase_url": "https://example.com/gear-23"
+  },
+  {
+    "id": "gear-24",
+    "slug": "gear-24",
+    "name": "Gear Item 24",
+    "gear_class_id": "cls-pot",
+    "price_usd": 121,
+    "weight_g": 560,
+    "packed_volume_l": null,
+    "packability_mode": "non_packable",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": null,
+    "seam_sealed": null,
+    "breathability_gm2": null,
+    "features_present": [
+      "volume"
+    ],
+    "purchase_url": "https://example.com/gear-24"
+  },
+  {
+    "id": "gear-25",
+    "slug": "gear-25",
+    "name": "Gear Item 25",
+    "gear_class_id": "cls-shell",
+    "price_usd": 124,
+    "weight_g": 575,
+    "packed_volume_l": 3.5,
+    "packability_mode": "portable_volume_based",
+    "insulation_type": null,
+    "fill_weight_g": null,
+    "fill_power": null,
+    "waterproof_mmv": 20000,
+    "seam_sealed": true,
+    "breathability_gm2": 12000,
+    "features_present": [
+      "waterproof",
+      "hood"
+    ],
+    "purchase_url": "https://example.com/gear-25"
+  }
+]

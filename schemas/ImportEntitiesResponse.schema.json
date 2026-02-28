@@ -1,0 +1,37 @@
+{
+  "$id": "https://camping-trip.local/schemas/ImportEntitiesResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ImportEntitiesResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["job_id", "status", "upserts", "errors"],
+  "properties": {
+    "job_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["accepted", "failed"] },
+    "upserts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gear_items", "gear_classes", "locations", "systems"],
+      "properties": {
+        "gear_items": { "type": "integer", "minimum": 0 },
+        "gear_classes": { "type": "integer", "minimum": 0 },
+        "locations": { "type": "integer", "minimum": 0 },
+        "systems": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["row_number", "field", "error_code", "message"],
+        "properties": {
+          "row_number": { "type": "integer", "minimum": 1 },
+          "field": { "type": "string" },
+          "error_code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    }
+  }
+}

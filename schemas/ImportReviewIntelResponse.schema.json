@@ -1,0 +1,28 @@
+{
+  "$id": "https://camping-trip.local/schemas/ImportReviewIntelResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ImportReviewIntelResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["job_id", "status", "rows_received", "rows_imported", "errors"],
+  "properties": {
+    "job_id": { "type": "string" },
+    "status": { "type": "string", "enum": ["accepted", "failed"] },
+    "rows_received": { "type": "integer", "minimum": 0 },
+    "rows_imported": { "type": "integer", "minimum": 0 },
+    "errors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["row_number", "field", "error_code", "message"],
+        "properties": {
+          "row_number": { "type": "integer", "minimum": 1 },
+          "field": { "type": "string" },
+          "error_code": { "type": "string" },
+          "message": { "type": "string" }
+        }
+      }
+    }
+  }
+}

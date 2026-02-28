@@ -1,0 +1,43 @@
+{
+  "$id": "https://camping-trip.local/schemas/TripsEvaluateResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TripsEvaluateResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "approved",
+    "tsi",
+    "tsi_band",
+    "required_min_levels",
+    "hard_rule_failures",
+    "selected_items_explainability"
+  ],
+  "properties": {
+    "approved": { "type": "boolean" },
+    "tsi": { "type": "number", "minimum": 0, "maximum": 1 },
+    "tsi_band": { "type": "string", "enum": ["low", "moderate", "high", "severe weekend/alpine"] },
+    "required_min_levels": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "minLength": 1 }
+    },
+    "hard_rule_failures": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "selected_items_explainability": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["gear_item_id", "suitability_score", "top_factors", "triggered_rules", "redundancy_warnings"],
+        "properties": {
+          "gear_item_id": { "type": "string", "minLength": 1 },
+          "suitability_score": { "type": "number" },
+          "top_factors": { "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": "string" } },
+          "triggered_rules": { "type": "array", "items": { "type": "string" } },
+          "redundancy_warnings": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

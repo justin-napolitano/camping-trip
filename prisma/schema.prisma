@@ -6,3 +6,489 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum PackabilityMode {
+  portable_volume_based
+  portable_weight_only
+  non_packable
+}
+
+enum SourceType {
+  internal_admin
+  field_note
+  third_party_review
+  manufacturer_spec
+}
+
+enum TripType {
+  weekend_backpacking
+  day_climb_car_camp
+  alpine_weekend
+}
+
+enum PrecipitationRisk {
+  low
+  medium
+  high
+  wintry
+}
+
+enum Remoteness {
+  frontcountry
+  semi_remote
+  remote
+}
+
+enum StaticExposure {
+  low
+  medium
+  high
+}
+
+enum FieldTestType {
+  sleep_overnight
+  stove_cold_start
+}
+
+enum ModerationStatus {
+  visible
+  flagged
+  hidden
+  quarantined
+}
+
+enum LocationType {
+  crag
+  park
+  campground
+  region
+  other
+}
+
+enum ClothingLevel {
+  L1
+  L2
+  L3
+  L4
+  L5
+  L6
+  L7
+}
+
+enum ShelterLevel {
+  S1
+  S2
+  S3
+  S4
+  S5
+  S6
+  S7
+}
+
+enum SleepLevel {
+  SL1
+  SL2
+  SL3
+  SL4
+  SL5
+  SL6
+  SL7
+}
+
+enum CookingLevel {
+  C1
+  C2
+  C3
+  C4
+  C5
+  C6
+  C7
+}
+
+enum WaterLevel {
+  W1
+  W2
+  W3
+  W4
+  W5
+  W6
+  W7
+}
+
+enum NavigationLevel {
+  N1
+  N2
+  N3
+  N4
+  N5
+  N6
+  N7
+}
+
+enum MedicalLevel {
+  M1
+  M2
+  M3
+  M4
+  M5
+  M6
+  M7
+}
+
+model GearClass {
+  id               String    @id @default(uuid()) @db.Uuid
+  slug             String    @unique
+  name             String
+  requiredFeatures Json      @default("[]") @map("required_features")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  updatedAt        DateTime  @updatedAt @map("updated_at")
+  deletedAt        DateTime? @map("deleted_at")
+  deletedBy        String?   @map("deleted_by")
+  version          Int       @default(1)
+
+  gearItems    GearItem[]
+  reviewIntel  ReviewIntel[]
+
+  @@index([deletedAt])
+  @@map("gear_class")
+}
+
+model System {
+  id           String    @id @default(uuid()) @db.Uuid
+  slug         String    @unique
+  name         String
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deprecatedAt DateTime? @map("deprecated_at")
+  deprecatedBy String?   @map("deprecated_by")
+  deletedAt    DateTime? @map("deleted_at")
+  deletedBy    String?   @map("deleted_by")
+  version      Int       @default(1)
+
+  aliases         SystemAlias[]
+  gearItemSystems GearItemSystem[]
+  reviewSystems   ReviewIntelSystem[]
+
+  @@index([deprecatedAt])
+  @@index([deletedAt])
+  @@map("system")
+}
+
+model SystemAlias {
+  id         String   @id @default(uuid()) @db.Uuid
+  alias      String   @unique
+  systemId   String   @map("system_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+  createdBy  String   @map("created_by")
+
+  system System @relation(fields: [systemId], references: [id], onDelete: Restrict)
+
+  @@index([systemId])
+  @@map("system_alias")
+}
+
+model Location {
+  id               String       @id @default(uuid()) @db.Uuid
+  slug             String       @unique
+  name             String
+  countryCode      String       @map("country_code")
+  regionCode       String?      @map("region_code")
+  latitude         Decimal      @db.Decimal(9, 6)
+  longitude        Decimal      @db.Decimal(9, 6)
+  parentLocationId String?      @map("parent_location_id") @db.Uuid
+  locationType     LocationType @default(other) @map("location_type")
+  createdAt        DateTime     @default(now()) @map("created_at")
+  updatedAt        DateTime     @updatedAt @map("updated_at")
+  deletedAt        DateTime?    @map("deleted_at")
+  deletedBy        String?      @map("deleted_by")
+  version          Int          @default(1)
+
+  parent      Location?     @relation("LocationHierarchy", fields: [parentLocationId], references: [id], onDelete: Restrict)
+  children    Location[]    @relation("LocationHierarchy")
+  reviewIntel ReviewIntel[]
+  trips       TripProfile[]
+
+  @@index([parentLocationId])
+  @@index([deletedAt])
+  @@map("location")
+}
+
+model GearItem {
+  id                 String          @id @default(uuid()) @db.Uuid
+  slug               String          @unique
+  name               String
+  model              String?
+  gearClassId        String          @map("gear_class_id") @db.Uuid
+  priceUsd           Decimal         @map("price_usd") @db.Decimal(10, 2)
+  purchaseUrl        String?         @map("purchase_url")
+  weightG            Int             @map("weight_g")
+  packedVolumeL      Decimal?        @map("packed_volume_l") @db.Decimal(6, 2)
+  packabilityMode    PackabilityMode @map("packability_mode")
+  insulationType     String?         @map("insulation_type")
+  fillWeightG        Int?            @map("fill_weight_g")
+  fillPower          Int?            @map("fill_power")
+  waterproofMmv      Int?            @map("waterproof_mmv")
+  seamSealed         Boolean?        @map("seam_sealed")
+  breathabilityGm2   Int?            @map("breathability_gm2")
+  featuresPresent    Json            @default("[]") @map("features_present")
+  canonicalSearchText String?        @map("canonical_search_text")
+  createdAt          DateTime        @default(now()) @map("created_at")
+  updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
+  deletedBy          String?         @map("deleted_by")
+  version            Int             @default(1)
+
+  gearClass   GearClass         @relation(fields: [gearClassId], references: [id], onDelete: Restrict)
+  systems     GearItemSystem[]
+  reviews     ReviewIntel[]
+  fieldTests  FieldTestLog[]
+
+  @@index([gearClassId])
+  @@index([deletedAt])
+  @@map("gear_item")
+}
+
+model GearItemSystem {
+  gearItemId String @map("gear_item_id") @db.Uuid
+  systemId   String @map("system_id") @db.Uuid
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  gearItem GearItem @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+  system   System   @relation(fields: [systemId], references: [id], onDelete: Restrict)
+
+  @@id([gearItemId, systemId])
+  @@index([systemId])
+  @@map("gear_item_system")
+}
+
+model ReviewIntel {
+  id                  String           @id @default(uuid()) @db.Uuid
+  gearItemId          String           @map("gear_item_id") @db.Uuid
+  gearClassId         String           @map("gear_class_id") @db.Uuid
+  locationId          String           @map("location_id") @db.Uuid
+  authorId            String           @map("author_id")
+  reviewDate          DateTime         @map("review_date") @db.Date
+  sourceType          SourceType       @map("source_type")
+  sourceUrl           String?          @map("source_url")
+  rating              Int
+  conditionsObserved  String           @map("conditions_observed")
+  durability          Int
+  value               Int
+  packability         Int
+  usageCyclesObserved Decimal?         @map("usage_cycles_observed") @db.Decimal(10, 2)
+  usageRuntimeHours   Decimal?         @map("usage_runtime_hours") @db.Decimal(10, 2)
+  failureEventCount   Int?             @map("failure_event_count")
+  repairEventCount    Int?             @map("repair_event_count")
+  pros                Json             @default("[]")
+  cons                Json             @default("[]")
+  useCase             String           @map("use_case")
+  evidenceQualityScore Decimal?        @map("evidence_quality_score") @db.Decimal(3, 2)
+  curationRank        Int?             @map("curation_rank")
+  compositeScore      Decimal?         @map("composite_score") @db.Decimal(4, 3)
+  confidenceScore     Decimal?         @map("confidence_score") @db.Decimal(4, 3)
+  reviewCount         Int              @default(1) @map("review_count")
+  moderationStatus    ModerationStatus @default(visible) @map("moderation_status")
+  moderationNotes     String?          @map("moderation_notes")
+  reviewedBy          String?          @map("reviewed_by")
+  reviewedAt          DateTime?        @map("reviewed_at")
+  createdAt           DateTime         @default(now()) @map("created_at")
+  updatedAt           DateTime         @updatedAt @map("updated_at")
+  deletedAt           DateTime?        @map("deleted_at")
+  deletedBy           String?          @map("deleted_by")
+  version             Int              @default(1)
+
+  gearItem   GearItem           @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+  gearClass  GearClass          @relation(fields: [gearClassId], references: [id], onDelete: Restrict)
+  location   Location           @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  systems    ReviewIntelSystem[]
+
+  @@unique([gearItemId, locationId, reviewDate, authorId, sourceType], map: "review_intel_idempotency_unique")
+  @@index([gearItemId, updatedAt(sort: Desc)])
+  @@index([locationId, updatedAt(sort: Desc)])
+  @@index([compositeScore(sort: Desc), confidenceScore(sort: Desc)])
+  @@index([gearClassId])
+  @@index([moderationStatus])
+  @@index([deletedAt])
+  @@map("review_intel")
+}
+
+model ReviewIntelSystem {
+  reviewIntelId String @map("review_intel_id") @db.Uuid
+  systemId      String @map("system_id") @db.Uuid
+
+  reviewIntel ReviewIntel @relation(fields: [reviewIntelId], references: [id], onDelete: Restrict)
+  system     System      @relation(fields: [systemId], references: [id], onDelete: Restrict)
+
+  @@id([reviewIntelId, systemId])
+  @@index([systemId])
+  @@map("review_intel_system")
+}
+
+model TripProfile {
+  id                   String            @id @default(uuid()) @db.Uuid
+  locationId           String            @map("location_id") @db.Uuid
+  tripType             TripType          @map("trip_type")
+  expectedLowC         Decimal           @map("expected_low_c") @db.Decimal(5, 2)
+  windMph              Decimal           @map("wind_mph") @db.Decimal(5, 2)
+  precipitationRisk    PrecipitationRisk @map("precipitation_risk")
+  remoteness           Remoteness
+  staticExposure       StaticExposure    @map("static_exposure")
+  precipitationExpected Boolean          @map("precipitation_expected")
+  createdAt            DateTime          @default(now()) @map("created_at")
+  updatedAt            DateTime          @updatedAt @map("updated_at")
+  deletedAt            DateTime?         @map("deleted_at")
+  deletedBy            String?           @map("deleted_by")
+  version              Int               @default(1)
+
+  location Location @relation(fields: [locationId], references: [id], onDelete: Restrict)
+
+  @@index([locationId])
+  @@index([deletedAt])
+  @@map("trip_profile")
+}
+
+model FieldTestLog {
+  id           String        @id @default(uuid()) @db.Uuid
+  gearItemId   String        @map("gear_item_id") @db.Uuid
+  testType     FieldTestType @map("test_type")
+  testDate     DateTime      @map("test_date") @db.Date
+  expectedLowC Decimal       @map("expected_low_c") @db.Decimal(5, 2)
+  passed       Boolean
+  notes        String
+  createdBy    String        @map("created_by")
+  createdAt    DateTime      @default(now()) @map("created_at")
+
+  gearItem GearItem @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+
+  @@index([gearItemId])
+  @@index([testDate])
+  @@map("field_test_log")
+}
+
+model CapabilityPolicy {
+  id                  String   @id @default(uuid()) @db.Uuid
+  policyVersion       String   @unique @map("policy_version")
+  medicalMildMinC     Decimal  @default(35) @map("medical_mild_min_c") @db.Decimal(4, 1)
+  medicalMildMaxC     Decimal  @default(32) @map("medical_mild_max_c") @db.Decimal(4, 1)
+  medicalModerateMinC Decimal  @default(32) @map("medical_moderate_min_c") @db.Decimal(4, 1)
+  medicalModerateMaxC Decimal  @default(28) @map("medical_moderate_max_c") @db.Decimal(4, 1)
+  medicalSevereLtC    Decimal  @default(28) @map("medical_severe_lt_c") @db.Decimal(4, 1)
+  sleepRThresholdsJson Json    @map("sleep_r_thresholds_json")
+  fuelBufferMultiplier Decimal @default(1.3) @map("fuel_buffer_multiplier") @db.Decimal(4, 2)
+  fieldTestRecencyDays Int     @default(180) @map("field_test_recency_days")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
+
+  @@map("capability_policy")
+}
+
+model HomepageKitBundle {
+  id          String    @id @default(uuid()) @db.Uuid
+  slug        String    @unique
+  name        String
+  contextKey  String    @map("context_key")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  deletedBy   String?   @map("deleted_by")
+  version     Int       @default(1)
+
+  items HomepageKitItem[]
+
+  @@index([contextKey])
+  @@index([deletedAt])
+  @@map("homepage_kit_bundle")
+}
+
+model HomepageKitItem {
+  id                String   @id @default(uuid()) @db.Uuid
+  homepageKitBundleId String @map("homepage_kit_bundle_id") @db.Uuid
+  gearItemId        String   @map("gear_item_id") @db.Uuid
+  systemId          String   @map("system_id") @db.Uuid
+  suitabilityScore  Decimal  @map("suitability_score") @db.Decimal(4, 3)
+  topFactors        Json     @map("top_factors")
+  hardRuleSummary   Json     @map("hard_rule_summary")
+  purchaseUrl       String?  @map("purchase_url")
+  createdAt         DateTime @default(now()) @map("created_at")
+
+  homepageKitBundle HomepageKitBundle @relation(fields: [homepageKitBundleId], references: [id], onDelete: Restrict)
+  gearItem          GearItem          @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+  system            System            @relation(fields: [systemId], references: [id], onDelete: Restrict)
+
+  @@index([homepageKitBundleId])
+  @@index([gearItemId])
+  @@index([systemId])
+  @@map("homepage_kit_item")
+}
+
+model CurationEntry {
+  id         String    @id @default(uuid()) @db.Uuid
+  contextKey String    @map("context_key")
+  gearItemId String    @map("gear_item_id") @db.Uuid
+  rank       Int       @map("curation_rank")
+  rationale  String
+  createdBy  String    @map("created_by")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  expiresAt  DateTime? @map("expires_at")
+
+  gearItem GearItem @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+
+  @@index([contextKey])
+  @@index([expiresAt])
+  @@index([gearItemId])
+  @@map("curation_entry")
+}
+
+model MediaAsset {
+  id               String           @id @default(uuid()) @db.Uuid
+  gearItemId       String?          @map("gear_item_id") @db.Uuid
+  reviewIntelId    String?          @map("review_intel_id") @db.Uuid
+  mimeType         String           @map("mime_type")
+  sizeBytes        Int              @map("size_bytes")
+  storageKey       String?          @map("storage_key")
+  moderationStatus ModerationStatus @default(hidden) @map("moderation_status")
+  createdBy        String           @map("created_by")
+  createdAt        DateTime         @default(now()) @map("created_at")
+  updatedAt        DateTime         @updatedAt @map("updated_at")
+
+  gearItem    GearItem?    @relation(fields: [gearItemId], references: [id], onDelete: Restrict)
+  reviewIntel ReviewIntel? @relation(fields: [reviewIntelId], references: [id], onDelete: Restrict)
+
+  @@index([gearItemId])
+  @@index([reviewIntelId])
+  @@index([moderationStatus])
+  @@map("media_asset")
+}
+
+model ImportJob {
+  id           String   @id @default(uuid()) @db.Uuid
+  importType   String   @map("import_type")
+  status       String
+  rowsReceived Int      @default(0) @map("rows_received")
+  rowsImported Int      @default(0) @map("rows_imported")
+  errorReport  Json?    @map("error_report")
+  createdBy    String   @map("created_by")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([importType])
+  @@index([status])
+  @@map("import_job")
+}
+
+model AuditLogEvent {
+  id              String   @id @default(uuid()) @db.Uuid
+  actorId         String   @map("actor_id")
+  entityType      String   @map("entity_type")
+  entityId        String   @map("entity_id")
+  eventType       String   @map("event_type")
+  beforeSummary   Json?    @map("before_summary")
+  afterSummary    Json?    @map("after_summary")
+  diffSummary     Json?    @map("diff_summary")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@map("audit_log_event")
+}

@@ -1,0 +1,51 @@
+[
+  {
+    "id": "cls-shell",
+    "slug": "shell-jacket",
+    "name": "Shell Jacket",
+    "required_features": [
+      "waterproof",
+      "hood"
+    ]
+  },
+  {
+    "id": "cls-insul",
+    "slug": "insulation-jacket",
+    "name": "Insulation Jacket",
+    "required_features": [
+      "insulation"
+    ]
+  },
+  {
+    "id": "cls-pad",
+    "slug": "sleep-pad",
+    "name": "Sleep Pad",
+    "required_features": [
+      "r_value"
+    ]
+  },
+  {
+    "id": "cls-bag",
+    "slug": "sleep-bag",
+    "name": "Sleep Bag",
+    "required_features": [
+      "temp_rating"
+    ]
+  },
+  {
+    "id": "cls-stove",
+    "slug": "stove",
+    "name": "Stove",
+    "required_features": [
+      "fuel_type"
+    ]
+  },
+  {
+    "id": "cls-pot",
+    "slug": "cook-pot",
+    "name": "Cook Pot",
+    "required_features": [
+      "volume"
+    ]
+  }
+]

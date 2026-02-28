@@ -1,8 +1,569 @@
 openapi: 3.1.0
 info:
   title: Camping Trip API
-  version: 0.1.0
-  description: Bootstrap OpenAPI scaffold. Endpoint contracts to be defined in T12.
-paths: {}
+  version: 1.0.0
+  description: Phase 1 locked API contracts.
+servers:
+  - url: https://api.example.com
+paths:
+  /api/v1/gear:
+    get:
+      summary: Search and list gear
+      operationId: listGear
+      x-auth-scope: public
+      parameters:
+        - in: query
+          name: q
+          schema: { type: string, maxLength: 120 }
+        - in: query
+          name: gear_class
+          schema: { type: string }
+        - in: query
+          name: system
+          schema:
+            oneOf:
+              - type: string
+              - type: array
+                items: { type: string }
+        - in: query
+          name: location
+          schema:
+            oneOf:
+              - type: string
+              - type: array
+                items: { type: string }
+        - in: query
+          name: sort
+          schema: { type: string, enum: [relevance, composite, confidence, updated_at] }
+        - in: query
+          name: order
+          schema: { type: string, enum: [asc, desc] }
+        - in: query
+          name: page
+          schema: { type: integer, minimum: 1, default: 1 }
+        - in: query
+          name: limit
+          schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        "200":
+          description: Ranked gear list
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/GearListResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    items:
+                      - id: gear-1
+                        slug: alpha-shell
+                        name: Alpha Shell
+                        composite_score: 4.3
+                        confidence_score: 0.82
+                        explainability:
+                          factors: [rating, durability, confidence]
+                          tie_break_path: [curation_none, composite_desc, confidence_desc]
+                    page: 1
+                    limit: 20
+                    total: 1
+        "400":
+          description: Invalid query
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: INVALID_QUERY
+                    message: Unknown query parameter: extra
+                    details: { field: extra }
+                    request_id: req-1
+  /api/v1/gear/{slug}:
+    get:
+      summary: Gear detail with aggregated scores
+      operationId: getGearBySlug
+      x-auth-scope: public
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Gear detail
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/GearDetailResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    id: gear-1
+                    slug: alpha-shell
+                    name: Alpha Shell
+                    aggregated_scores:
+                      composite_score: 4.3
+                      confidence_score: 0.82
+                      review_count: 7
+        "404":
+          description: Gear not found
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                missing:
+                  value:
+                    error_code: NOT_FOUND
+                    message: Gear not found
+                    request_id: req-2
+  /api/v1/gear/{slug}/locations:
+    get:
+      summary: Location performance for a gear item
+      operationId: getGearLocations
+      x-auth-scope: public
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Gear location performance
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/GearLocationsResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    gear_slug: alpha-shell
+                    locations:
+                      - location_slug: sand-rock
+                        location_name: Sand Rock
+                        composite_score: 4.1
+                        confidence_score: 0.8
+        "404":
+          description: Gear not found
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                missing:
+                  value:
+                    error_code: NOT_FOUND
+                    message: Gear not found
+                    request_id: req-3
+  /api/v1/homepage/kits:
+    get:
+      summary: Curated homepage kits
+      operationId: getHomepageKits
+      x-auth-scope: public
+      responses:
+        "200":
+          description: Kit bundles
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/HomepageKitsResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    kits:
+                      - kit_id: wknd-1
+                        name: Weekend Backpacking Baseline
+                        items:
+                          - gear_item_id: gear-1
+                            name: Alpha Shell
+                            system: clothing
+                            suitability_score: 0.9
+                            top_factors: [rain_shell, wind_protection, confidence]
+                            hard_rule_summary:
+                              passed: true
+                              failures: []
+                            purchase_url: https://example.com/alpha-shell
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                failed:
+                  value:
+                    error_code: INTERNAL_ERROR
+                    message: Unexpected error
+                    request_id: req-4
+  /api/v1/locations:
+    get:
+      summary: List or search locations
+      operationId: listLocations
+      x-auth-scope: public
+      responses:
+        "200":
+          description: Location list
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/LocationsListResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    items:
+                      - id: loc-1
+                        slug: sand-rock
+                        name: Sand Rock
+                        country_code: US
+                        region_code: AL
+                        latitude: 34.243
+                        longitude: -85.78
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                failed:
+                  value:
+                    error_code: INTERNAL_ERROR
+                    message: Unexpected error
+                    request_id: req-5
+  /api/v1/systems:
+    get:
+      summary: List systems
+      operationId: listSystems
+      x-auth-scope: public
+      responses:
+        "200":
+          description: System list
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/SystemsListResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    items:
+                      - id: sys-1
+                        slug: clothing
+                        name: Clothing
+                        deprecated: false
+        "500":
+          description: Internal error
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                failed:
+                  value:
+                    error_code: INTERNAL_ERROR
+                    message: Unexpected error
+                    request_id: req-6
+  /api/v1/trips/evaluate:
+    post:
+      summary: Deterministic capability and hard-rule evaluation
+      operationId: evaluateTrip
+      x-auth-scope: admin:review_write
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/TripsEvaluateRequest.schema.json
+            examples:
+              request:
+                value:
+                  trip_profile:
+                    trip_type: weekend_backpacking
+                    expected_low_c: 2
+                    wind_mph: 12
+                    precipitation_risk: medium
+                    remoteness: semi_remote
+                    static_exposure: medium
+                    precipitation_expected: true
+                  selected_gear_by_system:
+                    clothing: [gear-1]
+                    sleep: [gear-2]
+      responses:
+        "200":
+          description: Evaluation result
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/TripsEvaluateResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    approved: true
+                    tsi: 0.44
+                    tsi_band: moderate
+                    required_min_levels:
+                      shelter: S3
+                      sleep: SL3
+                      cooking: C3
+                      water: W3
+                      navigation: N2
+                      medical: M2
+                    hard_rule_failures: []
+                    selected_items_explainability:
+                      - gear_item_id: gear-1
+                        suitability_score: 0.88
+                        top_factors: [weather_protection, confidence, fit]
+                        triggered_rules: []
+                        redundancy_warnings: []
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: Request body failed schema validation
+                    details: [{ field: trip_profile.trip_type, error: invalid_enum }]
+                    request_id: req-7
+  /api/v1/review-intel:
+    post:
+      summary: Create review intel
+      operationId: createReviewIntel
+      x-auth-scope: admin:review_write
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/ReviewIntelCreateRequest.schema.json
+            examples:
+              request:
+                value:
+                  gear_item_id: gear-1
+                  gear_class_id: cls-1
+                  location_id: loc-1
+                  system_ids: [sys-1]
+                  author_id: admin-1
+                  review_date: 2026-02-20
+                  source_type: internal_admin
+                  source_url: null
+                  rating: 4
+                  durability: 4
+                  value: 3
+                  packability: 4
+                  usage_cycles_observed: 24
+                  usage_runtime_hours: null
+                  failure_event_count: 0
+                  repair_event_count: 0
+                  conditions_observed: Damp, cool overnight with moderate wind.
+                  pros: [Good hood]
+                  cons: [Pricey]
+                  use_case: Weekend backpacking
+                  version: 1
+      responses:
+        "201":
+          description: Review created
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ReviewIntelCreateResponse.schema.json
+              examples:
+                created:
+                  value:
+                    id: rev-1
+                    version: 1
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: source_url required for third_party_review
+                    details: { field: source_url }
+                    request_id: req-8
+  /api/v1/import/review-intel:
+    post:
+      summary: Import review intel CSV
+      operationId: importReviewIntel
+      x-auth-scope: admin:import
+      security:
+        - bearerAuth: []
+      responses:
+        "202":
+          description: Import accepted
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ImportReviewIntelResponse.schema.json
+              examples:
+                accepted:
+                  value:
+                    job_id: imp-1
+                    status: accepted
+                    rows_received: 200
+                    rows_imported: 200
+                    errors: []
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: Import contains invalid rows
+                    details:
+                      - row_number: 7
+                        field: source_type
+                        error_code: INVALID_ENUM
+                        message: source_type not allowed
+                    request_id: req-9
+  /api/v1/import/entities:
+    post:
+      summary: Import entities JSON
+      operationId: importEntities
+      x-auth-scope: admin:import
+      security:
+        - bearerAuth: []
+      responses:
+        "202":
+          description: Import accepted
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ImportEntitiesResponse.schema.json
+              examples:
+                accepted:
+                  value:
+                    job_id: imp-2
+                    status: accepted
+                    upserts:
+                      gear_items: 10
+                      gear_classes: 3
+                      locations: 1
+                      systems: 4
+                    errors: []
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: Entity import contains invalid rows
+                    details:
+                      - row_number: 2
+                        field: slug
+                        error_code: MISSING_REQUIRED
+                        message: slug is required
+                    request_id: req-10
+  /api/v1/media/upload-url:
+    post:
+      summary: Issue signed upload URL
+      operationId: issueMediaUploadUrl
+      x-auth-scope: admin:media_write
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/MediaUploadUrlRequest.schema.json
+            examples:
+              request:
+                value:
+                  filename: shell.jpg
+                  mime_type: image/jpeg
+                  size_bytes: 204800
+      responses:
+        "200":
+          description: Upload URL issued
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/MediaUploadUrlResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    media_id: med-1
+                    upload_url: https://storage.example.com/signed-put
+                    expires_at: 2026-02-28T16:30:00Z
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: mime_type not allowed
+                    details: { field: mime_type }
+                    request_id: req-11
+  /api/v1/media/complete:
+    post:
+      summary: Finalize media metadata
+      operationId: completeMediaUpload
+      x-auth-scope: admin:media_write
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../schemas/MediaCompleteRequest.schema.json
+            examples:
+              request:
+                value:
+                  media_id: med-1
+                  storage_key: uploads/med-1
+      responses:
+        "200":
+          description: Media finalized
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/MediaCompleteResponse.schema.json
+              examples:
+                ok:
+                  value:
+                    media_id: med-1
+                    moderation_status: flagged
+        "422":
+          description: Validation failure
+          content:
+            application/json:
+              schema:
+                $ref: ../../schemas/ErrorResponse.schema.json
+              examples:
+                invalid:
+                  value:
+                    error_code: VALIDATION_FAILED
+                    message: media_id not found
+                    details: { field: media_id }
+                    request_id: req-12
 components:
-  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -1,0 +1,23 @@
+{
+  "$id": "https://camping-trip.local/schemas/GearDetailResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "GearDetailResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "slug", "name", "aggregated_scores"],
+  "properties": {
+    "id": { "type": "string" },
+    "slug": { "type": "string" },
+    "name": { "type": "string" },
+    "aggregated_scores": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["composite_score", "confidence_score", "review_count"],
+      "properties": {
+        "composite_score": { "type": "number" },
+        "confidence_score": { "type": "number" },
+        "review_count": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

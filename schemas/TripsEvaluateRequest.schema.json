@@ -1,0 +1,19 @@
+{
+  "$id": "https://camping-trip.local/schemas/TripsEvaluateRequest.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "TripsEvaluateRequest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["trip_profile", "selected_gear_by_system"],
+  "properties": {
+    "trip_profile": { "$ref": "TripProfile.schema.json" },
+    "selected_gear_by_system": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "items": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "$id": "https://camping-trip.local/schemas/LocationsListResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LocationsListResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["items"],
+  "properties": {
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "slug", "name", "country_code", "latitude", "longitude"],
+        "properties": {
+          "id": { "type": "string" },
+          "slug": { "type": "string" },
+          "name": { "type": "string" },
+          "country_code": { "type": "string" },
+          "region_code": { "type": ["string", "null"] },
+          "latitude": { "type": "number" },
+          "longitude": { "type": "number" }
+        }
+      }
+    }
+  }
+}

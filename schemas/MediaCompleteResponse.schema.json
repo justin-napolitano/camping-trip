@@ -1,0 +1,12 @@
+{
+  "$id": "https://camping-trip.local/schemas/MediaCompleteResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MediaCompleteResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["media_id", "moderation_status"],
+  "properties": {
+    "media_id": { "type": "string" },
+    "moderation_status": { "type": "string", "enum": ["visible", "flagged", "hidden", "quarantined"] }
+  }
+}

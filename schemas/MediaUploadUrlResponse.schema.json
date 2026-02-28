@@ -1,0 +1,13 @@
+{
+  "$id": "https://camping-trip.local/schemas/MediaUploadUrlResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "MediaUploadUrlResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["media_id", "upload_url", "expires_at"],
+  "properties": {
+    "media_id": { "type": "string" },
+    "upload_url": { "type": "string", "format": "uri" },
+    "expires_at": { "type": "string", "format": "date-time" }
+  }
+}

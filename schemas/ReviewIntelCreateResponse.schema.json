@@ -1,0 +1,12 @@
+{
+  "$id": "https://camping-trip.local/schemas/ReviewIntelCreateResponse.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReviewIntelCreateResponse",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "version"],
+  "properties": {
+    "id": { "type": "string" },
+    "version": { "type": "integer", "minimum": 1 }
+  }
+}

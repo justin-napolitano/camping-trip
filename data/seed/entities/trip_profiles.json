@@ -1,0 +1,13 @@
+[
+  {
+    "id": "trip-sr-001",
+    "location_id": "loc-sand-rock",
+    "trip_type": "weekend_backpacking",
+    "expected_low_c": 3,
+    "wind_mph": 10,
+    "precipitation_risk": "medium",
+    "remoteness": "semi_remote",
+    "static_exposure": "medium",
+    "precipitation_expected": true
+  }
+]

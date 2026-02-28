@@ -87,10 +87,13 @@ This file is the operating contract for scope, architecture, data, and decision 
 - For complex features, significant refactors, or any multi-hour implementation effort, Codex must use an ExecPlan maintained in `.agent/PLANS.md` format.
 - Active implementation for v1 was driven by:
   - `.agent/execplans/v1-implementation.md`
-- Active implementation for current engine hardening branch must be driven by:
+- Active implementation for prior engine hardening branch was driven by:
   - `.agent/execplans/v2-engine-hardening.md`
+- Active implementation for current DB-seed/runtime-wiring branch must be driven by:
+  - `.agent/execplans/v3-db-seed-runtime-wiring.md`
 - Historical-plan rule:
   - `.agent/execplans/v1-implementation.md` is retained as closed historical evidence and is not the active execution source-of-truth for new tasks.
+  - `.agent/execplans/v2-engine-hardening.md` is retained as completed historical evidence and is not the active execution source-of-truth for new tasks.
 - ExecPlan usage rules:
   - the ExecPlan is the execution source-of-truth during implementation
   - the ExecPlan must be treated as a living document and updated at every stopping point
@@ -1039,6 +1042,39 @@ This file is the operating contract for scope, architecture, data, and decision 
     - `npm run test:unit`
     - `npm run test:integration`
 
+### T87: DB Seed Import Runtime + Frontend-Facing DB Wiring
+- Required deliverables:
+  - implement real seed-import runtime that writes `data/seed/entities/*.json` and `data/seed/review_intel/review_intel.csv` into Postgres
+  - importer is idempotent and uses deterministic upsert keys with transaction-safe failure behavior (no partial commits)
+  - replace static/mock runtime payloads with DB-backed reads for:
+    - `GET /api/v1/homepage/kits`
+    - `GET /api/v1/gear`
+    - `GET /api/v1/gear/:slug`
+    - `GET /api/v1/gear/:slug/locations`
+    - `POST /api/v1/trips/evaluate` policy/field-test context loading path
+  - preserve T86 deterministic trip-evaluation semantics while moving context source from seed files to DB reads
+  - keep contract layers synchronized in one change set (`schemas/`, `docs/openapi/v1.yaml`, `src/contracts/`)
+- Acceptance criteria:
+  - local seed import command persists rows to Postgres and is rerunnable without duplicate side effects
+  - target frontend-facing endpoints return DB-backed data aligned to response contracts
+  - trip-evaluation continues returning deterministic error/approval behavior from DB-derived context:
+    - `422` `VALIDATION_ERROR`
+    - `422` `EXPLAINABILITY_INCOMPLETE`
+    - `409` `POLICY_CONTEXT_MISSING`
+  - no contract drift between schema docs and runtime behavior for touched endpoints
+  - local verification commands succeed:
+    - `npm run db:up`
+    - `npm run db:migrate:reset-test`
+    - `npm run seed:validate`
+    - `npm run test:contract`
+    - `npm run test:capability-rules`
+    - `npm run test:trip-evaluation`
+    - `npm run test:trip-endpoint`
+    - `npm run test:unit`
+    - `npm run test:integration`
+    - `npm run lint`
+    - `npm run typecheck`
+
 ### Implementation Dependency Order (Locked)
 1. T12 (contracts) must be completed before T13 (schema migration finalization).
 2. T13 must be completed before T11 (seed import validation).
@@ -1160,6 +1196,7 @@ This file is the operating contract for scope, architecture, data, and decision 
 | T84 | Close search index policy drift in migration/schema checks | You + Codex | High | Done | 2026-03-02 | Added full-text canonical-search GIN index + name/model trigram GIN index; `db:migrate:check` enforcement added and preview apply verified |
 | T85 | Replace global no-op quality gates with real lint/type/test commands | You + Codex | High | Done | 2026-03-03 | `lint`, `typecheck`, `test:unit`, `test:integration` now run real validation suites; no `noop` usage in production gate scripts |
 | T86 | Harden trip evaluation runtime via hostile-review findings | You + Codex | High | Done | 2026-03-06 | Completed: validator parity + unknown-field rejection, selected-gear explainability enforcement (`422 EXPLAINABILITY_INCOMPLETE`), deterministic policy-context failure (`409 POLICY_CONTEXT_MISSING`), field-test `passed=true`/recency/selected-gear scoping, deterministic policy selection precedence, and passing local gate bundle tracked in `.agent/execplans/v2-engine-hardening.md` |
+| T87 | Implement DB seed import runtime and DB-backed endpoint wiring | You + Codex | High | Done | 2026-03-10 | Completed: `seed:import:db` transactional upsert runtime + `seed_local.sh` workflow update, DB-first route wiring for homepage/gear endpoints and trip-context loading, and passing command gates (`db:migrate:reset-test`, `seed:validate`, `test:contract`, capability tests, unit/integration, lint, typecheck, `contract:validate`) tracked in `.agent/execplans/v3-db-seed-runtime-wiring.md` |
 
 Status options: `Todo`, `In Progress`, `Blocked`, `Done`.
 

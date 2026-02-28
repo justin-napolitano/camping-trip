@@ -10,6 +10,7 @@ This plan hardens the trip-evaluation runtime path so hostile-review concerns ar
 
 - [x] (2026-02-28T18:05:00Z) V2 ExecPlan created for branch `feature/engine-hostile-hardening`.
 - [x] (2026-02-28T18:05:00Z) Governance sync prepared in AGENTS: T86 added with matching command manifest and acceptance criteria.
+- [x] (2026-02-28T19:20:00Z) Governance strict-tracking gate cleared via commit `d53a069`; T86 moved from `Blocked` to `In Progress` in AGENTS with same-session sync.
 - [ ] (2026-02-28T18:05:00Z) Milestone 1 pending: contract/runtime validator parity for `TripsEvaluateRequest`.
 - [ ] (2026-02-28T18:05:00Z) Milestone 2 pending: engine hard-rule semantics update (field-test `passed=true` gating).
 - [ ] (2026-02-28T18:05:00Z) Milestone 3 pending: strict explainability enforcement for all selected items.
@@ -145,3 +146,4 @@ This track depends on existing contract files, policy module, and route handlers
 
 - 2026-02-28: Added explicit lifecycle state (`Status: Active`) to align with `.agent/PLANS.md` lifecycle-state requirement.
 - 2026-02-28: Added dedicated `Change Notes` section to satisfy revision-trace requirement in `.agent/PLANS.md`.
+- 2026-02-28: Recorded strict-gate clearance and AGENTS status transition (`Blocked` -> `In Progress`) after governance commit `d53a069`.

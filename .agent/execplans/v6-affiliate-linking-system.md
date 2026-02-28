@@ -13,10 +13,10 @@ This work adds a governed affiliate-linking layer so outbound gear purchase clic
 ## Progress
 
 - [x] (2026-02-28T23:50:00Z) Created V6 ExecPlan and registered it as active in `AGENTS.md` with `T90` workboard entry.
-- [ ] Milestone 1: implement affiliate link policy/builder module with approved provider rules and fail-closed URL validation.
-- [ ] Milestone 2: add affiliate redirect endpoint with standard API error contract behavior.
-- [ ] Milestone 3: wire homepage and gear detail purchase links to resolver path and preserve existing UX behavior.
-- [ ] Milestone 4: run full command bundle, update AGENTS/ExecPlan closure evidence, and prepare PR.
+- [x] (2026-03-01T00:12:00Z) Milestone 1 completed: added deterministic affiliate link builder with provider domain rules and fail-closed URL validation in `src/affiliate/link-builder.mjs`.
+- [x] (2026-03-01T00:16:00Z) Milestone 2 completed: added `/api/v1/affiliate/resolve` route + handler with redirect success path and contract-compliant error responses for invalid queries/urls.
+- [x] (2026-03-01T00:20:00Z) Milestone 3 completed: wired homepage and gear detail purchase links through resolver path using shared UI helper function.
+- [x] (2026-03-01T00:30:00Z) Milestone 4 completed: full validation bundle passed and AGENTS/ExecPlan closure synchronization completed.
 
 ## Surprises & Discoveries
 
@@ -25,6 +25,9 @@ This work adds a governed affiliate-linking layer so outbound gear purchase clic
 
 - Observation: T89 now provides richer source provenance and source IDs that can be used to drive provider-specific affiliate link rules.
   Evidence: source normalization artifacts include `source_id` and `source_url` metadata.
+
+- Observation: existing Node test harness can validate redirect-path intent without browser automation by asserting generated href prefix and endpoint handler statuses.
+  Evidence: updated `scripts/e2e/run.mjs` + `scripts/contract/test-endpoint-handlers.mjs` cover resolver usage and allow/block behavior.
 
 ## Decision Log
 
@@ -36,9 +39,24 @@ This work adds a governed affiliate-linking layer so outbound gear purchase clic
   Rationale: prevents open redirect behavior and keeps outbound behavior policy-compliant.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: keep successful affiliate resolve responses as HTTP `302` redirect with headers, and reserve JSON bodies for error responses only.
+  Rationale: preserves outbound-link user behavior while keeping API error contract strict and machine-readable.
+  Date/Author: 2026-03-01 / Codex
+
 ## Outcomes & Retrospective
 
-Planning kickoff complete. Branch is registered with active V6 plan and T90 implementation task. Code implementation and validation evidence are pending.
+T90 completed. Affiliate linking now runs through a deterministic resolver layer with domain allowlist checks, contract-valid error handling, and UI wiring for homepage + gear detail purchase actions.
+
+Validation evidence:
+
+- `npm run test:homepage-kits`: PASS
+- `npm run test:e2e -- --grep "homepage kits"`: PASS
+- `npm run test:contract`: PASS
+- `npm run contract:validate`: PASS
+- `npm run test:unit`: PASS
+- `npm run test:integration`: PASS
+- `npm run lint`: PASS
+- `npm run typecheck`: PASS
 
 ## Context and Orientation
 
@@ -136,3 +154,4 @@ Dependencies:
 ## Change Notes
 
 - 2026-02-28: Created active V6 ExecPlan for T90 affiliate linking system and synchronized AGENTS registration before implementation.
+- 2026-03-01: Implemented link builder, resolver endpoint, contract/docs updates, and homepage/detail UI resolver wiring with full gate pass evidence.

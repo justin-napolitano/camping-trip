@@ -56,6 +56,7 @@ required_endpoints=(
   "/api/v1/gear/{slug}"
   "/api/v1/gear/{slug}/locations"
   "/api/v1/homepage/kits"
+  "/api/v1/affiliate/resolve"
   "/api/v1/locations"
   "/api/v1/systems"
   "/api/v1/trips/evaluate"

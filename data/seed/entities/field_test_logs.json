@@ -18,5 +18,25 @@
     "passed": true,
     "notes": "Cold-start test passed with backup plan.",
     "created_by": "admin-seed"
+  },
+  {
+    "id": "ft-003",
+    "gear_item_id": "gear-14",
+    "test_type": "sleep_overnight",
+    "test_date": "2026-01-18",
+    "expected_low_c": -7,
+    "passed": true,
+    "notes": "Remote overnight validation in windy basin.",
+    "created_by": "admin-seed"
+  },
+  {
+    "id": "ft-004",
+    "gear_item_id": "gear-26",
+    "test_type": "stove_cold_start",
+    "test_date": "2026-02-11",
+    "expected_low_c": -8,
+    "passed": false,
+    "notes": "Initial canister startup slow until warmed.",
+    "created_by": "admin-seed"
   }
 ]

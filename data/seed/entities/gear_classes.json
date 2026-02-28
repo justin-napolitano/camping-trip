@@ -17,6 +17,15 @@
     ]
   },
   {
+    "id": "cls-tent",
+    "slug": "tent",
+    "name": "Tent",
+    "required_features": [
+      "rainfly",
+      "stakes"
+    ]
+  },
+  {
     "id": "cls-pad",
     "slug": "sleep-pad",
     "name": "Sleep Pad",
@@ -46,6 +55,30 @@
     "name": "Cook Pot",
     "required_features": [
       "volume"
+    ]
+  },
+  {
+    "id": "cls-filter",
+    "slug": "water-filter",
+    "name": "Water Filter",
+    "required_features": [
+      "flow_rate"
+    ]
+  },
+  {
+    "id": "cls-nav",
+    "slug": "navigation-device",
+    "name": "Navigation Device",
+    "required_features": [
+      "offline_maps"
+    ]
+  },
+  {
+    "id": "cls-med",
+    "slug": "first-aid-kit",
+    "name": "First Aid Kit",
+    "required_features": [
+      "trauma_supplies"
     ]
   }
 ]

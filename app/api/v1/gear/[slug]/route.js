@@ -7,27 +7,17 @@ function json(body, status) {
 
 export async function GET(request, { params }) {
   const requestId = request.headers.get("x-request-id") || crypto.randomUUID();
+  const resolvedParams = await params;
+  const slug = resolvedParams?.slug;
   try {
-    const detail = await fetchGearDetailDb(params?.slug);
+    const detail = await fetchGearDetailDb(slug);
     if (!detail) {
       const fallback = handleGearDetail(null, requestId);
       return json(fallback.body, fallback.status);
     }
-    return json(
-      {
-        id: detail.id,
-        slug: detail.slug,
-        name: detail.name,
-        aggregated_scores: {
-          composite_score: Number(detail.composite_score),
-          confidence_score: Number(detail.confidence_score),
-          review_count: Number(detail.review_count)
-        }
-      },
-      200
-    );
+    return json(detail, 200);
   } catch {
-    const res = handleGearDetail(params?.slug, requestId);
+    const res = handleGearDetail(slug, requestId);
     return json(res.body, res.status);
   }
 }

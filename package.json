@@ -20,6 +20,7 @@
     "test:integration-adapters": "node scripts/integration/test-adapters.mjs",
     "seed:generate": "node scripts/seed/generate-fixture.mjs",
     "seed:source:check": "node scripts/seed/source-policy-check.mjs",
+    "seed:source:normalize": "node scripts/seed/source-normalize.mjs",
     "seed:validate": "node scripts/seed/validate.mjs",
     "seed:import:db": "node scripts/seed/import-db.mjs",
     "seed:import:test": "node scripts/seed/import-test.mjs",

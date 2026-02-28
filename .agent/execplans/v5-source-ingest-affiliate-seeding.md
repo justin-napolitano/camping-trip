@@ -16,7 +16,7 @@ This work expands database seeding so the product has much deeper gear coverage 
 - [x] (2026-02-28T22:25:00Z) Registered `T89` in AGENTS implementation tasks and workboard with locked acceptance commands.
 - [x] (2026-02-28T22:45:00Z) Hostile review pass completed for v5/T89; patched undefined policy/interface gaps in AGENTS and this plan before implementation.
 - [x] (2026-02-28T22:58:00Z) Milestone 1 completed: implemented `src/seed/source-policy.mjs` fail-closed source/domain policy gates and added executable guard command `npm run seed:source:check`.
-- [ ] Milestone 2: add adapter/normalization pipeline for affiliate-source records into canonical seed artifacts.
+- [x] (2026-02-28T23:15:00Z) Milestone 2 completed: added source normalization pipeline (`src/seed/sources/normalize-record.mjs`, `scripts/seed/source-normalize.mjs`) and fixture source feeds emitting canonical `data/seed/entities/gear_items.source.json`.
 - [ ] Milestone 3: integrate generated artifacts with existing seed validation/import workflow and add provenance reports.
 - [ ] Milestone 4: run full T89 command bundle, update AGENTS/ExecPlan closure evidence, and prepare PR.
 
@@ -36,6 +36,9 @@ This work expands database seeding so the product has much deeper gear coverage 
 
 - Observation: source policy checks are currently unit-style script assertions and are not yet wired into global `test:unit`.
   Evidence: `scripts/tasks/test-unit.sh` does not currently include `npm run seed:source:check`.
+
+- Observation: source feature names can include hyphenated variants that differ from canonical underscore keys.
+  Evidence: normalized records include pairs such as `flow-rate` and canonical `flow_rate`.
 
 ## Decision Log
 
@@ -63,6 +66,10 @@ This work expands database seeding so the product has much deeper gear coverage 
   Rationale: allows adapters/generators to consume one canonical trust policy and provides a fast gate for hostile review loops.
   Date/Author: 2026-02-28 / Codex
 
+- Decision: emit source-generated gear items into a dedicated canonical-shape artifact (`data/seed/entities/gear_items.source.json`) before merge/import integration.
+  Rationale: allows deterministic review of generated data without mutating baseline canonical fixture files prematurely.
+  Date/Author: 2026-02-28 / Codex
+
 ## Outcomes & Retrospective
 
 Planning and hostile-review hardening are complete, and Milestone 1 is implemented. The branch now has executable fail-closed source policy controls and a dedicated validation command.
@@ -72,6 +79,12 @@ Milestone 1 validation evidence:
 - `npm run seed:source:check`: PASS
 - `npm run lint`: PASS
 - `npm run typecheck`: PASS
+
+Milestone 2 validation evidence:
+
+- `npm run seed:source:normalize`: PASS (`sources=2 input_rows=8 normalized=8 emitted_gear_items=8`)
+- `npm run seed:validate`: PASS
+- `npm run test:unit`: PASS
 
 ## Context and Orientation
 
@@ -210,3 +223,4 @@ Dependencies and guardrails:
 - 2026-02-28: Created active V5 ExecPlan for T89 affiliate-source seed expansion and synchronized AGENTS registration before implementation work.
 - 2026-02-28: Hostile-review hardening pass added locked source allowlist values, deterministic dedupe formula, and adapter field contracts.
 - 2026-02-28: Implemented source-policy guardrails in code (`src/seed/source-policy.mjs`, `scripts/seed/source-policy-check.mjs`) and validated Milestone 1 command set.
+- 2026-02-28: Implemented source adapter/normalization pipeline and fixture source feeds; generated canonical-shape output artifact `data/seed/entities/gear_items.source.json`.

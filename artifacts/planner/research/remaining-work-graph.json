@@ -1,0 +1,165 @@
+{
+  "graph_id": "camping-trip-remaining-work-graph-20260324",
+  "created_at": "2026-03-24T00:00:00Z",
+  "ordering_policy": {
+    "ready_statuses": [
+      "ready"
+    ],
+    "ready_sort_fields": [
+      "ready_order",
+      "tie_breaker",
+      "node_id"
+    ],
+    "reorder_requires_explicit_action": true,
+    "board_projection_authority": "projection_only"
+  },
+  "queue_projection": {
+    "path": "docs/queued-execplans.md",
+    "projection_authority": "projection_only",
+    "last_reconciled_action_id": "rwg-action-20260324-register-rwg-004",
+    "ready_execplan_ids": []
+  },
+  "graph_actions": [
+    {
+      "action_id": "rwg-action-20260324-register-rwg-001",
+      "action": "register",
+      "node_id": "rwg-001",
+      "rationale": "create an explicit local planning slice for turning the new graph scaffold into lightweight repo discipline",
+      "evidence_ref": ".agent/execplans/v7-work-graph-and-governance-bootstrap.md",
+      "queue_reconciled": true
+    },
+    {
+      "action_id": "rwg-action-20260324-register-rwg-002",
+      "action": "register",
+      "node_id": "rwg-002",
+      "rationale": "capture post-v1 hardening work as a bounded draft instead of leaving it implied by code and AGENTS history",
+      "evidence_ref": ".agent/execplans/v8-product-hardening-and-launch-readiness.md",
+      "queue_reconciled": true
+    },
+    {
+      "action_id": "rwg-action-20260324-register-rwg-003",
+      "action": "register",
+      "node_id": "rwg-003",
+      "rationale": "separate search and explorer quality hardening from generic launch-readiness work",
+      "evidence_ref": ".agent/execplans/v9-search-ranking-and-explorer-hardening.md",
+      "queue_reconciled": true
+    },
+    {
+      "action_id": "rwg-action-20260324-register-rwg-004",
+      "action": "register",
+      "node_id": "rwg-004",
+      "rationale": "preserve the likely content-ops and affiliate-freshness follow-on as an explicit review-gated slice",
+      "evidence_ref": ".agent/execplans/v10-content-ops-and-affiliate-freshness.md",
+      "queue_reconciled": true
+    }
+  ],
+  "nodes": [
+    {
+      "node_id": "rwg-001",
+      "title": "Work graph and governance bootstrap",
+      "status": "review_gated",
+      "status_reason": "graph scaffold exists, but the repo has not yet decided how much planning discipline to enforce locally",
+      "gating_class": "review_gated",
+      "conflict_domains": [
+        "planning-governance"
+      ],
+      "target_execplan_id": "v7-work-graph-and-governance-bootstrap",
+      "goal_area": "planning-governance",
+      "execplan_path": ".agent/execplans/v7-work-graph-and-governance-bootstrap.md",
+      "expected_artifacts": [
+        ".agent/execplans/v7-work-graph-and-governance-bootstrap.md",
+        "artifacts/planner/research/remaining-work-graph.json",
+        "docs/queued-execplans.md",
+        "docs/remaining-work-graph.md"
+      ],
+      "ordering": {
+        "queue_position": 1,
+        "tie_breaker": "v7-work-graph-and-governance-bootstrap"
+      },
+      "depends_on": []
+    },
+    {
+      "node_id": "rwg-002",
+      "title": "Product hardening and launch-readiness",
+      "status": "review_gated",
+      "status_reason": "the app exists and major feature work landed, but launch-readiness criteria are not yet explicitly defined",
+      "gating_class": "review_gated",
+      "conflict_domains": [
+        "app-runtime",
+        "quality-gates",
+        "ops"
+      ],
+      "target_execplan_id": "v8-product-hardening-and-launch-readiness",
+      "goal_area": "product-hardening",
+      "execplan_path": ".agent/execplans/v8-product-hardening-and-launch-readiness.md",
+      "expected_artifacts": [
+        ".agent/execplans/v8-product-hardening-and-launch-readiness.md",
+        "docs/repo-state-assessment-2026-03-24.md"
+      ],
+      "ordering": {
+        "queue_position": 2,
+        "tie_breaker": "v8-product-hardening-and-launch-readiness"
+      },
+      "depends_on": [
+        "rwg-001"
+      ]
+    },
+    {
+      "node_id": "rwg-003",
+      "title": "Search, ranking, and explorer hardening",
+      "status": "review_gated",
+      "status_reason": "search and detail flows exist, but their quality bar and ranking trust still need explicit review",
+      "gating_class": "review_gated",
+      "conflict_domains": [
+        "search",
+        "ranking",
+        "ui"
+      ],
+      "target_execplan_id": "v9-search-ranking-and-explorer-hardening",
+      "goal_area": "search-quality",
+      "execplan_path": ".agent/execplans/v9-search-ranking-and-explorer-hardening.md",
+      "expected_artifacts": [
+        ".agent/execplans/v9-search-ranking-and-explorer-hardening.md",
+        "app/gear/page.js",
+        "app/gear/[slug]/page.js",
+        "src/api/v1/gear/list-handler.mjs",
+        "src/api/v1/gear/detail-handler.mjs"
+      ],
+      "ordering": {
+        "queue_position": 3,
+        "tie_breaker": "v9-search-ranking-and-explorer-hardening"
+      },
+      "depends_on": [
+        "rwg-002"
+      ]
+    },
+    {
+      "node_id": "rwg-004",
+      "title": "Content ops and affiliate freshness",
+      "status": "review_gated",
+      "status_reason": "the current seed and affiliate flow is good enough for a prototype, but the ongoing operator model is still undefined",
+      "gating_class": "review_gated",
+      "conflict_domains": [
+        "seed-ingest",
+        "affiliate",
+        "ops"
+      ],
+      "target_execplan_id": "v10-content-ops-and-affiliate-freshness",
+      "goal_area": "content-ops",
+      "execplan_path": ".agent/execplans/v10-content-ops-and-affiliate-freshness.md",
+      "expected_artifacts": [
+        ".agent/execplans/v10-content-ops-and-affiliate-freshness.md",
+        "scripts/seed/source-normalize.mjs",
+        "scripts/seed/import-db.mjs",
+        "src/affiliate/link-builder.mjs"
+      ],
+      "ordering": {
+        "queue_position": 4,
+        "tie_breaker": "v10-content-ops-and-affiliate-freshness"
+      },
+      "depends_on": [
+        "rwg-002"
+      ]
+    }
+  ]
+}

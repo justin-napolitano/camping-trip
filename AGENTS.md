@@ -6,8 +6,8 @@ This file is the operating contract for scope, architecture, data, and decision 
 
 ## Project Snapshot
 - Project: `camping-trip` (gear intelligence)
-- Phase: Planning complete -> implementation-ready blueprint locked
-- Last updated: 2026-02-28
+- Phase: Post-v1 prototype with local planning/governance refresh in progress
+- Last updated: 2026-03-24
 - Owners: You + Codex
 
 ## AI/Codex Operating Role
@@ -78,10 +78,18 @@ This file is the operating contract for scope, architecture, data, and decision 
 - If any required check fails, task status remains `In Progress` or `Blocked`.
 
 ## Plan Completeness Status
-- Planning status: complete for Phase 1.
-- Remaining open items are implementation tasks, not architecture/policy-definition blockers.
+- Phase 1 planning and implementation are complete through `T90`.
+- The repo is no longer missing its core v1 product surface; the remaining gap is a lighter post-v1 planning/governance layer for future work.
 - Any new scope or policy change must be added via decision log + workboard task before implementation.
-- Implementation governance status: explicit acceptance criteria and command-level validation required for all active tasks.
+- New multi-slice or post-v1 work should be reviewed against the local remaining-work graph and queued draft ExecPlans before execution begins.
+
+## Local Planning Surfaces
+- The local remaining-work graph lives at `artifacts/planner/research/remaining-work-graph.json`.
+- The human-readable queue mirror lives at `docs/queued-execplans.md`.
+- The current repo-state assessment lives at `docs/repo-state-assessment-2026-03-24.md`.
+- These planning artifacts are local-only and do not imply any GitHub Projects sync.
+- `review_gated` draft ExecPlans are planning artifacts, not active execution authority.
+- An ExecPlan becomes execution authority only when a branch intentionally adopts it as the active plan in this file.
 
 ## ExecPlans
 - For complex features, significant refactors, or any multi-hour implementation effort, Codex must use an ExecPlan maintained in `.agent/PLANS.md` format.
